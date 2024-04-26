@@ -569,6 +569,14 @@ class System_Settings(models.Model):
         blank=False,
         verbose_name=_("API expose error details"),
         help_text=_("When turned on, the API will expose error details in the response."))
+    filter_string_matching = models.BooleanField(
+        default=False,
+        blank=False,
+        verbose_name=_("Filter String Matching Optimization"),
+        help_text=_(
+            "When turned on, all filter operations in the UI will require string matches rather than ID. "
+            "This is a performance enhancement to avoid fetching objects unnecessarily."
+        ))
 
     from dojo.middleware import System_Settings_Manager
     objects = System_Settings_Manager()
@@ -2242,7 +2250,7 @@ class Finding(models.Model):
                            help_text=_("External reference that provides more information about this flaw."))  # not displayed and pretty much the same as references. To remove?
     severity = models.CharField(max_length=200,
                                 verbose_name=_('Severity'),
-                                help_text=_('The severity level of this flaw (Critical, High, Medium, Low, Informational).'))
+                                help_text=_('The severity level of this flaw (Critical, High, Medium, Low, Info).'))
     description = models.TextField(verbose_name=_('Description'),
                                 help_text=_("Longer more descriptive information about the flaw."))
     mitigation = models.TextField(verbose_name=_('Mitigation'),
@@ -2993,11 +3001,12 @@ class Finding(models.Model):
         if not user:
             from dojo.utils import get_current_user
             user = get_current_user()
-
         # Title Casing
         from titlecase import titlecase
         self.title = titlecase(self.title[:511])
-
+        # Set the date of the finding if nothing is supplied
+        if self.date is None:
+            self.date = timezone.now()
         # Assign the numerical severity for correct sorting order
         self.numerical_severity = Finding.get_numerical_severity(self.severity)
 
