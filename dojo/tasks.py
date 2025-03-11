@@ -26,8 +26,9 @@ def log_generic_alert(source, title, description):
 
 
 @app.task(bind=True)
-def add_alerts(self, runinterval):
+def add_alerts(self, timedelta_hours):
     now = timezone.now()
+    runinterval = timedelta(hours=timedelta_hours)
 
     upcoming_engagements = Engagement.objects.filter(target_start__gt=now + timedelta(days=3), target_start__lt=now + timedelta(days=3) + runinterval).order_by("target_start")
     for engagement in upcoming_engagements:

@@ -1156,7 +1156,7 @@ CELERY_BEAT_SCHEDULE = {
     "add-alerts": {
         "task": "dojo.tasks.add_alerts",
         "schedule": timedelta(hours=1),
-        "args": [timedelta(hours=1)],
+        "args": [1],
     },
     "cleanup-alerts": {
         "task": "dojo.tasks.cleanup_alerts",
@@ -1165,7 +1165,6 @@ CELERY_BEAT_SCHEDULE = {
     "dedupe-delete": {
         "task": "dojo.tasks.async_dupe_delete",
         "schedule": timedelta(minutes=1),
-        "args": [timedelta(minutes=1)],
     },
     "flush_auditlog": {
         "task": "dojo.tasks.flush_auditlog",
