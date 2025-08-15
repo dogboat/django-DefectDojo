@@ -5,7 +5,7 @@
 
 {% block content %}
     {{ block.super }}
-    <h3 id="id_heading"> Product Type {{ pt.name }}</h3>
+    <h3 id="id_heading"> {{ labels.Organization.cap }} {{ pt.name }}</h3>
     <div class="row">
         <div id="tests" class="col-md-8">
             <div class="panel panel-default">
@@ -14,7 +14,7 @@
                     <h3 class="pull-left">{% trans "Description" %}</h3>
                     <div class="dropdown pull-right">
                       <div class="btn-group">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" label="Actions" data-toggle="dropdown" aria-expanded="true" aria-label="Product type options">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" label="Actions" data-toggle="dropdown" aria-expanded="true" aria-label="{{ labels.Organization.cap }} options">
                                       <span class="fa-solid fa-bars"></span>
                                       <span class="caret"></span>
                                   </button>
@@ -32,7 +32,7 @@
                             </li>
                             <li>
                                 <a class="" href="{% url 'product_type_report' pt.id %}">
-                                <i class="fa-solid fa-file-lines"></i> {% trans "Product Type Report" %} </a>
+                                <i class="fa-solid fa-file-lines"></i> {% blocktrans with label=labels.Organization.cap %}{{ label }} Report{% endblocktrans %}</a>
                             </li>
                             {% if pt|has_object_permission:"Product_Type_Delete" %}
                             <li role="separator" class="divider"></li>
@@ -53,19 +53,19 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="clearfix">
-                        <h4 class="pull-left">{% trans "Products" %}</h4>
+                        <h4 class="pull-left">{% blocktrans with label=labels.Asset.plural_cap %}{{ label }}{% endblocktrans %}</h4>
                         <div class="dropdown pull-right">
                             <div class="btn-group">
                                 <button name="Show Filters" id="show-filters" aria-label="Filters" data-toggle="collapse" data-target="#the-filters" class="btn btn-primary toggle-filters"> <i class="fa-solid fa-filter"></i> <i class="caret"></i> </button>
                                 {% if pt|has_object_permission:"Product_Type_Add_Product" %}
-                                    <button name="Add Product" aria-label="Add product" class="btn btn-primary dropdown-toggle" type="button" label="Actions" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                    <button name="Add Product" aria-label="{% blocktrans with label=labels.Asset.cap %}Add {{ label }}{% endblocktrans %}" class="btn btn-primary dropdown-toggle" type="button" label="Actions" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                                                 <span class="fa-solid fa-bars"></span>
                                                 <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
                                         <li>
                                             <a class="" href="{% url 'add_product_to_product_type' pt.id %}">
-                                            <i class="fa-solid fa-plus"></i> {% trans "Add Product" %}</a>
+                                            <i class="fa-solid fa-plus"></i> {% blocktrans with label=labels.Asset.cap %}Add {{ label }}{% endblocktrans %}</a>
                                         </li>
                                     </ul>
                                 {% endif %}
@@ -126,7 +126,7 @@
                     </div>
                 {% else %}
                     <div class="panel-body">
-                        <small class="text-muted"><em>{% trans "No products found." %}</em></small>
+                        <small class="text-muted"><em>{% blocktrans with label=labels.Asset.plural_cap %}No {{ label }} found.{% endblocktrans %}</em></small>
                     </div>
                 {% endif %}
             </div>
@@ -140,7 +140,7 @@
                             {% if pt|has_object_permission:"Product_Type_Manage_Members" %}
                             <div class="dropdown pull-right">
                                 <button class="btn btn-primary dropdown-toggle" label="Actions" type="button" id="dropdownMenuAddProductTypeMember"
-                                        data-toggle="dropdown" aria-expanded="true" aria-label="{% trans "Add Product Type Member" %}">
+                                        data-toggle="dropdown" aria-expanded="true" aria-label="{% blocktrans with label=labels.Organization.cap %}Add {{ label }} Member{% endblocktrans %}">
                                     <span class="fa-solid fa-bars"></span>
                                     <span class="caret"></span>
                                 </button>
@@ -221,7 +221,7 @@
                         {% if pt|has_object_permission:"Product_Type_Group_Add" %}
                         <div class="dropdown pull-right">
                             <button class="btn btn-primary dropdown-toggle" label="Actions" type="button" id="dropdownMenuAddProductTypeGroup"
-                                    data-toggle="dropdown" aria-expanded="true" aria-label="{% trans "Add Product Type Group" %}">
+                                    data-toggle="dropdown" aria-expanded="true" aria-label="{% blocktrans with label=labels.Organization.cap %}Add {{ label }} Group{% endblocktrans %}">
                                 <span class="fa-solid fa-bars"></span>
                                 <span class="caret"></span>
                             </button>
@@ -303,7 +303,7 @@
                     <table class="table table-striped">
                       <tbody>
                         <tr>
-                          <td style="width: 150px;"><strong>{% trans "Critical product" %}</strong></td>
+                          <td style="width: 150px;"><strong>{% blocktrans with label=labels.Asset.cap %}Critical {{ label }}{% endblocktrans %}</strong></td>
                           <td>
                             {% if pt.critical_product %}
                             <i class="text-success fa-solid fa-check"></i>
@@ -313,7 +313,7 @@
                         </td>
                     </tr>
                         <tr>
-                            <td style="width: 150px;"><strong>{% trans "Key product" %}</strong></td>
+                            <td style="width: 150px;"><strong>{% blocktrans with label=labels.Asset.cap %}Key {{ label }}{% endblocktrans %}</strong></td>
                             <td>
                                 {% if pt.key_product %}
                                 <i class="text-success fa-solid fa-check"></i>

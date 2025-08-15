@@ -295,8 +295,11 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
-
 class System_Settings(models.Model):
+    class LabelsVersions(models.TextChoices):
+        V2 = "v2"
+        V3 = "v3"
+
     enable_deduplication = models.BooleanField(
         default=False,
         blank=False,
@@ -669,6 +672,15 @@ class System_Settings(models.Model):
             "When turned on, all filter operations in the UI will require string matches rather than ID. "
             "This is a performance enhancement to avoid fetching objects unnecessarily.",
         ))
+    labels_version = models.CharField(
+        max_length=2,
+        choices=LabelsVersions,
+        null=False,
+        blank=False,
+        default=LabelsVersions.V2,
+        verbose_name=_("Labels Version"),
+        help_text=_("The version of labels to use."),
+    )
 
     from dojo.middleware import System_Settings_Manager
     objects = System_Settings_Manager()

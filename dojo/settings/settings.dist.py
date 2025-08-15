@@ -860,6 +860,7 @@ TEMPLATES = [
                 "dojo.context_processors.bind_alert_count",
                 "dojo.context_processors.bind_announcement",
                 "dojo.context_processors.session_expiry_notification",
+                "dojo.context_processors.labels",
             ],
         },
     },
@@ -901,6 +902,7 @@ INSTALLED_APPS = (
 # MIDDLEWARE
 # ------------------------------------------------------------------------------
 DJANGO_MIDDLEWARE_CLASSES = [
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "dojo.middleware.APITrailingSlashMiddleware",
     "dojo.middleware.DojoSytemSettingsMiddleware",

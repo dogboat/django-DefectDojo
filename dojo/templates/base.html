@@ -233,33 +233,33 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a id="product-side-menu" href="{% url 'product' %}" aria-expanded="false" aria-label="Products">
+                                            <a id="product-side-menu" href="{% url 'product' %}" aria-expanded="false" aria-label="Assets">
                                                 <i class="fa-solid fa-list-ul fa-fw"></i>
-                                                <span>{% trans "Products" %}</span>
+                                                <span>{% trans "Assets" %}</span>
                                                 <span class="glyphicon arrow"></span>
                                             </a>
                                             <ul class="nav nav-second-level">
                                                 <li>
                                                     <a href="{% url 'product' %}">
-                                                        {% trans "All Products" %}
+                                                        {% trans labels.Asset.plural %}
                                                     </a>
                                                 </li>
                                                 {% if request.user|can_add_product %}
                                                     <li>
                                                         <a href="{% url 'new_product' %}">
-                                                            {% trans "Add Product" %}
+                                                            {% trans "Add Asset" %}
                                                         </a>
                                                     </li>
                                                 {% endif %}
                                                 <li>
                                                     <a href="{% url 'product_type' %}">
-                                                        {% trans "All Product Types" %}
+                                                        {% trans "All Organizations" %}
                                                     </a>
                                                 </li>
                                                 {% if "Product_Type_Add"|has_global_permission %}
                                                     <li>
                                                         <a id="pop-out-add-product-type" href="{% url 'add_product_type' %}">
-                                                            {% trans "Add Product Type" %}
+                                                            {% trans "Add Organization" %}
                                                         </a>
                                                     </li>
                                                 {% endif %}
@@ -436,22 +436,22 @@
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'critical_product_metrics' %}">
-                                                        {% trans "Critical Product Metrics" %}
+                                                        {% trans "Critical Asset Metrics" %}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'metrics_product_type' %}">
-                                                        {% trans "Product Type Metrics" %}
+                                                        {% trans "Organization Metrics" %}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'product_type_counts' %}">
-                                                        {% trans "Product Type Counts" %}
+                                                        {% trans "Organization Counts" %}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'product_tag_counts' %}">
-                                                        {% trans "Product Tag Counts" %}
+                                                        {% trans "Asset Tag Counts" %}
                                                     </a>
                                                 </li>
                                                 <li>
