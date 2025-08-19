@@ -22,6 +22,7 @@ from dojo.authorization.authorization import user_has_permission_or_403
 from dojo.authorization.roles_permissions import Permissions
 from dojo.filters import UserFilter
 from dojo.forms import ProductTagCountsForm, ProductTypeCountsForm, SimpleMetricsForm
+from dojo.labels import get_labels
 from dojo.metrics.utils import (
     endpoint_queries,
     finding_queries,
@@ -47,6 +48,9 @@ from dojo.utils import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+labels = get_labels()
 
 
 """
@@ -94,10 +98,10 @@ def metrics(request, mtype):
 
     filters = {}
     if view == "Finding":
-        page_name = _("Product Type Metrics by Findings")
+        page_name = labels.organization.relationships.metrics.by_findings
         filters = finding_queries(prod_type, request)
     elif view == "Endpoint":
-        page_name = _("Product Type Metrics by Affected Endpoints")
+        page_name = labels.organization.relationships.metrics.by_endpoints
         filters = endpoint_queries(prod_type, request)
 
     all_findings = findings_queryset(queryset_check(filters["all"]))
@@ -425,7 +429,7 @@ def product_type_counts(request):
             for o in overall_in_pt:
                 aip[o["numerical_severity"]] = o["numerical_severity__count"]
         else:
-            messages.add_message(request, messages.ERROR, _("Please choose month and year and the Product Type."),
+            messages.add_message(request, messages.ERROR, labels.organization.relationships.metrics.type_counts_error,
                                  extra_tags="alert-danger")
 
     add_breadcrumb(title=_("Bi-Weekly Metrics"), top_level=True, request=request)
@@ -630,8 +634,7 @@ def product_tag_counts(request):
             for o in overall_in_pt:
                 aip[o["numerical_severity"]] = o["numerical_severity__count"]
         else:
-            messages.add_message(request, messages.ERROR, _("Please choose month and year and the Product Tag."),
-                                 extra_tags="alert-danger")
+            messages.add_message(request, messages.ERROR, labels.asset.tag_counts_error, extra_tags="alert-danger")
 
     add_breadcrumb(title=_("Bi-Weekly Metrics"), top_level=True, request=request)
 

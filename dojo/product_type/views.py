@@ -220,7 +220,7 @@ def edit_product_type(request, ptid):
 
 @user_is_authorized(Product_Type, Permissions.Product_Type_Manage_Members, "ptid")
 def add_product_type_member(request, ptid):
-    page_name = str(labels.organization.fields.members.add_label)
+    page_name = str(labels.organization.relationships.users.add_label)
     pt = get_object_or_404(Product_Type, pk=ptid)
     memberform = Add_Product_Type_MemberForm(initial={"product_type": pt.id})
     if request.method == "POST":
@@ -243,7 +243,7 @@ def add_product_type_member(request, ptid):
                             product_type_member.save()
                 messages.add_message(request,
                                     messages.SUCCESS,
-                                    labels.organization.fields.members.add_success,
+                                    labels.organization.relationships.users.add_success,
                                     extra_tags="alert-success")
                 return HttpResponseRedirect(reverse("view_product_type", args=(ptid, )))
     add_breadcrumb(title=page_name, top_level=False, request=request)
@@ -256,7 +256,7 @@ def add_product_type_member(request, ptid):
 
 @user_is_authorized(Product_Type_Member, Permissions.Product_Type_Manage_Members, "memberid")
 def edit_product_type_member(request, memberid):
-    page_name = str(labels.organization.fields.members.edit_label)
+    page_name = str(labels.organization.relationships.users.edit_label)
     member = get_object_or_404(Product_Type_Member, pk=memberid)
     memberform = Edit_Product_Type_MemberForm(instance=member)
     if request.method == "POST":
@@ -266,7 +266,7 @@ def edit_product_type_member(request, memberid):
                 owners = Product_Type_Member.objects.filter(product_type=member.product_type, role__is_owner=True).exclude(id=member.id).count()
                 if owners < 1:
                     messages.add_message(request, messages.SUCCESS,
-                                        labels.organization.fields.members.minimum_number_label
+                                        labels.organization.relationships.users.minimum_number_label
                                             % {"name": member.product_type.name},
                                         extra_tags="alert-warning")
                     if is_title_in_breadcrumbs("View User"):
@@ -281,7 +281,7 @@ def edit_product_type_member(request, memberid):
                 memberform.save()
                 messages.add_message(request,
                                     messages.SUCCESS,
-                                    labels.organization.fields.members.edit_success,
+                                    labels.organization.relationships.users.edit_success,
                                     extra_tags="alert-success")
                 if is_title_in_breadcrumbs("View User"):
                     return HttpResponseRedirect(reverse("view_user", args=(member.user.id, )))
@@ -296,7 +296,7 @@ def edit_product_type_member(request, memberid):
 
 @user_is_authorized(Product_Type_Member, Permissions.Product_Type_Member_Delete, "memberid")
 def delete_product_type_member(request, memberid):
-    page_name = str(labels.organization.fields.members.delete_label)
+    page_name = str(labels.organization.relationships.users.delete_label)
     member = get_object_or_404(Product_Type_Member, pk=memberid)
     memberform = Delete_Product_Type_MemberForm(instance=member)
     if request.method == "POST":
@@ -315,7 +315,7 @@ def delete_product_type_member(request, memberid):
         member.delete()
         messages.add_message(request,
                             messages.SUCCESS,
-                            labels.organization.fields.members.delete_success,
+                            labels.organization.relationships.users.delete_success,
                             extra_tags="alert-success")
         if is_title_in_breadcrumbs("View User"):
             return HttpResponseRedirect(reverse("view_user", args=(member.user.id, )))
@@ -332,7 +332,7 @@ def delete_product_type_member(request, memberid):
 
 @user_is_authorized(Product_Type, Permissions.Product_Type_Group_Add, "ptid")
 def add_product_type_group(request, ptid):
-    page_name = str(labels.organization.fields.groups.add_label)
+    page_name = str(labels.organization.relationships.groups.add_label)
     pt = get_object_or_404(Product_Type, pk=ptid)
     group_form = Add_Product_Type_GroupForm(initial={"product_type": pt.id})
 
@@ -356,7 +356,7 @@ def add_product_type_group(request, ptid):
                             product_type_group.save()
                 messages.add_message(request,
                                      messages.SUCCESS,
-                                     labels.organization.fields.groups.add_success,
+                                     labels.organization.relationships.groups.add_success,
                                      extra_tags="alert-success")
                 return HttpResponseRedirect(reverse("view_product_type", args=(ptid,)))
 
@@ -370,7 +370,7 @@ def add_product_type_group(request, ptid):
 
 @user_is_authorized(Product_Type_Group, Permissions.Product_Type_Group_Edit, "groupid")
 def edit_product_type_group(request, groupid):
-    page_name = str(labels.organization.fields.groups.edit_label)
+    page_name = str(labels.organization.relationships.groups.edit_label)
     group = get_object_or_404(Product_Type_Group, pk=groupid)
     groupform = Edit_Product_Type_Group_Form(instance=group)
 
@@ -386,7 +386,7 @@ def edit_product_type_group(request, groupid):
                 groupform.save()
                 messages.add_message(request,
                                      messages.SUCCESS,
-                                     labels.organization.fields.groups.edit_success,
+                                     labels.organization.relationships.groups.edit_success,
                                      extra_tags="alert-success")
                 if is_title_in_breadcrumbs("View Group"):
                     return HttpResponseRedirect(reverse("view_group", args=(group.group.id,)))
@@ -402,7 +402,7 @@ def edit_product_type_group(request, groupid):
 
 @user_is_authorized(Product_Type_Group, Permissions.Product_Type_Group_Delete, "groupid")
 def delete_product_type_group(request, groupid):
-    page_name = str(labels.organization.fields.groups.delete_label)
+    page_name = str(labels.organization.relationships.groups.delete_label)
     group = get_object_or_404(Product_Type_Group, pk=groupid)
     groupform = Delete_Product_Type_GroupForm(instance=group)
 
@@ -412,7 +412,7 @@ def delete_product_type_group(request, groupid):
         group.delete()
         messages.add_message(request,
                              messages.SUCCESS,
-                             labels.organization.fields.groups.delete_success,
+                             labels.organization.relationships.groups.delete_success,
                              extra_tags="alert-success")
         if is_title_in_breadcrumbs("View Group"):
             return HttpResponseRedirect(reverse("view_group", args=(group.group.id, )))

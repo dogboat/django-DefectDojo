@@ -370,6 +370,10 @@ def get_tags_model_from_field_name(field):
 
 def get_tags_label_from_model(model):
     if model:
+        if model is Product_Type:
+            return labels.organization.filters.tags
+        if model is Product:
+            return labels.asset.filters.tags
         return f"Tags ({model.__name__.title()})"
     return "Tags (Unknown)"
 
@@ -515,7 +519,7 @@ class FindingTagFilter(DojoFilter):
         field_name="test__engagement__product__tags__name",
         to_field_name="name",
         queryset=Product.tags.tag_model.objects.all().order_by("name"),
-        help_text="Filter Products by the selected tags")
+        help_text=labels.asset.filters.tags_filter_help)
 
     not_tags = ModelMultipleChoiceFilter(
         field_name="tags__name",
@@ -540,9 +544,9 @@ class FindingTagFilter(DojoFilter):
     not_test__engagement__product__tags = ModelMultipleChoiceFilter(
         field_name="test__engagement__product__tags__name",
         to_field_name="name",
-        label="Product without tags",
+        label=labels.asset.filters.assets_without_tags,
         queryset=Product.tags.tag_model.objects.all().order_by("name"),
-        help_text="Search for tags on a Product that contain a given pattern, and exclude them",
+        help_text=labels.asset.filters.assets_without_tags_help,
         exclude=True)
 
     def __init__(self, *args, **kwargs):
@@ -581,15 +585,15 @@ class FindingTagStringFilter(FilterSet):
         lookup_expr="iexact",
         help_text="Search for tags on a Finding that are an exact match")
     test__engagement__product__tags_contains = CharFilter(
-        label="Product Tag Contains",
+        label=labels.asset.filters.tag_asset_contains,
         field_name="test__engagement__product__tags__name",
         lookup_expr="icontains",
-        help_text="Search for tags on a Finding that contain a given pattern")
+        help_text=labels.asset.filters.tag_asset_contains_help)
     test__engagement__product__tags = CharFilter(
-        label="Product Tag",
+        label=labels.asset.filters.tag_asset,
         field_name="test__engagement__product__tags__name",
         lookup_expr="iexact",
-        help_text="Search for tags on a Finding that are an exact match")
+        help_text=labels.asset.filters.tag_asset_help)
 
     not_tags_contains = CharFilter(
         label="Finding Tag Does Not Contain",
@@ -628,16 +632,16 @@ class FindingTagStringFilter(FilterSet):
         help_text="Search for tags on a Engagement that are an exact match, and exclude them",
         exclude=True)
     not_test__engagement__product__tags_contains = CharFilter(
-        label="Product Tag Does Not Contain",
+        label=labels.asset.filters.tag_not_contain,
         field_name="test__engagement__product__tags__name",
         lookup_expr="icontains",
-        help_text="Search for tags on a Product that contain a given pattern, and exclude them",
+        help_text=labels.asset.filters.tag_not_contain_help,
         exclude=True)
     not_test__engagement__product__tags = CharFilter(
-        label="Not Product Tag",
+        label=labels.asset.filters.tag_not,
         field_name="test__engagement__product__tags__name",
         lookup_expr="iexact",
-        help_text="Search for tags on a Product that are an exact match, and exclude them",
+        help_text=labels.asset.filters.tag_not_help,
         exclude=True)
 
     def delete_tags_from_form(self, tag_list: list):
@@ -922,32 +926,32 @@ class ComponentFilterWithoutObjectLookups(ProductComponentFilter):
     test__engagement__product__prod_type__name = CharFilter(
         field_name="test__engagement__product__prod_type__name",
         lookup_expr="iexact",
-        label="Product Type Name",
-        help_text="Search for Product Type names that are an exact match")
+        label=labels.organization.filters.name,
+        help_text=labels.organization.filters.name_help)
     test__engagement__product__prod_type__name_contains = CharFilter(
         field_name="test__engagement__product__prod_type__name",
         lookup_expr="icontains",
-        label="Product Type Name Contains",
-        help_text="Search for Product Type names that contain a given pattern")
+        label=labels.organization.filters.name_contains,
+        help_text=labels.organization.filters.name_contains_help)
     test__engagement__product__name = CharFilter(
         field_name="test__engagement__product__name",
         lookup_expr="iexact",
-        label="Product Name",
-        help_text="Search for Product names that are an exact match")
+        label=labels.asset.filters.name,
+        help_text=labels.asset.filters.name_help)
     test__engagement__product__name_contains = CharFilter(
         field_name="test__engagement__product__name",
         lookup_expr="icontains",
-        label="Product Name Contains",
-        help_text="Search for Product names that contain a given pattern")
+        label=labels.asset.filters.name_contains,
+        help_text=labels.asset.filters.name_contains_help)
 
 
 class ComponentFilter(ProductComponentFilter):
     test__engagement__product__prod_type = ModelMultipleChoiceFilter(
         queryset=Product_Type.objects.none(),
-        label="Product Type")
+        label=labels.organization.filters.label)
     test__engagement__product = ModelMultipleChoiceFilter(
         queryset=Product.objects.none(),
-        label="Product")
+        label=labels.asset.filters.label)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -985,7 +989,7 @@ class EngagementDirectFilterHelper(FilterSet):
             "target_start": "Start date",
             "name": "Engagement",
             "product__name": labels.asset.filters.name,
-            "product__prod_type__name": labels.organization.filters.name,
+            "product__prod_type__name": labels.organization.filters.label,
             "lead__first_name": "Lead",
         },
     )
@@ -995,7 +999,7 @@ class EngagementDirectFilter(EngagementDirectFilterHelper, DojoFilter):
     lead = ModelChoiceFilter(queryset=Dojo_User.objects.none(), label="Lead")
     product__prod_type = ModelMultipleChoiceFilter(
         queryset=Product_Type.objects.none(),
-        label=labels.organization.filters.name)
+        label=labels.organization.filters.label)
     tags = ModelMultipleChoiceFilter(
         field_name="tags__name",
         to_field_name="name",
@@ -1067,7 +1071,7 @@ class EngagementFilterHelper(FilterSet):
         ),
         field_labels={
             "name": labels.asset.filters.name,
-            "prod_type__name": labels.organization.filters.name,
+            "prod_type__name": labels.organization.filters.label,
         },
     )
 
@@ -1078,7 +1082,7 @@ class EngagementFilter(EngagementFilterHelper, DojoFilter):
         label="Lead")
     prod_type = ModelMultipleChoiceFilter(
         queryset=Product_Type.objects.none(),
-        label=labels.organization.filters.name)
+        label=labels.organization.filters.label)
     tags = ModelMultipleChoiceFilter(
         field_name="tags__name",
         to_field_name="name",
@@ -1094,6 +1098,8 @@ class EngagementFilter(EngagementFilterHelper, DojoFilter):
         self.form.fields["prod_type"].queryset = get_authorized_product_types(Permissions.Product_Type_View)
         self.form.fields["engagement__lead"].queryset = get_authorized_users(Permissions.Product_Type_View) \
             .filter(engagement__lead__isnull=False).distinct()
+        self.form.fields["tags"].help_text = labels.asset.filters.tags_help
+        self.form.fields["not_tags"].help_text = labels.asset.filters.not_tags_help
 
     class Meta:
         model = Product
@@ -1140,8 +1146,8 @@ class EngagementFilterWithoutObjectLookups(EngagementFilterHelper):
     prod_type__name = CharFilter(
         field_name="prod_type__name",
         lookup_expr="iexact",
-        label=labels.organization.filters.name,
-        help_text=labels.organization.filters.name_help)
+        label=labels.organization.filters.label,
+        help_text=labels.organization.filters.label_help)
     prod_type__name_contains = CharFilter(
         field_name="prod_type__name",
         lookup_expr="icontains",
@@ -1226,17 +1232,17 @@ class ApiEngagementFilter(DojoFilter):
     product__tags = CharFieldInFilter(
         field_name="product__tags__name",
         lookup_expr="in",
-        help_text="Comma separated list of exact tags present on product (uses OR for multiple values)")
+        help_text=labels.asset.filters.csv_tags_or)
     product__tags__and = CharFieldFilterANDExpression(
         field_name="product__tags__name",
-        help_text="Comma separated list of exact tags to match with an AND expression present on product")
+        help_text=labels.asset.filters.csv_tags_and)
 
     not_tag = CharFilter(field_name="tags__name", lookup_expr="icontains", help_text="Not Tag name contains", exclude="True")
     not_tags = CharFieldInFilter(field_name="tags__name", lookup_expr="in",
                                  help_text="Comma separated list of exact tags not present on model", exclude="True")
     not_product__tags = CharFieldInFilter(field_name="product__tags__name",
                                                 lookup_expr="in",
-                                                help_text="Comma separated list of exact tags not present on product",
+                                                help_text=labels.asset.filters.csv_tags_not,
                                                 exclude="True")
     has_tags = BooleanFilter(field_name="tags", lookup_expr="isnull", exclude=True, label="Has tags")
 
@@ -1296,7 +1302,7 @@ class ProductFilterHelper(FilterSet):
         field_labels={
             "name": labels.asset.filters.name,
             "name_exact": labels.asset.filters.name_exact,
-            "prod_type__name": labels.organization.filters.name,
+            "prod_type__name": labels.organization.filters.label,
             "business_criticality": "Business Criticality",
             "platform": "Platform ",
             "lifecycle": "Lifecycle ",
@@ -1311,7 +1317,7 @@ class ProductFilterHelper(FilterSet):
 class ProductFilter(ProductFilterHelper, DojoFilter):
     prod_type = ModelMultipleChoiceFilter(
         queryset=Product_Type.objects.none(),
-        label=labels.organization.filters.name)
+        label=labels.organization.filters.label)
     tags = ModelMultipleChoiceFilter(
         field_name="tags__name",
         to_field_name="name",
@@ -1411,7 +1417,7 @@ class ApiProductFilter(DojoFilter):
         help_text="Comma separated list of exact tags to match with an AND expression")
     not_tag = CharFilter(field_name="tags__name", lookup_expr="icontains", help_text="Not Tag name contains", exclude="True")
     not_tags = CharFieldInFilter(field_name="tags__name", lookup_expr="in",
-                                 help_text="Comma separated list of exact tags not present on product", exclude="True")
+                                 help_text=labels.asset.filters.csv_tags_not, exclude="True")
     has_tags = BooleanFilter(field_name="tags", lookup_expr="isnull", exclude=True, label="Has tags")
     outside_of_sla = extend_schema_field(OpenApiTypes.NUMBER)(ProductSLAFilter())
 
@@ -1494,10 +1500,10 @@ class ApiFindingFilter(DojoFilter):
     steps_to_reproduce = CharFilter(lookup_expr="icontains")
     unique_id_from_tool = CharFilter(lookup_expr="icontains")
     title = CharFilter(lookup_expr="icontains")
-    product_name = CharFilter(lookup_expr="engagement__product__name__iexact", field_name="test", label="exact product name")
-    product_name_contains = CharFilter(lookup_expr="engagement__product__name__icontains", field_name="test", label="exact product name")
+    product_name = CharFilter(lookup_expr="engagement__product__name__iexact", field_name="test", label=labels.asset.filters.name_exact)
+    product_name_contains = CharFilter(lookup_expr="engagement__product__name__icontains", field_name="test", label=labels.asset.filters.name_contains)
     product_lifecycle = CharFilter(method=custom_filter, lookup_expr="engagement__product__lifecycle",
-                                   field_name="test__engagement__product__lifecycle", label="Comma separated list of exact product lifecycles")
+                                   field_name="test__engagement__product__lifecycle", label=labels.asset.filters.csv_lifecycles)
     # DateRangeFilter
     created = DateRangeFilter()
     date = DateRangeFilter()
@@ -1577,10 +1583,10 @@ class ApiFindingFilter(DojoFilter):
     test__engagement__product__tags = CharFieldInFilter(
         field_name="test__engagement__product__tags__name",
         lookup_expr="in",
-        help_text="Comma separated list of exact tags present on product (uses OR for multiple values)")
+        help_text=labels.asset.filters.csv_tags_or)
     test__engagement__product__tags__and = CharFieldFilterANDExpression(
         field_name="test__engagement__product__tags__name",
-        help_text="Comma separated list of exact tags to match with an AND expression present on product")
+        help_text=labels.asset.filters.csv_tags_and)
     not_tag = CharFilter(field_name="tags__name", lookup_expr="icontains", help_text="Not Tag name contains", exclude="True")
     not_tags = CharFieldInFilter(field_name="tags__name", lookup_expr="in",
                                  help_text="Comma separated list of exact tags not present on model", exclude="True")
@@ -1591,7 +1597,7 @@ class ApiFindingFilter(DojoFilter):
     not_test__engagement__product__tags = CharFieldInFilter(
         field_name="test__engagement__product__tags__name",
         lookup_expr="in",
-        help_text="Comma separated list of exact tags not present on product",
+        help_text=labels.asset.filters.csv_tags_not,
         exclude="True")
     has_tags = BooleanFilter(field_name="tags", lookup_expr="isnull", exclude=True, label="Has tags")
     outside_of_sla = extend_schema_field(OpenApiTypes.NUMBER)(FindingSLAFilter())
@@ -1790,7 +1796,7 @@ class FindingFilterHelper(FilterSet):
             "mitigated": "Mitigated Date",
             "fix_available": "Fix Available",
             "title": "Finding Name",
-            "test__engagement__product__name": "Product Name",
+            "test__engagement__product__name": labels.asset.filters.name,
             "epss_score": "EPSS Score",
             "epss_percentile": "EPSS Percentile",
             "known_exploited": "Known Exploited",
@@ -1856,23 +1862,23 @@ class FindingFilterWithoutObjectLookups(FindingFilterHelper, FindingTagStringFil
     test__engagement__product__prod_type__name = CharFilter(
         field_name="test__engagement__product__prod_type__name",
         lookup_expr="iexact",
-        label="Product Type Name",
-        help_text="Search for Product Type names that are an exact match")
+        label=labels.organization.filters.name,
+        help_text=labels.organization.filters.name_help)
     test__engagement__product__prod_type__name_contains = CharFilter(
         field_name="test__engagement__product__prod_type__name",
         lookup_expr="icontains",
-        label="Product Type Name Contains",
-        help_text="Search for Product Type names that contain a given pattern")
+        label=labels.organization.filters.name_contains,
+        help_text=labels.organization.filters.name_contains_help)
     test__engagement__product__name = CharFilter(
         field_name="test__engagement__product__name",
         lookup_expr="iexact",
-        label="Product Name",
-        help_text="Search for Product names that are an exact match")
+        label=labels.asset.filters.name,
+        help_text=labels.asset.filters.name_help)
     test__engagement__product__name_contains = CharFilter(
         field_name="test__engagement__product__name",
         lookup_expr="icontains",
-        label="Product name Contains",
-        help_text="Search for Product Typ names that contain a given pattern")
+        label=labels.asset.filters.name_contains,
+        help_text=labels.asset.filters.name_contains_help)
     test__engagement__name = CharFilter(
         field_name="test__engagement__name",
         lookup_expr="iexact",
@@ -1945,10 +1951,10 @@ class FindingFilter(FindingFilterHelper, FindingTagFilter):
     reviewers = ModelMultipleChoiceFilter(queryset=Dojo_User.objects.none())
     test__engagement__product__prod_type = ModelMultipleChoiceFilter(
         queryset=Product_Type.objects.none(),
-        label="Product Type")
+        label=labels.organization.filters.label)
     test__engagement__product = ModelMultipleChoiceFilter(
         queryset=Product.objects.none(),
-        label="Product")
+        label=labels.asset.filters.label)
     test__engagement = ModelMultipleChoiceFilter(
         queryset=Engagement.objects.none(),
         label="Engagement")
@@ -2217,7 +2223,7 @@ class TemplateFindingFilter(DojoFilter):
         field_name="test__engagement__product__tags__name",
         to_field_name="name",
         exclude=True,
-        label="Product without tags",
+        label=labels.asset.filters.without_tags,
         queryset=Product.tags.tag_model.objects.all().order_by("name"),
         # label='tags', # doesn't work with tagulous, need to set in __init__ below
     )
@@ -2329,7 +2335,7 @@ class MetricsEndpointFilterHelper(FilterSet):
 class MetricsEndpointFilter(MetricsEndpointFilterHelper):
     finding__test__engagement__product__prod_type = ModelMultipleChoiceFilter(
         queryset=Product_Type.objects.none(),
-        label="Product Type")
+        label=labels.organization.filters.label)
     finding__test__engagement = ModelMultipleChoiceFilter(
         queryset=Engagement.objects.none(),
         label="Engagement")
@@ -2356,7 +2362,7 @@ class MetricsEndpointFilter(MetricsEndpointFilterHelper):
     finding__test__engagement__product__tags = ModelMultipleChoiceFilter(
         field_name="finding__test__engagement__product__tags__name",
         to_field_name="name",
-        label="Product tags",
+        label=labels.asset.filters.tags_asset,
         queryset=Product.tags.tag_model.objects.all().order_by("name"))
     not_endpoint__tags = ModelMultipleChoiceFilter(
         field_name="endpoint__tags__name",
@@ -2386,7 +2392,7 @@ class MetricsEndpointFilter(MetricsEndpointFilterHelper):
         field_name="finding__test__engagement__product__tags__name",
         to_field_name="name",
         exclude=True,
-        label="Product without tags",
+        label=labels.asset.filters.without_tags,
         queryset=Product.tags.tag_model.objects.all().order_by("name"))
 
     def __init__(self, *args, **kwargs):
@@ -2422,13 +2428,13 @@ class MetricsEndpointFilterWithoutObjectLookups(MetricsEndpointFilterHelper, Fin
     finding__test__engagement__product__prod_type = CharFilter(
         field_name="finding__test__engagement__product__prod_type",
         lookup_expr="iexact",
-        label="Product Type Name",
-        help_text="Search for Product Type names that are an exact match")
+        label=labels.organization.filters.name,
+        help_text=labels.organization.filters.name_help)
     finding__test__engagement__product__prod_type_contains = CharFilter(
         field_name="finding__test__engagement__product__prod_type",
         lookup_expr="icontains",
-        label="Product Type Name Contains",
-        help_text="Search for Product Type names that contain a given pattern")
+        label=labels.organization.filters.name_contains,
+        help_text=labels.organization.filters.name_contains_help)
     finding__test__engagement = CharFilter(
         field_name="finding__test__engagement",
         lookup_expr="iexact",
@@ -2480,15 +2486,15 @@ class MetricsEndpointFilterWithoutObjectLookups(MetricsEndpointFilterHelper, Fin
         lookup_expr="iexact",
         help_text="Search for tags on a Finding that are an exact match")
     finding__test__engagement__product__tags_contains = CharFilter(
-        label="Product Tag Contains",
+        label=labels.asset.filters.tag_asset_contains,
         field_name="finding__test__engagement__product__tags__name",
         lookup_expr="icontains",
-        help_text="Search for tags on a Finding that contain a given pattern")
+        help_text=labels.asset.filters.tag_asset_contains_help)
     finding__test__engagement__product__tags = CharFilter(
-        label="Product Tag",
+        label=labels.asset.filters.tag_asset,
         field_name="finding__test__engagement__product__tags__name",
         lookup_expr="iexact",
-        help_text="Search for tags on a Finding that are an exact match")
+        help_text=labels.asset.filters.tag_asset_help)
 
     not_endpoint__tags_contains = CharFilter(
         label="Endpoint Tag Does Not Contain",
@@ -2539,16 +2545,16 @@ class MetricsEndpointFilterWithoutObjectLookups(MetricsEndpointFilterHelper, Fin
         help_text="Search for tags on a Engagement that are an exact match, and exclude them",
         exclude=True)
     not_finding__test__engagement__product__tags_contains = CharFilter(
-        label="Product Tag Does Not Contain",
+        label=labels.asset.filters.tag_not_contain,
         field_name="finding__test__engagement__product__tags__name",
         lookup_expr="icontains",
-        help_text="Search for tags on a Product that contain a given pattern, and exclude them",
+        help_text=labels.asset.filters.tag_not_contain_help,
         exclude=True)
     not_finding__test__engagement__product__tags = CharFilter(
-        label="Not Product Tag",
+        label=labels.asset.filters.tag_not,
         field_name="finding__test__engagement__product__tags__name",
         lookup_expr="iexact",
-        help_text="Search for tags on a Product that are an exact match, and exclude them",
+        help_text=labels.asset.filters.tag_not_help,
         exclude=True)
 
     def __init__(self, *args, **kwargs):
@@ -2593,7 +2599,7 @@ class EndpointFilterHelper(FilterSet):
 class EndpointFilter(EndpointFilterHelper, DojoFilter):
     product = ModelMultipleChoiceFilter(
         queryset=Product.objects.none(),
-        label="Product")
+        label=labels.asset.filters.label)
     tags = ModelMultipleChoiceFilter(
         field_name="tags__name",
         to_field_name="name",
@@ -2617,7 +2623,7 @@ class EndpointFilter(EndpointFilterHelper, DojoFilter):
     findings__test__engagement__product__tags = ModelMultipleChoiceFilter(
         field_name="findings__test__engagement__product__tags__name",
         to_field_name="name",
-        label="Product Tags",
+        label=labels.asset.filters.tags_asset,
         queryset=Product.tags.tag_model.objects.all().order_by("name"))
     not_tags = ModelMultipleChoiceFilter(
         field_name="tags__name",
@@ -2646,7 +2652,7 @@ class EndpointFilter(EndpointFilterHelper, DojoFilter):
     not_findings__test__engagement__product__tags = ModelMultipleChoiceFilter(
         field_name="findings__test__engagement__product__tags__name",
         to_field_name="name",
-        label="Not Product Tags",
+        label=labels.asset.filters.not_tags_asset,
         exclude=True,
         queryset=Product.tags.tag_model.objects.all().order_by("name"))
 
@@ -2672,13 +2678,13 @@ class EndpointFilterWithoutObjectLookups(EndpointFilterHelper):
     product__name = CharFilter(
         field_name="product__name",
         lookup_expr="iexact",
-        label="Product Name",
-        help_text="Search for Product names that are an exact match")
+        label=labels.asset.filters.name,
+        help_text=labels.asset.filters.name_help)
     product__name_contains = CharFilter(
         field_name="product__name",
         lookup_expr="icontains",
-        label="Product Name Contains",
-        help_text="Search for Product names that contain a given pattern")
+        label=labels.asset.filters.name_contains,
+        help_text=labels.asset.filters.name_contains_help)
 
     tags_contains = CharFilter(
         label="Endpoint Tag Contains",
@@ -2721,15 +2727,15 @@ class EndpointFilterWithoutObjectLookups(EndpointFilterHelper):
         lookup_expr="iexact",
         help_text="Search for tags on a Finding that are an exact match")
     findings__test__engagement__product__tags_contains = CharFilter(
-        label="Product Tag Contains",
+        label=labels.asset.filters.tag_asset_contains,
         field_name="findings__test__engagement__product__tags__name",
         lookup_expr="icontains",
-        help_text="Search for tags on a Finding that contain a given pattern")
+        help_text=labels.asset.filters.tag_asset_contains_help)
     findings__test__engagement__product__tags = CharFilter(
-        label="Product Tag",
+        label=labels.asset.filters.tag_asset,
         field_name="findings__test__engagement__product__tags__name",
         lookup_expr="iexact",
-        help_text="Search for tags on a Finding that are an exact match")
+        help_text=labels.asset.filters.tag_asset_help)
 
     not_tags_contains = CharFilter(
         label="Endpoint Tag Does Not Contain",
@@ -2780,16 +2786,16 @@ class EndpointFilterWithoutObjectLookups(EndpointFilterHelper):
         help_text="Search for tags on a Engagement that are an exact match, and exclude them",
         exclude=True)
     not_findings__test__engagement__product__tags_contains = CharFilter(
-        label="Product Tag Does Not Contain",
+        label=labels.asset.filters.tag_not_contain,
         field_name="findings__test__engagement__product__tags__name",
         lookup_expr="icontains",
-        help_text="Search for tags on a Product that contain a given pattern, and exclude them",
+        help_text=labels.asset.filters.tag_not_contain_help,
         exclude=True)
     not_findings__test__engagement__product__tags = CharFilter(
-        label="Not Product Tag",
+        label=labels.asset.filters.tag_not,
         field_name="findings__test__engagement__product__tags__name",
         lookup_expr="iexact",
-        help_text="Search for tags on a Product that are an exact match, and exclude them",
+        help_text=labels.asset.filters.tag_not_help,
         exclude=True)
 
     def __init__(self, *args, **kwargs):
@@ -2987,10 +2993,10 @@ class ApiTestFilter(DojoFilter):
     engagement__product__tags = CharFieldInFilter(
         field_name="engagement__product__tags__name",
         lookup_expr="in",
-        help_text="Comma separated list of exact tags present on product (uses OR for multiple values)")
+        help_text=labels.asset.filters.csv_tags_or)
     engagement__product__tags__and = CharFieldFilterANDExpression(
         field_name="engagement__product__tags__name",
-        help_text="Comma separated list of exact tags to match with an AND expression present on product")
+        help_text=labels.asset.filters.csv_tags_and)
 
     not_tag = CharFilter(field_name="tags__name", lookup_expr="icontains", help_text="Not Tag name contains", exclude="True")
     not_tags = CharFieldInFilter(field_name="tags__name", lookup_expr="in",
@@ -3000,7 +3006,7 @@ class ApiTestFilter(DojoFilter):
                                                    exclude="True")
     not_engagement__product__tags = CharFieldInFilter(field_name="engagement__product__tags__name",
                                                                   lookup_expr="in",
-                                                                  help_text="Comma separated list of exact tags not present on product",
+                                                                  help_text=labels.asset.filters.csv_tags_not,
                                                                   exclude="True")
     has_tags = BooleanFilter(field_name="tags", lookup_expr="isnull", exclude=True, label="Has tags")
 
@@ -3154,11 +3160,11 @@ class ReportFindingFilterHelper(FilterSet):
 
 class ReportFindingFilter(ReportFindingFilterHelper, FindingTagFilter):
     test__engagement__product = ModelMultipleChoiceFilter(
-        queryset=Product.objects.none(), label="Product")
+        queryset=Product.objects.none(), label=labels.asset.filters.label)
     test__engagement__product__prod_type = ModelMultipleChoiceFilter(
         queryset=Product_Type.objects.none(),
-        label="Product Type")
-    test__engagement__product__lifecycle = MultipleChoiceFilter(choices=Product.LIFECYCLE_CHOICES, label="Product Lifecycle")
+        label=labels.organization.filters.label)
+    test__engagement__product__lifecycle = MultipleChoiceFilter(choices=Product.LIFECYCLE_CHOICES, label=labels.asset.lifecycle)
     test__engagement = ModelMultipleChoiceFilter(queryset=Engagement.objects.none(), label="Engagement")
     duplicate_finding = ModelChoiceFilter(queryset=Finding.objects.filter(original_finding__isnull=False).distinct())
 
@@ -3269,23 +3275,23 @@ class ReportFindingFilterWithoutObjectLookups(ReportFindingFilterHelper, Finding
     test__engagement__product__prod_type__name = CharFilter(
         field_name="test__engagement__product__prod_type__name",
         lookup_expr="iexact",
-        label="Product Type Name",
-        help_text="Search for Product Type names that are an exact match")
+        label=labels.organization.filters.name,
+        help_text=labels.organization.filters.name_help)
     test__engagement__product__prod_type__name_contains = CharFilter(
         field_name="test__engagement__product__prod_type__name",
         lookup_expr="icontains",
-        label="Product Type Name Contains",
-        help_text="Search for Product Type names that contain a given pattern")
+        label=labels.organization.filters.name_contains,
+        help_text=labels.organization.filters.name_contains_help)
     test__engagement__product__name = CharFilter(
         field_name="test__engagement__product__name",
         lookup_expr="iexact",
-        label="Product Name",
-        help_text="Search for Product names that are an exact match")
+        label=labels.asset.filters.name,
+        help_text=labels.asset.filters.name_help)
     test__engagement__product__name_contains = CharFilter(
         field_name="test__engagement__product__name",
         lookup_expr="icontains",
-        label="Product name Contains",
-        help_text="Search for Product names that contain a given pattern")
+        label=labels.asset.filters.name_contains,
+        help_text=labels.asset.filters.name_contains_help)
     test__engagement__name = CharFilter(
         field_name="test__engagement__name",
         lookup_expr="iexact",

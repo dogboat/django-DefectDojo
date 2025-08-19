@@ -5,7 +5,7 @@
 
 {% block content %}
     {{ block.super }}
-    <h3 id="id_heading"> {{ labels.organization.label }} {{ pt.name }}</h3>
+    <h3 id="id_heading">{{ labels.organization.label }} {{ pt.name }}</h3>
     <div class="row">
         <div id="tests" class="col-md-8">
             <div class="panel panel-default">
@@ -140,14 +140,14 @@
                             {% if pt|has_object_permission:"Product_Type_Manage_Members" %}
                             <div class="dropdown pull-right">
                                 <button class="btn btn-primary dropdown-toggle" label="Actions" type="button" id="dropdownMenuAddProductTypeMember"
-                                        data-toggle="dropdown" aria-expanded="true" aria-label="{{ labels.organization.fields.members.add_label }}">
+                                        data-toggle="dropdown" aria-expanded="true" aria-label="{{ labels.organization.relationships.users.add_label }}">
                                     <span class="fa-solid fa-bars"></span>
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
                                         <a id="addProductTypeMember" href="{% url 'add_product_type_member' pt.id %}">
-                                            <i class="fa-solid fa-plus"></i> {% trans "Add Users" %}
+                                            <i class="fa-solid fa-plus"></i> {% trans "Add Members" %}
                                         </a>
                                     </li>
                                 </ul>

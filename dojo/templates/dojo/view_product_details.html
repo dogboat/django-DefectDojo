@@ -333,7 +333,7 @@
                                 </ul>
                             </td>
                             <td name="member_user">{{ member.user.get_full_name }}</td>
-                            <td>{% trans "Product member" %}</td>
+                            <td>{{ labels.asset.relationships.users.member_label }}</td>
                             <td name="member_role">{{ member.role }}</td>
                         </tr>
                     {% endfor %}
@@ -344,7 +344,7 @@
                             <td>{{ member.user.get_full_name }}</td>
                             <td>
                                 <a class="" href="{% url 'view_product_type' member.product_type.id %}">
-                                    Product type: {{ member.product_type }}
+                                    {{ labels.organization.label }}: {{ member.product_type }}
                                 </a>
                             </td>
                             <td>{{ member.role }}</td>

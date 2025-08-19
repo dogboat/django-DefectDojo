@@ -295,7 +295,7 @@ class Add_Product_Type_MemberForm(forms.ModelForm):
 
 
 class Add_Product_Type_Member_UserForm(forms.ModelForm):
-    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label="Product Types")
+    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label=labels.organization.label_plural)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -427,6 +427,7 @@ class Edit_Product_MemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
+        self.fields["product"].label = labels.asset.label
         self.fields["user"].queryset = Dojo_User.objects.order_by("first_name", "last_name")
         self.fields["user"].disabled = True
 
@@ -441,6 +442,7 @@ class Add_Product_MemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
+        self.fields["product"].label = labels.asset.label
         current_members = Product_Member.objects.filter(product=self.initial["product"]).values_list("user", flat=True)
         self.fields["users"].queryset = Dojo_User.objects.exclude(
             Q(is_superuser=True)
@@ -452,7 +454,7 @@ class Add_Product_MemberForm(forms.ModelForm):
 
 
 class Add_Product_Member_UserForm(forms.ModelForm):
-    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label="Products")
+    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label=labels.asset.label_plural)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1014,7 +1016,7 @@ class EngForm(forms.ModelForm):
         ))
     description = forms.CharField(widget=forms.Textarea(attrs={}),
                                   required=False, help_text="Description of the engagement and details regarding the engagement.")
-    product = forms.ModelChoiceField(label="Product",
+    product = forms.ModelChoiceField(label=labels.asset.label,
                                        queryset=Product.objects.none(),
                                        required=True)
     target_start = forms.DateField(widget=forms.TextInput(
@@ -1789,8 +1791,8 @@ class AddEndpointForm(forms.Form):
                                          "Each must be valid.",
                                widget=forms.widgets.Textarea(attrs={"rows": "15", "cols": "400"}))
     product = forms.CharField(required=True,
-                              widget=forms.widgets.HiddenInput(), help_text="The product this endpoint should be "
-                                                                            "associated with.")
+                              label=labels.asset.label,
+                              widget=forms.widgets.HiddenInput(), help_text=labels.asset.endpoint_help)
     tags = TagField(required=False,
                     help_text="Add tags that help describe this endpoint.  "
                               "Choose from the list or add new tags. Press Enter key to add.")
@@ -1800,7 +1802,9 @@ class AddEndpointForm(forms.Form):
         if "product" in kwargs:
             product = kwargs.pop("product")
         super().__init__(*args, **kwargs)
-        self.fields["product"] = forms.ModelChoiceField(queryset=get_authorized_products(Permissions.Endpoint_Add))
+        self.fields["product"] = forms.ModelChoiceField(
+            queryset=get_authorized_products(Permissions.Endpoint_Add),
+            label=labels.asset.label)
         if product is not None:
             self.fields["product"].initial = product.id
 
@@ -2207,6 +2211,7 @@ class Add_Product_GroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
+        self.fields["product"].label = labels.asset.label
         current_groups = Product_Group.objects.filter(product=self.initial["product"]).values_list("group", flat=True)
         authorized_groups = get_authorized_groups(Permissions.Group_View)
         authorized_groups = authorized_groups.exclude(id__in=current_groups)
@@ -2218,7 +2223,7 @@ class Add_Product_GroupForm(forms.ModelForm):
 
 
 class Add_Product_Group_GroupForm(forms.ModelForm):
-    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label="Products")
+    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label=labels.asset.label_plural)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -2237,6 +2242,7 @@ class Edit_Product_Group_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
+        self.fields["product"].label = labels.asset.label
         self.fields["group"].disabled = True
 
     class Meta:
@@ -2260,6 +2266,7 @@ class Add_Product_Type_GroupForm(forms.ModelForm):
         authorized_groups = authorized_groups.exclude(id__in=current_groups)
         self.fields["groups"].queryset = authorized_groups
         self.fields["product_type"].disabled = True
+        self.fields["product_type"].label = labels.organization.label
 
     class Meta:
         model = Product_Type_Group
@@ -2267,7 +2274,7 @@ class Add_Product_Type_GroupForm(forms.ModelForm):
 
 
 class Add_Product_Type_Group_GroupForm(forms.ModelForm):
-    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label="Product Types")
+    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label=labels.organization.label_plural)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -2286,8 +2293,8 @@ class Edit_Product_Type_Group_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product_type"].disabled = True
-        self.fields["group"].disabled = True
         self.fields["product_type"].label = labels.organization.label
+        self.fields["group"].disabled = True
 
     class Meta:
         model = Product_Type_Group
@@ -2427,6 +2434,7 @@ class GlobalRoleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         current_user = get_current_user()
+        self.fields["role"].help_text = labels.asset.relationships.global_role_help
         if not current_user.is_superuser:
             self.fields["role"].disabled = True
 
@@ -2452,11 +2460,13 @@ class ProductTypeCountsForm(ProductCountsFormBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product_type"].queryset = get_authorized_product_types(Permissions.Product_Type_View)
+        self.fields["product_type"].label = labels.organization.label
 
 
 class ProductTagCountsForm(ProductCountsFormBase):
     product_tag = forms.ModelChoiceField(required=True,
                                          queryset=Product.tags.tag_model.objects.none().order_by("name"),
+                                         label=labels.asset.tag_label,
                                          error_messages={
                                              "required": "*"})
 
