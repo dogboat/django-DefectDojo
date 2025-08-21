@@ -305,7 +305,6 @@ class K:
     ORG_USERS_LABEL = "org.users.label"
     ORG_USERS_NO_ACCESS_MESSAGE = "org.users.no_access_message"
     ORG_USERS_ADD_ORGANIZATIONS_LABEL = "org.users.add_organizations_label"
-    ORG_USERS_ADD_USERS_LABEL = "org.users.add_users_label"
     ORG_USERS_DELETE_LABEL = "org.users.delete_label"
     ORG_USERS_DELETE_SUCCESS_MESSAGE = "org.users.delete_success_message"
     ORG_USERS_ADD_LABEL = "org.users.add_label"
@@ -450,7 +449,6 @@ V2_LABELS = {
     K.ORG_USERS_LABEL: _("Product Types this User can access"),
     K.ORG_USERS_NO_ACCESS_MESSAGE: _("This User is not assigned to any Product Types."),
     K.ORG_USERS_ADD_ORGANIZATIONS_LABEL: _("Add Product Types"),
-    K.ORG_USERS_ADD_USERS_LABEL: _("Add Members"),
     K.ORG_USERS_DELETE_LABEL: _("Delete Product Type Member"),
     K.ORG_USERS_DELETE_SUCCESS_MESSAGE: _("Product Type member deleted successfully."),
     K.ORG_USERS_ADD_LABEL: _("Add Product Type Member"),
@@ -604,7 +602,6 @@ V3_LABELS = {
     K.ORG_USERS_LABEL: _("Organizations this User can access"),
     K.ORG_USERS_NO_ACCESS_MESSAGE: _("This User is not assigned to any Organizations."),
     K.ORG_USERS_ADD_ORGANIZATIONS_LABEL: _("Add Organizations"),
-    K.ORG_USERS_ADD_USERS_LABEL: _("Add Members"),
     K.ORG_USERS_DELETE_LABEL: _("Delete Organization Member"),
     K.ORG_USERS_DELETE_SUCCESS_MESSAGE: _("Organization member deleted successfully."),
     K.ORG_USERS_ADD_LABEL: _("Add Organization Member"),
