@@ -673,8 +673,7 @@ class System_Settings(models.Model):
         blank=False,
         default=True,
         verbose_name=_("Use V3 Labels"),
-        help_text=_("Whether to use the labels associated with v3."),
-    )
+        help_text=_("Whether to use the labels associated with v3."))
 
     from dojo.middleware import System_Settings_Manager
     objects = System_Settings_Manager()
