@@ -455,15 +455,6 @@ V3_LABELS = {
 }
 
 
-
-def get_labels_dict_method(version):
-    return MAPS_BY_VERSION.get(version, V2_LABELS)
-
-
-def get_labels_version():
-    return System_Settings.LabelsVersions(System_Settings.objects.get().labels_version)
-
-
 class LabelsManager(K):
     def __init__(self, labels):
         for _l, _v in K.__dict__.items():
@@ -472,11 +463,6 @@ class LabelsManager(K):
 
 
 def get_labels() -> K:
-    return LabelsManager(V3_LABELS)
-    version = get_labels_version()
-    labels_dict = get_labels_dict_method(version)
-    return LabelsManager(labels_dict)
-
-
-def get_dict_labels():
-    pass
+    if System_Settings.objects.get().use_v3_labels:
+        return LabelsManager(V3_LABELS)
+    return LabelsManager(V2_LABELS)
