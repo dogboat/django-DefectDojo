@@ -118,6 +118,8 @@ from dojo.widgets import TableCheckboxWidget
 
 logger = logging.getLogger(__name__)
 
+labels = get_labels()
+
 RE_DATE = re.compile(r"(\d{4})-(\d\d?)-(\d\d?)$")
 
 FINDING_STATUS = (("verified", "Verified"),
@@ -239,7 +241,6 @@ class MonthYearWidget(Widget):
             return f"{y}-{m}-{1}"
         return data.get(name, None)
 
-labels = get_labels()
 
 class Product_TypeForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={}),

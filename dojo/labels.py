@@ -741,24 +741,17 @@ MAPS_BY_VERSION = {
     System_Settings.LabelsVersions.V3: V3_LABELS,
 }
 
-def get_labels_map():
-    import random
-    return random.Random().choice(list(MAPS_BY_VERSION.keys()))
-
 
 def get_labels_classes_method(version):
     return LABELS_BY_VERSION.get(version, V2Labels)()
 
 
 def get_labels_dict_method(version):
-    return _LabelProxy(MAPS_BY_VERSION.get(version, V2_LABELS))
+    return MAPS_BY_VERSION.get(version, V2Labels)
 
 
 def get_labels_version():
-    import random
-    return random.Random().choice(System_Settings.LabelsVersions.choices)
-    # In reality:
-    # return System_Settings.objects.get().labels_version
+    return System_Settings.LabelsVersions(System_Settings.objects.get().labels_version)
 
 
 class LabelsManager(K):

@@ -1334,6 +1334,8 @@ class ProductFilter(ProductFilterHelper, DojoFilter):
             self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
         self.form.fields["prod_type"].queryset = get_authorized_product_types(Permissions.Product_Type_View)
+        self.form.fields["tags"].help_text = labels.ASSET_FILTERS_TAGS_HELP
+        self.form.fields["not_tags"].help_text = labels.ASSET_FILTERS_NOT_TAGS_HELP
 
     class Meta:
         model = Product
