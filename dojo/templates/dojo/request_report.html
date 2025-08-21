@@ -10,9 +10,9 @@
                     <h3 class="has-filters">
                         Generate
                         {% if product_type %}
-                            {{ labels.organization.label}}
+                            {{ labels.ORG_LABEL }}
                         {% elif product %}
-                            {{ labels.asset.label}}
+                            {{ labels.ASSET_LABEL }}
                         {% elif engagement %}
                             Engagement
                         {% elif test %}
@@ -72,7 +72,7 @@
                             <th>Mitigated</th>
                             <th>Severity</th>
                             <th>EPSS Score / Percentile</th>
-                            <th>{{ labels.asset.label }}</th>
+                            <th>{{ labels.ASSET_LABEL }}</th>
                         </tr>
                         </thead>
                         <tbody>

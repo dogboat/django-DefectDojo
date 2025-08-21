@@ -1,377 +1,778 @@
+from types import SimpleNamespace
 
-from abc import abstractmethod, abstractproperty, ABC
-from dataclasses import dataclass
-from enum import Enum
-from typing import Optional
-
-from django import template
-from django.utils.text import capfirst
-from django.utils.translation import pgettext, npgettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from dojo.models import System_Settings
 
 
-register = template.Library()
+"""
+    _label -> short label, used for UI/API fields
+    _message -> a longer message displayed as a toast or displayed on the page
+    _help -> helptext (for help_text kwargs/popover content)
+    
+    
+"""
 
-
-
-class V2OrgListLabels:
-    label = _("List Organizations")
-
-
-class V2OrgMembersLabels:
-    label = _("Members")
-    delete_label = _("Delete Organization Member")
-    delete_success = _("Organization member deleted successfully.")
-    add_label = _("Add Organization Member")
-    add_success = _("Organization members added successfully.")
-    edit_label = _("Edit Organization Member")
-    edit_success = _("Organization member updated successfully")
-    minimum_number_label = _("There must be at least one owner for Organization %(name)s.")
-
-
-
-class V2OrgGroupsLabels:
-    label = _("Groups")
-
-    add_label = _("Add Organization Group")
-    add_success = _("Organization groups added successfully.")
-    edit_label = _("Edit Organization Group")
-    edit_success = _("Organization group updated successfully.")
-    delete_label = _("Delete Organization Group")
-    delete_success = _("Organization group deleted successfully.")
-
-    can_access = _("Organizations this Group can access")
-    no_access = _("This Group cannot access any Organizations.")
-
-
-class V2OrgXUserLabels:
+class V3OrgXUserLabels:
     label = _("Organizations this User can access")
-    no_access = _("This User is not assigned to any Organizations.")
+    no_access_message = _("This User is not assigned to any Organizations.")
 
-    add_organizations = _("Add Organizations")
-    add_users = _("Add Members")
+    add_organizations_label = _("Add Organizations")
+    add_users_label = _("Add Members")
 
     delete_label = _("Delete Organization Member")
-    delete_success = _("Organization member deleted successfully.")
+    delete_success_message = _("Organization member deleted successfully.")
+
     add_label = _("Add Organization Member")
-    add_success = _("Organization members added successfully.")
-    edit_label = _("Edit Organization Member")
-    edit_success = _("Organization member updated successfully")
-    minimum_number_label = _("There must be at least one owner for Organization %(name)s.")
+    add_success_message = _("Organization members added successfully.")
+
+    update_label = _("Edit Organization Member")
+    update_success_message = _("Organization member updated successfully")
+
+    minimum_number_with_name_message = _("There must be at least one owner for Organization %(name)s.")
 
 
-class V2OrgXGroupLabels:
+class V3OrgXGroupLabels:
     label = _("Organizations this Group can access")
-    no_access = _("This Group cannot access any Organizations.")
+    no_access_message = _("This Group cannot access any Organizations.")
 
-    add_organizations = _("Add Organizations")
-    num_organizations = _("Number of Organizations")
+    add_organizations_label = _("Add Organizations")
+    num_organizations_label = _("Number of Organizations")
 
     add_label = _("Add Organization Group")
-    add_success = _("Organization groups added successfully.")
+    add_success_message = _("Organization groups added successfully.")
 
-    edit_label = _("Edit Organization Group")
-    edit_success = _("Organization group updated successfully.")
+    update_label = _("Edit Organization Group")
+    update_success_message = _("Organization group updated successfully.")
 
     delete_label = _("Delete Organization Group")
-    delete_success = _("Organization group deleted successfully.")
+    delete_success_message = _("Organization group deleted successfully.")
 
 
-class V2OrgMetricsLabels:
-    by_findings = _("Organization Metrics by Findings")
-    by_endpoints = _("Organization Metrics by Affected Endpoints")
-    type_counts_error = _("Please choose month and year and the Organization.")
+class V3OrgFields:
+    critical_product_label = _("Critical Asset")
+    key_product_label = _("Key Asset")
 
 
-class V2OrgRelationshipsLabels:
-    users = V2OrgXUserLabels()
-    groups = V2OrgXGroupLabels()
-    metrics = V2OrgMetricsLabels()
-
-
-class V2AssetXGroupLabels:
-    label = _("Assets this Group can access")
-    no_access = _("This Group cannot access any Assets.")
-
-    add_label = _("Add Asset Group")
-    add_success = _("Asset Groups added successfully.")
-
-    edit_label = _("Edit Asset Group")
-    edit_success = _("Asset Group updated successfully.")
-
-    delete_label = _("Delete Asset Group")
-    delete_success = _("Asset Group deleted successfully.")
-
-    add_asset = _("Add Assets")
-    num_assets = _("Number of Assets")
-
-
-class V2AssetXUserLabels:
-    label = _("Assets this User can access")
-    no_access = _("This User is not assigned to any Assets.")
-
-    member_label = _("Asset Member")
-
-    add_label = _("Add Asset Member")
-    add_success = _("Asset members added successfully.")
-
-    edit_label = _("Edit Asset Member")
-    edit_success = _("Asset member updated successfully.")
-
-    delete_label = _("Delete Asset Member")
-    delete_success = _("Asset member deleted successfully.")
-
-    add_assets = _("Add Assets")
-    add_users = _("Add Users")
-
-
-class V2AssetRelationshipsLabels:
-    users = V2AssetXUserLabels()
-    groups = V2AssetXGroupLabels()
-
-    global_role_help = _("The global role will be applied to all Organizations and Assets.")
-
-
-class V2OrgFields:
-    critical_product = _("Critical Asset")
-    key_product = _("Key Asset")
-    #members = V2OrgMembersLabels()
-    #groups = V2OrgGroupsLabels()
-    add_group = _("Add Organization Group")
-
-
-class V2OrgUpdateLabels:
-    label = _("Edit Organization")
-    label_with_name = _("Edit Organization %(name)s")
-    success = _("Organization updated successfully.")
-    failure = _("Organization not updated.")
-
-
-class V2OrgsGroupsLabels:
-    label = _("Groups")
-
-
-class V2OrgDeleteLabels:
-    label = _("Delete Organization")
-    label_with_name = _("Delete Organization %(name)s")
-    confirm = _("Deleting this Organization will remove any related objects associated with it. These relationships are listed below:")
-    success = _("Organization and relationships removed.")
-    success_async = _("Organization and relationships will be removed in the background.")
-    failure = _("Organization not deleted.")
-
-
-class V2CreateOrgLabels:
+class V3CreateOrgLabels:
     label = _("Add Organization")
-    success = _("Organization added successfully.")
-    failure = _("Organization not added.")
+    success_message = _("Organization added successfully.")
 
 
-class V2ReadOrgLabels:
+class V3ReadOrgLabels:
     label = _("View Organization")
+    list_label = _("List Organizations")
 
 
-class V2OrgFilterLabels:
+class V3OrgUpdateLabels:
+    label = _("Edit Organization")
+    with_name_label = _("Edit Organization %(name)s")
+    success_message = _("Organization updated successfully.")
+
+
+class V3OrgDeleteLabels:
+    label = _("Delete Organization")
+    with_name_label = _("Delete Organization %(name)s")
+
+    confirm_message = _("Deleting this Organization will remove any related objects associated with it. These relationships are listed below:")
+    success_message = _("Organization and relationships removed.")
+    success_async_message = _("Organization and relationships will be removed in the background.")
+
+
+class V3OrgFilterLabels:
     label = _("Organization")
     label_help = _("Search for Organization names that are an exact match")
-
-    name = _("Organization Name")
+    name_label = _("Organization Name")
     name_help = _("Search for Organization names that are an exact match")
-
-    name_exact = _("Exact Organization Name")
-
-    name_contains = _("Organization Name Contains")
+    name_exact_label = _("Exact Organization Name")
+    name_contains_label = _("Organization Name Contains")
     name_contains_help = _("Search for Organization names that contain a given pattern")
+    tags_label = _("Tags (Organization)")
 
-    tags = _("Tags (Organization)")
 
-
-class V2OrganizationLabels:
+# MAIN
+class V3OrganizationLabels:
+    # Labels
     label = _("Organization")
-    label_plural = _("Organizations")
-    label_all = _("All Organizations")
-    label_with_name = _("Organization '%(name)s'")
-    none_found_label = _("No Organizations found")
-    fields = V2OrgFields()
-    relationships = V2OrgRelationshipsLabels()
-    filters = V2OrgFilterLabels()
+    plural_label = _("Organizations")
+    all_label = _("All Organizations")
+    with_name_label = _("Organization '%(name)s'")
+    none_found_message = _("No Organizations found")
 
-    create = V2CreateOrgLabels()
-    read = V2ReadOrgLabels()
-    update = V2OrgUpdateLabels()
-    delete = V2OrgDeleteLabels()
-
-    options_label = _("Organization Options")
+    # reports/metrics
     report_label = _("Organization Report")
     report_title = _("Organization Report")
+    report_with_name_title = _("Organization Report: %(name)s")
+    metrics_by_findings_label = _("Organization Metrics by Findings")
+    metrics_by_endpoints_label = _("Organization Metrics by Affected Endpoints")
+    metrics_type_counts_error_message = _("Please choose month and year and the Organization.")
 
-    notification_created_with_name = _("Organization %(name)s as been created successfully.")
+    # misc labels/messages
+    options_label = _("Organization Options")
+    notification_with_name_created_message = _("Organization %(name)s as been created successfully.")
 
-    add_label = _("Add Organization")
-    edit_label = _("Edit Organization")
-    register_new_label = _("Register a new Organization")
-    list_label = _("List Organizations")
-    add_successful_label = _("Organization added successfully.")
-
-    list = V2OrgListLabels()
-
-
-
-class V2AssetGroupsLabels:
-    access = _("Assets this Group can access")
-    no_access = _("This Group cannot access any Assets.")
-
-
-class V2AssetFieldsLabels:
-    groups = V2AssetGroupsLabels()
+    fields = V3OrgFields()
+    filters = V3OrgFilterLabels()
+    users = V3OrgXUserLabels()
+    groups = V3OrgXGroupLabels()
+    create = V3CreateOrgLabels()
+    read = V3ReadOrgLabels()
+    update = V3OrgUpdateLabels()
+    delete = V3OrgDeleteLabels()
 
 
-class V2AssetCreateLabels:
+class V3AssetXGroupLabels:
+    access_label = _("Assets this Group can access")
+    no_access_message = _("This Group cannot access any Assets.")
+
+    add_label = _("Add Asset Group")
+    add_success_message = _("Asset Groups added successfully.")
+
+    update_label = _("Edit Asset Group")
+    update_success_message = _("Asset Group updated successfully.")
+
+    delete_label = _("Delete Asset Group")
+    delete_success_message = _("Asset Group deleted successfully.")
+
+    add_assets_label = _("Add Assets")
+    num_assets_label = _("Number of Assets")
+
+
+class V3AssetXUserLabels:
+    access_label = _("Assets this User can access")
+    no_access_message = _("This User is not assigned to any Assets.")
+
+    add_label = _("Add Assets")
+    users_add_label = _("Add Users")
+
+    member_label = _("Asset Member")
+    member_add_label = _("Add Asset Member")
+    member_add_success_message = _("Asset members added successfully.")
+
+    member_update_label = _("Edit Asset Member")
+    member_update_success_message = _("Asset member updated successfully.")
+
+    member_delete_label = _("Delete Asset Member")
+    member_delete_success_message = _("Asset member deleted successfully.")
+
+
+class V3AssetCreateLabels:
     label = _("Add Asset")
-    success = _("Asset added successfully.")
-    failure = _("Organization not added")
+    success_message = _("Asset added successfully.")
 
 
-class V2AssetListLabels:
-    label = _("Asset List")
+class V3AssetReadLabels:
+    list_label = _("Asset List")
 
 
-class V2AssetFilterLabels:
+class V3AssetUpdateLabels:
+    label = _("Edit Asset")
+    # with_name_label = _("Edit Asset %(name)s")
+    success_message = _("Asset updated successfully.")
+    sla_changed_message = _("All SLA expiration dates for Findings within this Asset will be recalculated asynchronously for the newly assigned SLA configuration.")
+
+
+class V3AssetDeleteLabels:
+    label = _("Delete Asset")
+    success_message = _("Asset and relationships removed.")
+    success_async_message = _("Asset and relationships will be removed in the background.")
+
+
+class V3AssetFilterLabels:
     label = _("Asset")
 
-    name = _("Asset Name")
+    # Asset Name filters/hep
+    name_label = _("Asset Name")
     name_help = _("Search for Asset names that are an exact match")
 
     name_exact = _("Exact Asset Name")
 
-    name_contains = _("Asset Name Contains")
+    name_contains_label = _("Asset Name Contains")
     name_contains_help = _("Search for Asset names that contain a given pattern")
 
-    tags = _("Tags (Asset)")
+    tags_label = _("Tags (Asset)")
     tags_help = _("Filter for Assets with the given tags")
+
+    # Asset tags filters/help
     not_tags_help = _("Filter for Assets that do not have the given tags")
 
-    assets_without_tags = _("Assets without tags")
+    assets_without_tags_label = _("Assets without tags")
     assets_without_tags_help = _("Search for tags on an Asset that contain a given pattern, and exclude them")
+
     tags_filter_help = _("Filter Assets by the selected tags")
 
-    csv_tags_or = _("Comma separated list of exact tags present on Asset (uses OR for multiple values)")
-    csv_tags_and = _("Comma separated list of exact tags to match with an AND expression present on Asset")
-    csv_tags_not = _("Comma separated list of exact tags not present on Asset")
-    csv_lifecycles = _("Comma separated list of exact Asset lifecycles")
+    csv_tags_or_help = _("Comma separated list of exact tags present on Asset (uses OR for multiple values)")
+    csv_tags_and_help = _("Comma separated list of exact tags to match with an AND expression present on Asset")
+    csv_tags_not_help = _("Comma separated list of exact tags not present on Asset")
+    csv_lifecycles_help = _("Comma separated list of exact Asset lifecycles")
 
     # Used in MetricsEndpointFilter and EndpointFilter and EndpointFilterWithoutObjectLookups
-    tags_asset = _("Asset Tags")
-    tag_asset = _("Asset Tag")
+    tags_asset_label = _("Asset Tags")
+    tag_asset_label = _("Asset Tag")
     tag_asset_help = _("Search for tags on an Asset that are an exact match")
-    not_tags_asset = _("Not Asset Tags")
-    without_tags = _("Asset without tags")
-    tag_asset_contains = _("Asset Tag Contains")
+
+    not_tags_asset_label = _("Not Asset Tags")
+    without_tags_label = _("Asset without tags")
+    tag_asset_contains_label = _("Asset Tag Contains")
     tag_asset_contains_help = _("Search for tags on an Asset that contain a given pattern")
-    tag_not_contain = _("Asset Tag Does Not Contain")
+    tag_not_contain_label = _("Asset Tag Does Not Contain")
     tag_not_contain_help = _("Search for tags on an Asset that contain a given pattern, and exclude them")
-    tag_not = _("Not Asset Tag")
+    tag_not_label = _("Not Asset Tag")
     tag_not_help = _("Search for tags on an Asset that are an exact match, and exclude them")
 
 
-
-class V2AssetDeleteLabels:
-    label = _("Delete Asset")
-    success = _("Asset and relationships removed.")
-    success_async = _("Asset and relationships will be removed in the background.")
-    failure = _("Asset not deleted.")
-
-
-class V2AssetUpdateLabels:
-    label = _("Edit Asset")
-    # label_with_name = _("Edit Asset %(name)s")
-    success = _("Asset updated successfully.")
-    sla_changed = _("All SLA expiration dates for Findings within this Asset will be recalculated asynchronously for the newly assigned SLA configuration.")
-    failure = _("Asset not updated.")
-
-
-
-class V2AssetLabels:
+class V3AssetLabels:
     label = _("Asset")
-    label_plural = _("Assets")
-    label_with_name = _("Asset '%(name)s'")
+    plural_label = _("Assets")
+    all_label = _("All Assets")
+    with_name_label = _("Asset '%(name)s'")
+    none_found_message = _("No Assets found.")
 
-    manager = _("Asset Manager")
+    manager_label = _("Asset Manager")
+    global_role_help = _("The global role will be applied to all Organizations and Assets.")
     notifications_help = _("These are your personal settings for this Asset.")
-    none_found_label = _("No Assets found.")
-    label_all = _("All Assets")
+
     options_label = _("Asset Options")
     options_menu_label = _("Asset Options Menu")
     count_label = _("Asset Count")
-    engagements_by = _("Engagements by Asset")
-    lifecycle = _("Asset Lifecycle")
+    engagements_by_label = _("Engagements by Asset")
+    lifecycle_label = _("Asset Lifecycle")
     tag_label = _("Asset Tag")
-    tag_counts_error = _("Please choose month and year and the Asset Tag.")
-    notification_created_with_name = _("Asset %(name)s as been created successfully.")
+    metrics_tag_counts_error_message = _("Please choose month and year and the Asset Tag.")
+    notification_with_name_created_message = _("Asset %(name)s as been created successfully.")
 
-    add_tracking_files = _("Add Asset Tracking Files")
-    view_tracking_files = _("View Asset Tracking Files")
     report_label = _("Asset Report")
-
     report_title = _("Asset Report")
+    report_with_name_title = _("Asset Report: %(name)s")
 
-    close_findings = _("Close old findings within this Asset")
-    close_findings_help = _("This affects findings within the same product.")
-    enable_tag_inheritance = _("Enable Asset Tag Inheritance")
-    enable_tag_inheritance_help = _("Enables Asset tag inheritance. Any tags added on an Asset will automatically be added to all Engagements, Tests, and Findings.")
+    tracking_files_add_label = _("Add Asset Tracking Files")
+    tracking_files_view_label = _("View Asset Tracking Files")
+    findings_close_label = _("Close old findings within this Asset")
+    findings_close_help = _("This affects findings within the same product.")
+    tag_inheritance_enable_label = _("Enable Asset Tag Inheritance")
+    tag_inheritance_enable_help = _("Enables Asset tag inheritance. Any tags added on an Asset will automatically be added to all Engagements, Tests, and Findings.")
     endpoint_help = _("The Asset this Endpoint should be associated with.")
 
-    create = V2AssetCreateLabels()
-    update = V2AssetUpdateLabels()
-    delete = V2AssetDeleteLabels()
+    create = V3AssetCreateLabels()
+    read = V3AssetReadLabels()
+    update = V3AssetUpdateLabels()
+    delete = V3AssetDeleteLabels()
 
-    list = V2AssetListLabels()
-
-    filters = V2AssetFilterLabels()
-    relationships = V2AssetRelationshipsLabels()
-
-
-class V2Labels:
-    def __init__(self):
-        self._organization = V2OrganizationLabels()
-        self._asset = V2AssetLabels()
-
-    @property
-    def asset(self):
-        return self._asset
-
-    @property
-    def organization(self):
-        return self._organization
+    filters = V3AssetFilterLabels()
+    users = V3AssetXUserLabels()
+    groups = V3AssetXGroupLabels()
 
 
 class V3Labels:
-    def __init__(self):
-        self._organization = V2OrganizationLabels()
-        self._asset = V2AssetLabels()
-
-    @property
-    def asset(self):
-        return self._asset
-
-    @property
-    def organization(self):
-        return self._organization
+    asset = V3AssetLabels()
+    org = V3OrganizationLabels()
 
 
-mah_map = {
-    System_Settings.LabelsVersions.V2: V2Labels(),
-    System_Settings.LabelsVersions.V3: V3Labels(),
+class V2Labels:
+    asset = V3AssetLabels()
+    org = V3OrganizationLabels()
+
+
+LABELS_BY_VERSION = {
+    System_Settings.LabelsVersions.V2: V2Labels,
+    System_Settings.LabelsVersions.V3: V3Labels,
+}
+
+class K:
+    ORG_LABEL = "org.label"
+    ORG_PLURAL_LABEL = "org.plural_label"
+    ORG_ALL_LABEL = "org.all_label"
+    ORG_WITH_NAME_LABEL = "org.with_name_label"
+    ORG_NONE_FOUND_MESSAGE = "org.none_found_label"
+    ORG_REPORT_LABEL = "org.report_label"
+    ORG_REPORT_TITLE = "org.report_title"
+    ORG_REPORT_WITH_NAME_TITLE = "org.report_with_name_title"
+    ORG_METRICS_BY_FINDINGS_LABEL = "org.metrics_by_findings_label"
+    ORG_METRICS_BY_ENDPOINTS_LABEL = "org.metrics_by_endpoints_label"
+    ORG_METRICS_TYPE_COUNTS_ERROR_MESSAGE = "org.metrics_type_counts_error_message"
+    ORG_OPTIONS_LABEL = "org.options_label"
+    ORG_NOTIFICATION_WITH_NAME_CREATED_MESSAGE = "org.notification_with_name_created_message"
+    ORG_CRITICAL_PRODUCT_LABEL = "org.critical_product_label"
+    ORG_KEY_PRODUCT_LABEL = "org.key_product_label"
+    ORG_FILTERS_LABEL = "org.filters.label"
+    ORG_FILTERS_LABEL_HELP = "org.filters.label_help"
+    ORG_FILTERS_NAME_LABEL = "org.filters.name_label"
+    ORG_FILTERS_NAME_HELP = "org.filters.name_help"
+    ORG_FILTERS_NAME_EXACT_LABEL = "org.filters.name_exact_label"
+    ORG_FILTERS_NAME_CONTAINS_LABEL = "org.filters.name_contains_label"
+    ORG_FILTERS_NAME_CONTAINS_HELP = "org.filters.name_contains_help"
+    ORG_FILTERS_TAGS_LABEL = "org.filters.tags_label"
+    ORG_USERS_LABEL = "org.users.label"
+    ORG_USERS_NO_ACCESS_MESSAGE = "org.users.no_access_message"
+    ORG_USERS_ADD_ORGANIZATIONS_LABEL = "org.users.add_organizations_label"
+    ORG_USERS_ADD_USERS_LABEL = "org.users.add_users_label"
+    ORG_USERS_DELETE_LABEL = "org.users.delete_label"
+    ORG_USERS_DELETE_SUCCESS_MESSAGE = "org.users.delete_success_message"
+    ORG_USERS_ADD_LABEL = "org.users.add_label"
+    ORG_USERS_ADD_SUCCESS_MESSAGE = "org.users.add_success_message"
+    ORG_USERS_UPDATE_LABEL = "org.users.update_label"
+    ORG_USERS_UPDATE_SUCCESS_MESSAGE = "org.users.update_success_message"
+    ORG_USERS_MINIMUM_NUMBER_WITH_NAME_MESSAGE = "org.users.minimum_number_with_name_message"
+    ORG_GROUPS_LABEL = "org.groups.label"
+    ORG_GROUPS_NO_ACCESS_MESSAGE = "org.groups.no_access_message"
+    ORG_GROUPS_ADD_ORGANIZATIONS_LABEL = "org.groups.add_organizations_label"
+    ORG_GROUPS_NUM_ORGANIZATIONS_LABEL = "org.groups.num_organizations_label"
+    ORG_GROUPS_ADD_LABEL = "org.groups.add_label"
+    ORG_GROUPS_ADD_SUCCESS_MESSAGE = "org.groups.add_success_message"
+    ORG_GROUPS_UPDATE_LABEL = "org.groups.update_label"
+    ORG_GROUPS_UPDATE_SUCCESS_MESSAGE = "org.groups.update_success_message"
+    ORG_GROUPS_DELETE_LABEL = "org.groups.delete_label"
+    ORG_GROUPS_DELETE_SUCCESS_MESSAGE = "org.groups.delete_success_message"
+    ORG_CREATE_LABEL = "org.create.label"
+    ORG_CREATE_SUCCESS_MESSAGE = "org.create.success_message"
+    ORG_READ_LABEL = "org.read.label"
+    ORG_READ_LIST_LABEL = "org.read.list_label"
+    ORG_UPDATE_LABEL = "org.update.label"
+    ORG_UPDATE_WITH_NAME_LABEL = "org.update.with_name_label"
+    ORG_UPDATE_SUCCESS_MESSAGE = "org.update.success_message"
+    ORG_DELETE_LABEL = "org.delete.label"
+    ORG_DELETE_WITH_NAME_LABEL = "org.delete.with_name_label"
+    ORG_DELETE_CONFIRM_MESSAGE = "org.delete.confirm_message"
+    ORG_DELETE_SUCCESS_MESSAGE = "org.delete.success_message"
+    ORG_DELETE_SUCCESS_ASYNC_MESSAGE = "org.delete.success_async_message"
+    ASSET_LABEL = "asset.label"
+    ASSET_PLURAL_LABEL = "asset.plural_label"
+    ASSET_ALL_LABEL = "asset.all_label"
+    ASSET_WITH_NAME_LABEL = "asset.with_name_label"
+    ASSET_NONE_FOUND_MESSAGE = "asset.none_found_label"
+    ASSET_MANAGER_LABEL = "asset.manager_label"
+    ASSET_GLOBAL_ROLE_HELP = "asset.global_role_help"
+    ASSET_NOTIFICATIONS_HELP = "asset.notifications_help"
+    ASSET_OPTIONS_LABEL = "asset.options_label"
+    ASSET_OPTIONS_MENU_LABEL = "asset.options_menu_label"
+    ASSET_COUNT_LABEL = "asset.count_label"
+    ASSET_ENGAGEMENTS_BY_LABEL = "asset.engagements_by_label"
+    ASSET_LIFECYCLE_LABEL = "asset.lifecycle_label"
+    ASSET_TAG_LABEL = "asset.tag_label"
+    ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE = "asset.metrics_tag_counts_error_message"
+    ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE = "asset.notification_with_name_created_message"
+    ASSET_REPORT_LABEL = "asset.report_label"
+    ASSET_REPORT_TITLE = "asset.report_title"
+    ASSET_REPORT_WITH_NAME_TITLE = "asset.report_with_name_title"
+    ASSET_TRACKING_FILES_ADD_LABEL = "asset.tracking_files_add_label"
+    ASSET_TRACKING_FILES_VIEW_LABEL = "asset.tracking_files_view_label"
+    ASSET_FINDINGS_CLOSE_LABEL = "asset.findings_close_label"
+    ASSET_FINDINGS_CLOSE_HELP = "asset.findings_close_help"
+    ASSET_TAG_INHERITANCE_ENABLE_LABEL = "asset.tag_inheritance_enable_label"
+    ASSET_TAG_INHERITANCE_ENABLE_HELP = "asset.tag_inheritance_enable_help"
+    ASSET_ENDPOINT_HELP = "asset.endpoint_help"
+    ASSET_CREATE_LABEL = "asset.create.label"
+    ASSET_CREATE_SUCCESS_MESSAGE = "asset.create.success_message"
+    ASSET_READ_LIST_LABEL = "asset.read.list_label"
+    ASSET_UPDATE_LABEL = "asset.update.label"
+    ASSET_UPDATE_SUCCESS_MESSAGE = "asset.update.success_message"
+    ASSET_UPDATE_SLA_CHANGED_MESSAGE = "asset.update.sla_changed_message"
+    ASSET_DELETE_LABEL = "asset.delete.label"
+    ASSET_DELETE_SUCCESS_MESSAGE = "asset.delete.success_message"
+    ASSET_DELETE_SUCCESS_ASYNC_MESSAGE = "asset.delete.success_async_message"
+    ASSET_FILTERS_LABEL = "asset.filters.label"
+    ASSET_FILTERS_NAME_LABEL = "asset.filters.name_label"
+    ASSET_FILTERS_NAME_HELP = "asset.filters.name_help"
+    ASSET_FILTERS_NAME_EXACT = "asset.filters.name_exact"
+    ASSET_FILTERS_NAME_CONTAINS_LABEL = "asset.filters.name_contains_label"
+    ASSET_FILTERS_NAME_CONTAINS_HELP = "asset.filters.name_contains_help"
+    ASSET_FILTERS_TAGS_LABEL = "asset.filters.tags_label"
+    ASSET_FILTERS_TAGS_HELP = "asset.filters.tags_help"
+    ASSET_FILTERS_NOT_TAGS_HELP = "asset.filters.not_tags_help"
+    ASSET_FILTERS_ASSETS_WITHOUT_TAGS_LABEL = "asset.filters.assets_without_tags_label"
+    ASSET_FILTERS_ASSETS_WITHOUT_TAGS_HELP = "asset.filters.assets_without_tags_help"
+    ASSET_FILTERS_TAGS_FILTER_HELP = "asset.filters.tags_filter_help"
+    ASSET_FILTERS_CSV_TAGS_OR_HELP = "asset.filters.csv_tags_or_help"
+    ASSET_FILTERS_CSV_TAGS_AND_HELP = "asset.filters.csv_tags_and_help"
+    ASSET_FILTERS_CSV_TAGS_NOT_HELP = "asset.filters.csv_tags_not_help"
+    ASSET_FILTERS_CSV_LIFECYCLES_HELP = "asset.filters.csv_lifecycles_help"
+    ASSET_FILTERS_TAGS_ASSET_LABEL = "asset.filters.tags_asset_label"
+    ASSET_FILTERS_TAG_ASSET_LABEL = "asset.filters.tag_asset_label"
+    ASSET_FILTERS_TAG_ASSET_HELP = "asset.filters.tag_asset_help"
+    ASSET_FILTERS_NOT_TAGS_ASSET_LABEL = "asset.filters.not_tags_asset_label"
+    ASSET_FILTERS_WITHOUT_TAGS_LABEL = "asset.filters.without_tags_label"
+    ASSET_FILTERS_TAG_ASSET_CONTAINS_LABEL = "asset.filters.tag_asset_contains_label"
+    ASSET_FILTERS_TAG_ASSET_CONTAINS_HELP = "asset.filters.tag_asset_contains_help"
+    ASSET_FILTERS_TAG_NOT_CONTAIN_LABEL = "asset.filters.tag_not_contain_label"
+    ASSET_FILTERS_TAG_NOT_CONTAIN_HELP = "asset.filters.tag_not_contain_help"
+    ASSET_FILTERS_TAG_NOT_LABEL = "asset.filters.tag_not_label"
+    ASSET_FILTERS_TAG_NOT_HELP = "asset.filters.tag_not_help"
+    ASSET_USERS_ACCESS_LABEL = "asset.users.access_label"
+    ASSET_USERS_NO_ACCESS_MESSAGE = "asset.users.no_access_message"
+    ASSET_USERS_ADD_LABEL = "asset.users.add_label"
+    ASSET_USERS_USERS_ADD_LABEL = "asset.users.users_add_label"
+    ASSET_USERS_MEMBER_LABEL = "asset.users.member_label"
+    ASSET_USERS_MEMBER_ADD_LABEL = "asset.users.member_add_label"
+    ASSET_USERS_MEMBER_ADD_SUCCESS_MESSAGE = "asset.users.member_add_success_message"
+    ASSET_USERS_MEMBER_UPDATE_LABEL = "asset.users.member_update_label"
+    ASSET_USERS_MEMBER_UPDATE_SUCCESS_MESSAGE = "asset.users.member_update_success_message"
+    ASSET_USERS_MEMBER_DELETE_LABEL = "asset.users.member_delete_label"
+    ASSET_USERS_MEMBER_DELETE_SUCCESS_MESSAGE = "asset.users.member_delete_success_message"
+    ASSET_GROUPS_ACCESS_LABEL = "asset.groups.access_label"
+    ASSET_GROUPS_NO_ACCESS_MESSAGE = "asset.groups.no_access_message"
+    ASSET_GROUPS_MEMBER_LABEL = "asset.groups.member_label"
+    ASSET_GROUPS_ADD_LABEL = "asset.groups.add_label"
+    ASSET_GROUPS_ADD_SUCCESS_MESSAGE = "asset.groups.add_success_message"
+    ASSET_GROUPS_UPDATE_LABEL = "asset.groups.update_label"
+    ASSET_GROUPS_UPDATE_SUCCESS_MESSAGE = "asset.groups.update_success_message"
+    ASSET_GROUPS_DELETE_LABEL = "asset.groups.delete_label"
+    ASSET_GROUPS_DELETE_SUCCESS_MESSAGE = "asset.groups.delete_success_message"
+    ASSET_GROUPS_ADD_ASSETS_LABEL = "asset.groups.add_assets_label"
+    ASSET_GROUPS_NUM_ASSETS_LABEL = "asset.groups.num_assets_label"
+
+
+V2_LABELS = {
+    K.ORG_LABEL: _("Product Type"),
+    K.ORG_PLURAL_LABEL: _("Product Types"),
+    K.ORG_ALL_LABEL: _("All Product Types"),
+    K.ORG_WITH_NAME_LABEL: _("Product Type '%(name)s'"),
+    K.ORG_NONE_FOUND_MESSAGE: _("No Product Types found"),
+    K.ORG_REPORT_LABEL: _("Product Type Report"),
+    K.ORG_REPORT_TITLE: _("Product Type Report"),
+    K.ORG_REPORT_WITH_NAME_TITLE: _("Product Type Report: %(name)s"),
+    K.ORG_METRICS_BY_FINDINGS_LABEL: _("Product Type Metrics by Findings"),
+    K.ORG_METRICS_BY_ENDPOINTS_LABEL: _("Product Type Metrics by Affected Endpoints"),
+    K.ORG_METRICS_TYPE_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Product Type."),
+    K.ORG_OPTIONS_LABEL: _("Product Type Options"),
+    K.ORG_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Product Type %(name)s as been created successfully."),
+    K.ORG_CRITICAL_PRODUCT_LABEL: _("Critical Product"),
+    K.ORG_KEY_PRODUCT_LABEL: _("Key Product"),
+    K.ORG_FILTERS_LABEL: _("Product Type"),
+    K.ORG_FILTERS_LABEL_HELP: _("Search for Product Type names that are an exact match"),
+    K.ORG_FILTERS_NAME_LABEL: _("Product Type Name"),
+    K.ORG_FILTERS_NAME_HELP: _("Search for Product Type names that are an exact match"),
+    K.ORG_FILTERS_NAME_EXACT_LABEL: _("Exact Product Type Name"),
+    K.ORG_FILTERS_NAME_CONTAINS_LABEL: _("Product Type Name Contains"),
+    K.ORG_FILTERS_NAME_CONTAINS_HELP: _("Search for Product Type names that contain a given pattern"),
+    K.ORG_FILTERS_TAGS_LABEL: _("Tags (Product Type)"),
+    K.ORG_USERS_LABEL: _("Product Types this User can access"),
+    K.ORG_USERS_NO_ACCESS_MESSAGE: _("This User is not assigned to any Product Types."),
+    K.ORG_USERS_ADD_ORGANIZATIONS_LABEL: _("Add Product Types"),
+    K.ORG_USERS_ADD_USERS_LABEL: _("Add Members"),
+    K.ORG_USERS_DELETE_LABEL: _("Delete Product Type Member"),
+    K.ORG_USERS_DELETE_SUCCESS_MESSAGE: _("Product Type member deleted successfully."),
+    K.ORG_USERS_ADD_LABEL: _("Add Product Type Member"),
+    K.ORG_USERS_ADD_SUCCESS_MESSAGE: _("Product Type members added successfully."),
+    K.ORG_USERS_UPDATE_LABEL: _("Edit Product Type Member"),
+    K.ORG_USERS_UPDATE_SUCCESS_MESSAGE: _("Product Type member updated successfully"),
+    K.ORG_USERS_MINIMUM_NUMBER_WITH_NAME_MESSAGE: _("There must be at least one owner for Product Type %(name)s."),
+    K.ORG_GROUPS_LABEL: _("Product Types this Group can access"),
+    K.ORG_GROUPS_NO_ACCESS_MESSAGE: _("This Group cannot access any Product Types."),
+    K.ORG_GROUPS_ADD_ORGANIZATIONS_LABEL: _("Add Product Types"),
+    K.ORG_GROUPS_NUM_ORGANIZATIONS_LABEL: _("Number of Product Types"),
+    K.ORG_GROUPS_ADD_LABEL: _("Add Product Type Group"),
+    K.ORG_GROUPS_ADD_SUCCESS_MESSAGE: _("Product Type groups added successfully."),
+    K.ORG_GROUPS_UPDATE_LABEL: _("Edit Product Type Group"),
+    K.ORG_GROUPS_UPDATE_SUCCESS_MESSAGE: _("Product Type group updated successfully."),
+    K.ORG_GROUPS_DELETE_LABEL: _("Delete Product Type Group"),
+    K.ORG_GROUPS_DELETE_SUCCESS_MESSAGE: _("Product Type group deleted successfully."),
+    K.ORG_CREATE_LABEL: _("Add Product Type"),
+    K.ORG_CREATE_SUCCESS_MESSAGE: _("Product Type added successfully."),
+    K.ORG_READ_LABEL: _("View Product Type"),
+    K.ORG_READ_LIST_LABEL: _("List Product Types"),
+    K.ORG_UPDATE_LABEL: _("Edit Product Type"),
+    K.ORG_UPDATE_WITH_NAME_LABEL: _("Edit Product Type %(name)s"),
+    K.ORG_UPDATE_SUCCESS_MESSAGE: _("Product Type updated successfully."),
+    K.ORG_DELETE_LABEL: _("Delete Product Type"),
+    K.ORG_DELETE_WITH_NAME_LABEL: _("Delete Product Type %(name)s"),
+    K.ORG_DELETE_CONFIRM_MESSAGE: _(
+        "Deleting this Product Type will remove any related objects associated with it. These relationships are listed below:"),
+    K.ORG_DELETE_SUCCESS_MESSAGE: _("Product Type and relationships removed."),
+    K.ORG_DELETE_SUCCESS_ASYNC_MESSAGE: _("Product Type and relationships will be removed in the background."),
+    K.ASSET_LABEL: _("Product"),
+    K.ASSET_PLURAL_LABEL: _("Products"),
+    K.ASSET_ALL_LABEL: _("All Products"),
+    K.ASSET_WITH_NAME_LABEL: _("Product '%(name)s'"),
+    K.ASSET_NONE_FOUND_MESSAGE: _("No Products found."),
+    K.ASSET_MANAGER_LABEL: _("Product Manager"),
+    K.ASSET_GLOBAL_ROLE_HELP: _("The global role will be applied to all Product Types and Products."),
+    K.ASSET_NOTIFICATIONS_HELP: _("These are your personal settings for this Product."),
+    K.ASSET_OPTIONS_LABEL: _("Product Options"),
+    K.ASSET_OPTIONS_MENU_LABEL: _("Product Options Menu"),
+    K.ASSET_COUNT_LABEL: _("Product Count"),
+    K.ASSET_ENGAGEMENTS_BY_LABEL: _("Engagements by Product"),
+    K.ASSET_LIFECYCLE_LABEL: _("Product Lifecycle"),
+    K.ASSET_TAG_LABEL: _("Product Tag"),
+    K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Product Tag."),
+    K.ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Product %(name)s as been created successfully."),
+    K.ASSET_REPORT_LABEL: _("Product Report"),
+    K.ASSET_REPORT_TITLE: _("Product Report"),
+    K.ASSET_REPORT_WITH_NAME_TITLE: _("Product Report: %(name)s"),
+    K.ASSET_TRACKING_FILES_ADD_LABEL: _("Add Product Tracking Files"),
+    K.ASSET_TRACKING_FILES_VIEW_LABEL: _("View Product Tracking Files"),
+    K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Product"),
+    K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
+    K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Product Tag Inheritance"),
+    K.ASSET_TAG_INHERITANCE_ENABLE_HELP: _(
+        "Enables Product tag inheritance. Any tags added on an Product will automatically be added to all Engagements, Tests, and Findings."),
+    K.ASSET_ENDPOINT_HELP: _("The Product this Endpoint should be associated with."),
+    K.ASSET_CREATE_LABEL: _("Add Product"),
+    K.ASSET_CREATE_SUCCESS_MESSAGE: _("Product added successfully."),
+    K.ASSET_READ_LIST_LABEL: _("Product List"),
+    K.ASSET_UPDATE_LABEL: _("Edit Product"),
+    K.ASSET_UPDATE_SUCCESS_MESSAGE: _("Product updated successfully."),
+    K.ASSET_UPDATE_SLA_CHANGED_MESSAGE: _(
+        "All SLA expiration dates for Findings within this Product will be recalculated asynchronously for the newly assigned SLA configuration."),
+    K.ASSET_DELETE_LABEL: _("Delete Product"),
+    K.ASSET_DELETE_SUCCESS_MESSAGE: _("Product and relationships removed."),
+    K.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE: _("Product and relationships will be removed in the background."),
+    K.ASSET_FILTERS_LABEL: _("Product"),
+    K.ASSET_FILTERS_NAME_LABEL: _("Product Name"),
+    K.ASSET_FILTERS_NAME_HELP: _("Search for Product names that are an exact match"),
+    K.ASSET_FILTERS_NAME_EXACT: _("Exact Product Name"),
+    K.ASSET_FILTERS_NAME_CONTAINS_LABEL: _("Product Name Contains"),
+    K.ASSET_FILTERS_NAME_CONTAINS_HELP: _("Search for Product names that contain a given pattern"),
+    K.ASSET_FILTERS_TAGS_LABEL: _("Tags (Product)"),
+    K.ASSET_FILTERS_TAGS_HELP: _("Filter for Products with the given tags"),
+    K.ASSET_FILTERS_NOT_TAGS_HELP: _("Filter for Products that do not have the given tags"),
+    K.ASSET_FILTERS_ASSETS_WITHOUT_TAGS_LABEL: _("Products without tags"),
+    K.ASSET_FILTERS_ASSETS_WITHOUT_TAGS_HELP: _(
+        "Search for tags on an Product that contain a given pattern, and exclude them"),
+    K.ASSET_FILTERS_TAGS_FILTER_HELP: _("Filter Products by the selected tags"),
+    K.ASSET_FILTERS_CSV_TAGS_OR_HELP: _(
+        "Comma separated list of exact tags present on Product (uses OR for multiple values)"),
+    K.ASSET_FILTERS_CSV_TAGS_AND_HELP: _(
+        "Comma separated list of exact tags to match with an AND expression present on Product"),
+    K.ASSET_FILTERS_CSV_TAGS_NOT_HELP: _("Comma separated list of exact tags not present on Product"),
+    K.ASSET_FILTERS_CSV_LIFECYCLES_HELP: _("Comma separated list of exact Product lifecycles"),
+    K.ASSET_FILTERS_TAGS_ASSET_LABEL: _("Product Tags"),
+    K.ASSET_FILTERS_TAG_ASSET_LABEL: _("Product Tag"),
+    K.ASSET_FILTERS_TAG_ASSET_HELP: _("Search for tags on an Product that are an exact match"),
+    K.ASSET_FILTERS_NOT_TAGS_ASSET_LABEL: _("Not Product Tags"),
+    K.ASSET_FILTERS_WITHOUT_TAGS_LABEL: _("Product without tags"),
+    K.ASSET_FILTERS_TAG_ASSET_CONTAINS_LABEL: _("Product Tag Contains"),
+    K.ASSET_FILTERS_TAG_ASSET_CONTAINS_HELP: _("Search for tags on an Product that contain a given pattern"),
+    K.ASSET_FILTERS_TAG_NOT_CONTAIN_LABEL: _("Product Tag Does Not Contain"),
+    K.ASSET_FILTERS_TAG_NOT_CONTAIN_HELP: _(
+        "Search for tags on an Product that contain a given pattern, and exclude them"),
+    K.ASSET_FILTERS_TAG_NOT_LABEL: _("Not Product Tag"),
+    K.ASSET_FILTERS_TAG_NOT_HELP: _("Search for tags on an Product that are an exact match, and exclude them"),
+    K.ASSET_USERS_ACCESS_LABEL: _("Products this User can access"),
+    K.ASSET_USERS_NO_ACCESS_MESSAGE: _("This User is not assigned to any Products."),
+    K.ASSET_USERS_ADD_LABEL: _("Add Products"),
+    K.ASSET_USERS_USERS_ADD_LABEL: _("Add Users"),
+    K.ASSET_USERS_MEMBER_LABEL: _("Product Member"),
+    K.ASSET_USERS_MEMBER_ADD_LABEL: _("Add Product Member"),
+    K.ASSET_USERS_MEMBER_ADD_SUCCESS_MESSAGE: _("Product members added successfully."),
+    K.ASSET_USERS_MEMBER_UPDATE_LABEL: _("Edit Product Member"),
+    K.ASSET_USERS_MEMBER_UPDATE_SUCCESS_MESSAGE: _("Product member updated successfully."),
+    K.ASSET_USERS_MEMBER_DELETE_LABEL: _("Delete Product Member"),
+    K.ASSET_USERS_MEMBER_DELETE_SUCCESS_MESSAGE: _("Product member deleted successfully."),
+    K.ASSET_GROUPS_ACCESS_LABEL: _("Products this Group can access"),
+    K.ASSET_GROUPS_NO_ACCESS_MESSAGE: _("This Group cannot access any Products."),
+    K.ASSET_GROUPS_MEMBER_LABEL: _("Product Group"),
+    K.ASSET_GROUPS_ADD_LABEL: _("Add Product Group"),
+    K.ASSET_GROUPS_ADD_SUCCESS_MESSAGE: _("Product Groups added successfully."),
+    K.ASSET_GROUPS_UPDATE_LABEL: _("Edit Product Group"),
+    K.ASSET_GROUPS_UPDATE_SUCCESS_MESSAGE: _("Product Group updated successfully."),
+    K.ASSET_GROUPS_DELETE_LABEL: _("Delete Product Group"),
+    K.ASSET_GROUPS_DELETE_SUCCESS_MESSAGE: _("Product Group deleted successfully."),
+    K.ASSET_GROUPS_ADD_ASSETS_LABEL: _("Add Products"),
+    K.ASSET_GROUPS_NUM_ASSETS_LABEL: _("Number of Products"),
 }
 
 
+V3_LABELS = {
+    K.ORG_LABEL: _("Organization"),
+    K.ORG_PLURAL_LABEL: _("Organizations"),
+    K.ORG_ALL_LABEL: _("All Organizations"),
+    K.ORG_WITH_NAME_LABEL: _("Organization '%(name)s'"),
+    K.ORG_NONE_FOUND_MESSAGE: _("No Organizations found"),
+    K.ORG_REPORT_LABEL: _("Organization Report"),
+    K.ORG_REPORT_TITLE: _("Organization Report"),
+    K.ORG_REPORT_WITH_NAME_TITLE: _("Organization Report: %(name)s"),
+    K.ORG_METRICS_BY_FINDINGS_LABEL: _("Organization Metrics by Findings"),
+    K.ORG_METRICS_BY_ENDPOINTS_LABEL: _("Organization Metrics by Affected Endpoints"),
+    K.ORG_METRICS_TYPE_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Organization."),
+    K.ORG_OPTIONS_LABEL: _("Organization Options"),
+    K.ORG_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Organization %(name)s as been created successfully."),
+    K.ORG_CRITICAL_PRODUCT_LABEL: _("Critical Asset"),
+    K.ORG_KEY_PRODUCT_LABEL: _("Key Asset"),
+    K.ORG_FILTERS_LABEL: _("Organization"),
+    K.ORG_FILTERS_LABEL_HELP: _("Search for Organization names that are an exact match"),
+    K.ORG_FILTERS_NAME_LABEL: _("Organization Name"),
+    K.ORG_FILTERS_NAME_HELP: _("Search for Organization names that are an exact match"),
+    K.ORG_FILTERS_NAME_EXACT_LABEL: _("Exact Organization Name"),
+    K.ORG_FILTERS_NAME_CONTAINS_LABEL: _("Organization Name Contains"),
+    K.ORG_FILTERS_NAME_CONTAINS_HELP: _("Search for Organization names that contain a given pattern"),
+    K.ORG_FILTERS_TAGS_LABEL: _("Tags (Organization)"),
+    K.ORG_USERS_LABEL: _("Organizations this User can access"),
+    K.ORG_USERS_NO_ACCESS_MESSAGE: _("This User is not assigned to any Organizations."),
+    K.ORG_USERS_ADD_ORGANIZATIONS_LABEL: _("Add Organizations"),
+    K.ORG_USERS_ADD_USERS_LABEL: _("Add Members"),
+    K.ORG_USERS_DELETE_LABEL: _("Delete Organization Member"),
+    K.ORG_USERS_DELETE_SUCCESS_MESSAGE: _("Organization member deleted successfully."),
+    K.ORG_USERS_ADD_LABEL: _("Add Organization Member"),
+    K.ORG_USERS_ADD_SUCCESS_MESSAGE: _("Organization members added successfully."),
+    K.ORG_USERS_UPDATE_LABEL: _("Edit Organization Member"),
+    K.ORG_USERS_UPDATE_SUCCESS_MESSAGE: _("Organization member updated successfully"),
+    K.ORG_USERS_MINIMUM_NUMBER_WITH_NAME_MESSAGE: _("There must be at least one owner for Organization %(name)s."),
+    K.ORG_GROUPS_LABEL: _("Organizations this Group can access"),
+    K.ORG_GROUPS_NO_ACCESS_MESSAGE: _("This Group cannot access any Organizations."),
+    K.ORG_GROUPS_ADD_ORGANIZATIONS_LABEL: _("Add Organizations"),
+    K.ORG_GROUPS_NUM_ORGANIZATIONS_LABEL: _("Number of Organizations"),
+    K.ORG_GROUPS_ADD_LABEL: _("Add Organization Group"),
+    K.ORG_GROUPS_ADD_SUCCESS_MESSAGE: _("Organization groups added successfully."),
+    K.ORG_GROUPS_UPDATE_LABEL: _("Edit Organization Group"),
+    K.ORG_GROUPS_UPDATE_SUCCESS_MESSAGE: _("Organization group updated successfully."),
+    K.ORG_GROUPS_DELETE_LABEL: _("Delete Organization Group"),
+    K.ORG_GROUPS_DELETE_SUCCESS_MESSAGE: _("Organization group deleted successfully."),
+    K.ORG_CREATE_LABEL: _("Add Organization"),
+    K.ORG_CREATE_SUCCESS_MESSAGE: _("Organization added successfully."),
+    K.ORG_READ_LABEL: _("View Organization"),
+    K.ORG_READ_LIST_LABEL: _("List Organizations"),
+    K.ORG_UPDATE_LABEL: _("Edit Organization"),
+    K.ORG_UPDATE_WITH_NAME_LABEL: _("Edit Organization %(name)s"),
+    K.ORG_UPDATE_SUCCESS_MESSAGE: _("Organization updated successfully."),
+    K.ORG_DELETE_LABEL: _("Delete Organization"),
+    K.ORG_DELETE_WITH_NAME_LABEL: _("Delete Organization %(name)s"),
+    K.ORG_DELETE_CONFIRM_MESSAGE: _("Deleting this Organization will remove any related objects associated with it. These relationships are listed below:"),
+    K.ORG_DELETE_SUCCESS_MESSAGE: _("Organization and relationships removed."),
+    K.ORG_DELETE_SUCCESS_ASYNC_MESSAGE: _("Organization and relationships will be removed in the background."),
+    K.ASSET_LABEL: _("Asset"),
+    K.ASSET_PLURAL_LABEL: _("Assets"),
+    K.ASSET_ALL_LABEL: _("All Assets"),
+    K.ASSET_WITH_NAME_LABEL: _("Asset '%(name)s'"),
+    K.ASSET_NONE_FOUND_MESSAGE: _("No Assets found."),
+    K.ASSET_MANAGER_LABEL: _("Asset Manager"),
+    K.ASSET_GLOBAL_ROLE_HELP: _("The global role will be applied to all Organizations and Assets."),
+    K.ASSET_NOTIFICATIONS_HELP: _("These are your personal settings for this Asset."),
+    K.ASSET_OPTIONS_LABEL: _("Asset Options"),
+    K.ASSET_OPTIONS_MENU_LABEL: _("Asset Options Menu"),
+    K.ASSET_COUNT_LABEL: _("Asset Count"),
+    K.ASSET_ENGAGEMENTS_BY_LABEL: _("Engagements by Asset"),
+    K.ASSET_LIFECYCLE_LABEL: _("Asset Lifecycle"),
+    K.ASSET_TAG_LABEL: _("Asset Tag"),
+    K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Asset Tag."),
+    K.ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Asset %(name)s as been created successfully."),
+    K.ASSET_REPORT_LABEL: _("Asset Report"),
+    K.ASSET_REPORT_TITLE: _("Asset Report"),
+    K.ASSET_REPORT_WITH_NAME_TITLE: _("Asset Report: %(name)s"),
+    K.ASSET_TRACKING_FILES_ADD_LABEL: _("Add Asset Tracking Files"),
+    K.ASSET_TRACKING_FILES_VIEW_LABEL: _("View Asset Tracking Files"),
+    K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Asset"),
+    K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
+    K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Asset Tag Inheritance"),
+    K.ASSET_TAG_INHERITANCE_ENABLE_HELP: _("Enables Asset tag inheritance. Any tags added on an Asset will automatically be added to all Engagements, Tests, and Findings."),
+    K.ASSET_ENDPOINT_HELP: _("The Asset this Endpoint should be associated with."),
+    K.ASSET_CREATE_LABEL: _("Add Asset"),
+    K.ASSET_CREATE_SUCCESS_MESSAGE: _("Asset added successfully."),
+    K.ASSET_READ_LIST_LABEL: _("Asset List"),
+    K.ASSET_UPDATE_LABEL: _("Edit Asset"),
+    K.ASSET_UPDATE_SUCCESS_MESSAGE: _("Asset updated successfully."),
+    K.ASSET_UPDATE_SLA_CHANGED_MESSAGE: _("All SLA expiration dates for Findings within this Asset will be recalculated asynchronously for the newly assigned SLA configuration."),
+    K.ASSET_DELETE_LABEL: _("Delete Asset"),
+    K.ASSET_DELETE_SUCCESS_MESSAGE: _("Asset and relationships removed."),
+    K.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE: _("Asset and relationships will be removed in the background."),
+    K.ASSET_FILTERS_LABEL: _("Asset"),
+    K.ASSET_FILTERS_NAME_LABEL: _("Asset Name"),
+    K.ASSET_FILTERS_NAME_HELP: _("Search for Asset names that are an exact match"),
+    K.ASSET_FILTERS_NAME_EXACT: _("Exact Asset Name"),
+    K.ASSET_FILTERS_NAME_CONTAINS_LABEL: _("Asset Name Contains"),
+    K.ASSET_FILTERS_NAME_CONTAINS_HELP: _("Search for Asset names that contain a given pattern"),
+    K.ASSET_FILTERS_TAGS_LABEL: _("Tags (Asset)"),
+    K.ASSET_FILTERS_TAGS_HELP: _("Filter for Assets with the given tags"),
+    K.ASSET_FILTERS_NOT_TAGS_HELP: _("Filter for Assets that do not have the given tags"),
+    K.ASSET_FILTERS_ASSETS_WITHOUT_TAGS_LABEL: _("Assets without tags"),
+    K.ASSET_FILTERS_ASSETS_WITHOUT_TAGS_HELP: _("Search for tags on an Asset that contain a given pattern, and exclude them"),
+    K.ASSET_FILTERS_TAGS_FILTER_HELP: _("Filter Assets by the selected tags"),
+    K.ASSET_FILTERS_CSV_TAGS_OR_HELP: _("Comma separated list of exact tags present on Asset (uses OR for multiple values)"),
+    K.ASSET_FILTERS_CSV_TAGS_AND_HELP: _("Comma separated list of exact tags to match with an AND expression present on Asset"),
+    K.ASSET_FILTERS_CSV_TAGS_NOT_HELP: _("Comma separated list of exact tags not present on Asset"),
+    K.ASSET_FILTERS_CSV_LIFECYCLES_HELP: _("Comma separated list of exact Asset lifecycles"),
+    K.ASSET_FILTERS_TAGS_ASSET_LABEL: _("Asset Tags"),
+    K.ASSET_FILTERS_TAG_ASSET_LABEL: _("Asset Tag"),
+    K.ASSET_FILTERS_TAG_ASSET_HELP: _("Search for tags on an Asset that are an exact match"),
+    K.ASSET_FILTERS_NOT_TAGS_ASSET_LABEL: _("Not Asset Tags"),
+    K.ASSET_FILTERS_WITHOUT_TAGS_LABEL: _("Asset without tags"),
+    K.ASSET_FILTERS_TAG_ASSET_CONTAINS_LABEL: _("Asset Tag Contains"),
+    K.ASSET_FILTERS_TAG_ASSET_CONTAINS_HELP: _("Search for tags on an Asset that contain a given pattern"),
+    K.ASSET_FILTERS_TAG_NOT_CONTAIN_LABEL: _("Asset Tag Does Not Contain"),
+    K.ASSET_FILTERS_TAG_NOT_CONTAIN_HELP: _("Search for tags on an Asset that contain a given pattern, and exclude them"),
+    K.ASSET_FILTERS_TAG_NOT_LABEL: _("Not Asset Tag"),
+    K.ASSET_FILTERS_TAG_NOT_HELP: _("Search for tags on an Asset that are an exact match, and exclude them"),
+    K.ASSET_USERS_ACCESS_LABEL: _("Assets this User can access"),
+    K.ASSET_USERS_NO_ACCESS_MESSAGE: _("This User is not assigned to any Assets."),
+    K.ASSET_USERS_ADD_LABEL: _("Add Assets"),
+    K.ASSET_USERS_USERS_ADD_LABEL: _("Add Users"),
+    K.ASSET_USERS_MEMBER_LABEL: _("Asset Member"),
+    K.ASSET_USERS_MEMBER_ADD_LABEL: _("Add Asset Member"),
+    K.ASSET_USERS_MEMBER_ADD_SUCCESS_MESSAGE: _("Asset members added successfully."),
+    K.ASSET_USERS_MEMBER_UPDATE_LABEL: _("Edit Asset Member"),
+    K.ASSET_USERS_MEMBER_UPDATE_SUCCESS_MESSAGE: _("Asset member updated successfully."),
+    K.ASSET_USERS_MEMBER_DELETE_LABEL: _("Delete Asset Member"),
+    K.ASSET_USERS_MEMBER_DELETE_SUCCESS_MESSAGE: _("Asset member deleted successfully."),
+    K.ASSET_GROUPS_ACCESS_LABEL: _("Assets this Group can access"),
+    K.ASSET_GROUPS_NO_ACCESS_MESSAGE: _("This Group cannot access any Assets."),
+    K.ASSET_GROUPS_MEMBER_LABEL: _("Asset Group"),
+    K.ASSET_GROUPS_ADD_LABEL: _("Add Asset Group"),
+    K.ASSET_GROUPS_ADD_SUCCESS_MESSAGE: _("Asset Groups added successfully."),
+    K.ASSET_GROUPS_UPDATE_LABEL: _("Edit Asset Group"),
+    K.ASSET_GROUPS_UPDATE_SUCCESS_MESSAGE: _("Asset Group updated successfully."),
+    K.ASSET_GROUPS_DELETE_LABEL: _("Delete Asset Group"),
+    K.ASSET_GROUPS_DELETE_SUCCESS_MESSAGE: _("Asset Group deleted successfully."),
+    K.ASSET_GROUPS_ADD_ASSETS_LABEL: _("Add Assets"),
+    K.ASSET_GROUPS_NUM_ASSETS_LABEL: _("Number of Assets"),
+}
+
+
+class _LabelProxy:
+    def __init__(self, labels, base=""):
+        self.labels = labels
+        if not base:
+            self.base = ""
+        else:
+            self.base = base + "."
+
+    def __getattr__(self, name):
+        if name == "organization":
+            name = "org"
+        full = self.base + name
+        if full in self.labels:
+            return self.labels[full]
+        return _LabelProxy(self.labels, full)
+
+    def __str__(self):
+        raise ValueError(f"Invalid label: {self.base}")
+
+
+MAPS_BY_VERSION = {
+    System_Settings.LabelsVersions.V2: V2_LABELS,
+    System_Settings.LabelsVersions.V3: V3_LABELS,
+}
+
+def get_labels_map():
+    import random
+    return random.Random().choice(list(MAPS_BY_VERSION.keys()))
+
+
+def get_labels_classes_method(version):
+    return LABELS_BY_VERSION.get(version, V2Labels)()
+
+
+def get_labels_dict_method(version):
+    return _LabelProxy(MAPS_BY_VERSION.get(version, V2_LABELS))
+
+
 def get_labels_version():
-    return System_Settings.objects.get().labels_version
+    import random
+    return random.Random().choice(System_Settings.LabelsVersions.choices)
+    # In reality:
+    # return System_Settings.objects.get().labels_version
 
 
-def get_labels():
-    labels_version = get_labels_version()
-    return V3Labels()
-    #return {
-    #    'organization': MyV3Labels # mah_map.get(labels_version, V2Labels())
-    #}
+class LabelsManager(K):
+    def __init__(self, labels):
+        for _l, _v in K.__dict__.items():
+            if not _l.startswith("__"):
+                setattr(self, _l, labels[_v])
+
+
+def get_labels() -> K:
+    version = get_labels_version()
+    labels_dict = get_labels_dict_method(version)
+    return LabelsManager(labels_dict)
+
+
+def get_dict_labels():
+    pass

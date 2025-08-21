@@ -197,7 +197,7 @@ def report_findings(request):
                    "title_words": title_words,
                     "component_words": component_words,
                    "title": "finding-list",
-                   "asset_label": labels.asset.label,
+                   "asset_label": labels.ASSET_LABEL
                    })
 
 
@@ -389,8 +389,8 @@ def generate_report(request, obj, *, host_view=False):
     if type(obj).__name__ == "Product_Type":
         product_type = obj
         template = "dojo/product_type_pdf_report.html"
-        report_name = str(labels.organization.report_title) + ": " + str(product_type)
-        report_title = str(labels.organization.report_title)
+        report_name = labels.ORG_REPORT_WITH_NAME_TITLE % {"name": str(product_type)}
+        report_title = labels.ORG_REPORT_LABEL
         findings = report_finding_filter_class(request.GET, prod_type=product_type, queryset=prefetch_related_findings_for_report(Finding.objects.filter(
             test__engagement__product__prod_type=product_type)))
         products = Product.objects.filter(prod_type=product_type,
@@ -439,8 +439,8 @@ def generate_report(request, obj, *, host_view=False):
     elif type(obj).__name__ == "Product":
         product = obj
         template = "dojo/product_pdf_report.html"
-        report_name = str(labels.asset.report_title) + ": " + str(product)
-        report_title = str(labels.asset.report_title)
+        report_name = labels.ASSET_REPORT_WITH_NAME_TITLE % {"name": str(product)}
+        report_title = labels.ASSET_REPORT_LABEL
         findings = report_finding_filter_class(request.GET, product=product, queryset=prefetch_related_findings_for_report(Finding.objects.filter(
             test__engagement__product=product)))
         ids = set(finding.id for finding in findings.qs)  # noqa: C401
@@ -611,7 +611,7 @@ def generate_report(request, obj, *, host_view=False):
         product_tab = Product_Tab(test.engagement.product, title="Test Report", tab="engagements")
         product_tab.setEngagement(test.engagement)
     elif product:
-        product_tab = Product_Tab(product, title=str(labels.asset.report_label), tab="findings")
+        product_tab = Product_Tab(product, title=str(labels.ASSET_REPORT_LABEL), tab="findings")
     elif endpoints:
         if host_view:
             product_tab = Product_Tab(endpoint.product, title="Endpoint Host Report", tab="endpoints")

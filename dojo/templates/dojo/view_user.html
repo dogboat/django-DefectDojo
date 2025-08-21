@@ -104,7 +104,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <h4 class="pull-left">{{ labels.organization.relationships.users.label }}</h4>
+                    <h4 class="pull-left">{{ labels.ORG_USERS_LABEL }}</h4>
                     &nbsp;
                     <a href="https://docs.defectdojo.com/en/customize_dojo/user_management/about_perms_and_roles/#productproduct-type-membership--roles" target="_blank">
                         <i class="fa-solid fa-circle-question"></i></a>
@@ -118,7 +118,7 @@
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu2">
                             <li role="presentation">
                                 <a id="addProductTypeMember" href="{% url 'add_product_type_member_user' user.id %}">
-                                    <i class="fa-solid fa-plus"></i> {{ labels.organization.relationships.users.add_organizations }}
+                                    <i class="fa-solid fa-plus"></i> {{ labels.ORG_USERS_ADD_ORGANIZATIONS_LABEL }}
                                 </a>
                             </li>
                         </ul>
@@ -132,7 +132,7 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>{{ labels.organization.label }}</th>
+                            <th>{{ labels.ORG_LABEL }}</th>
                             <th>{% trans "Role" %}</th>
                         </tr>
                     </thead>
@@ -170,14 +170,14 @@
             </div>
             {% else %}
             <div class="panel-body">
-                <small class="text-muted"><em>{{ labels.organization.relationships.user.no_access }}</em></small>
+                <small class="text-muted"><em>{{ labels.ORG_USERS_NO_ACCESS_MESSAGE }}</em></small>
             </div>
             {% endif %}
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="clearfix">
-                    <h4 class="pull-left">{{ labels.asset.relationships.users.label }}</h4>
+                    <h4 class="pull-left">{{ labels.ASSET_USERS_LABEL }}</h4>
                     &nbsp;
                     <a href="https://docs.defectdojo.com/en/customize_dojo/user_management/about_perms_and_roles/#productproduct-type-membership--roles" target="_blank">
                         <i class="fa-solid fa-circle-question"></i></a>
@@ -191,7 +191,7 @@
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu3">
                             <li role="presentation">
                                 <a id="addProductMember" href="{% url 'add_product_member_user' user.id %}">
-                                    <i class="fa-solid fa-plus"></i> {{ labels.asset.relationships.users.add_assets }}
+                                    <i class="fa-solid fa-plus"></i> {{ labels.ASSET_USERS_ADD_ASSETS_LABEL }}
                                 </a>
                             </li>
                         </ul>
@@ -205,7 +205,7 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>{{ labels.asset.label }}</th>
+                            <th>{{ labels.ASSET_LABEL }}</th>
                             <th>{% trans "Role" %}</th>
                         </tr>
                     </thead>
@@ -243,7 +243,7 @@
             </div>
             {% else %}
             <div class="panel-body">
-                <small class="text-muted"><em>{{ labels.asset.relationships.users.no_access }}</em></small>
+                <small class="text-muted"><em>{{ labels.ASSET_USERS_NO_ACCESS_MESSAGE }}</em></small>
             </div>
             {% endif %}
         </div>

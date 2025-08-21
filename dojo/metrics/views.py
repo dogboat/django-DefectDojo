@@ -98,10 +98,10 @@ def metrics(request, mtype):
 
     filters = {}
     if view == "Finding":
-        page_name = labels.organization.relationships.metrics.by_findings
+        page_name = labels.ORG_METRICS_BY_FINDINGS_LABEL
         filters = finding_queries(prod_type, request)
     elif view == "Endpoint":
-        page_name = labels.organization.relationships.metrics.by_endpoints
+        page_name = labels.ORG_METRICS_BY_ENDPOINTS_LABEL
         filters = endpoint_queries(prod_type, request)
 
     all_findings = findings_queryset(queryset_check(filters["all"]))
@@ -429,7 +429,7 @@ def product_type_counts(request):
             for o in overall_in_pt:
                 aip[o["numerical_severity"]] = o["numerical_severity__count"]
         else:
-            messages.add_message(request, messages.ERROR, labels.organization.relationships.metrics.type_counts_error,
+            messages.add_message(request, messages.ERROR, labels.ORG_METRICS_TYPE_COUNTS_ERROR_MESSAGE,
                                  extra_tags="alert-danger")
 
     add_breadcrumb(title=_("Bi-Weekly Metrics"), top_level=True, request=request)
@@ -634,7 +634,7 @@ def product_tag_counts(request):
             for o in overall_in_pt:
                 aip[o["numerical_severity"]] = o["numerical_severity__count"]
         else:
-            messages.add_message(request, messages.ERROR, labels.asset.tag_counts_error, extra_tags="alert-danger")
+            messages.add_message(request, messages.ERROR, labels.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE, extra_tags="alert-danger")
 
     add_breadcrumb(title=_("Bi-Weekly Metrics"), top_level=True, request=request)
 

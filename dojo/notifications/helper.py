@@ -124,9 +124,9 @@ class NotificationManagerHelpers:
     def _create_description(self, event: str, kwargs: dict) -> str:
         if kwargs.get("description") is None:
             if event == "product_added":
-                kwargs["description"] = labels.asset.notification_created_with_name % {"name": kwargs["title"]}
+                kwargs["description"] = labels.ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE % {"name": kwargs["title"]}
             elif event == "product_type_added":
-                kwargs["description"] = labels.organization.notification_created_with_name % {"name": kwargs["title"]}
+                kwargs["description"] = labels.ORG_NOTIFICATION_WITH_NAME_CREATED_MESSAGE % {"name": kwargs["title"]}
             else:
                 kwargs["description"] = _("Event %s has occurred.") % str(event)
 

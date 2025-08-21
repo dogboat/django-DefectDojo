@@ -11,12 +11,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading tight">
                     <h3 class="has-filters">
-                        {{ labels.organization.label }}
+                        {{ labels.ORG_LABEL }}
                         <div class="dropdown pull-right">
                             <button id="show-filters" aria-label="Filters" data-toggle="collapse" data-target="#the-filters" class="btn btn-primary toggle-filters"> <i class="fa-solid fa-filter"></i> <i class="caret"></i> </button>
                             {% if "Product_Type_Add"|has_global_permission %}
                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1"
-                                    data-toggle="dropdown" aria-expanded="true" aria-label="{{ labels.organization.label }} options">
+                                    data-toggle="dropdown" aria-expanded="true" aria-label="{{ labels.ORG_LABEL }} options">
                                 <span class="fa-solid fa-screwdriver-wrench"></span>
                                 <span class="caret"></span>
                             </button>
@@ -25,7 +25,7 @@
                                     <li role="presentation">
                                         <a href="{% url 'add_product_type' %}">
                                             <i class="fa-solid fa-plus"></i>
-                                            {{ labels.organization.create.label }}
+                                            {{ labels.ORG_CREATE_LABEL }}
                                         </a>
                                     </li>
                             </ul>
@@ -50,11 +50,11 @@
                         <tr>
                             <th></th>
                             {% comment %} The display field is translated in the function. No need to translate here as well{% endcomment %}
-                            <th>{% dojo_sort request labels.organization.label 'name' 'asc' %}</th>
-                            <th>{{ labels.asset.count_label }}</th>
+                            <th>{% dojo_sort request labels.ORG_LABEL 'name' 'asc' %}</th>
+                            <th>{{ labels.ASSET_COUNT_LABEL }}</th>
                             <th>{% trans "Active (Verified) findings" %}</th>
-                            <th class="text-center">{{ labels.organization.fields.critical_product }}</th>
-                            <th class="text-center">{{ labels.organization.fields.key_product }}</th>
+                            <th class="text-center">{{ labels.ORG_CRITICAL_PRODUCT_LABEL }}</th>
+                            <th class="text-center">{{ labels.ORG_KEY_PRODUCT_LABEL }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -79,7 +79,7 @@
                                                 <li role="presentation">
                                                     <a class="" href="{% url 'add_product_to_product_type' pt.id %}" role="menuitem">
                                                         <i class="fa-solid fa-plus"></i>
-                                                        {{ labels.asset.create.label }}
+                                                        {{ labels.ASSET_CREATE_LABEL }}
                                                     </a>
                                                 </li>
                                                 {% endif %}
@@ -91,7 +91,7 @@
                                                 <li role="presentation">
                                                     <a class="" href="{% url 'product_type_report' pt.id %}" role="menuitem">
                                                         <i class="fa-solid fa-file-lines"></i>
-                                                        {{ labels.organization.report_label }}
+                                                        {{ labels.ORG_REPORT_LABEL }}
                                                     </a>
                                                 </li>
                                                 {% if pt|has_object_permission:"Product_Type_Delete" %}
@@ -134,7 +134,7 @@
                     {% include "dojo/paging_snippet.html" with page=pts page_size=True %}
                 </div>
             {% else %}
-                <p class="text-center">{{ labels.organization.none_found_label }}</p>
+                <p class="text-center">{{ labels.ORG_NONE_FOUND_MESSAGE }}</p>
             {% endif %}
         </div>
     </div>

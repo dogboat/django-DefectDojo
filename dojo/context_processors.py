@@ -83,5 +83,5 @@ def session_expiry_notification(request):
 
 def labels(request):
     return {
-        "labels": get_labels()
+        "labels": get_labels(),
     }

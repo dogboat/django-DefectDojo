@@ -233,33 +233,33 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a id="product-side-menu" href="{% url 'product' %}" aria-expanded="false" aria-label="{{ labels.asset.label_plural }}">
+                                            <a id="product-side-menu" href="{% url 'product' %}" aria-expanded="false" aria-label="{{ labels.ASSET_PLURAL_LABEL }}">
                                                 <i class="fa-solid fa-list-ul fa-fw"></i>
-                                                <span>{{ labels.asset.label_plural }}</span>
+                                                <span>{{ labels.ASSET_PLURAL_LABEL }}</span>
                                                 <span class="glyphicon arrow"></span>
                                             </a>
                                             <ul class="nav nav-second-level">
                                                 <li>
                                                     <a href="{% url 'product' %}">
-                                                        {{ labels.asset.label_all }}
+                                                        {{ labels.ASSET_ALL_LABEL }}
                                                     </a>
                                                 </li>
                                                 {% if request.user|can_add_product %}
                                                     <li>
                                                         <a href="{% url 'new_product' %}">
-                                                            {{ labels.asset.create.label }}
+                                                            {{ labels.ASSET_CREATE_LABEL }}
                                                         </a>
                                                     </li>
                                                 {% endif %}
                                                 <li>
                                                     <a href="{% url 'product_type' %}">
-                                                        {{ labels.organization.label_all }}
+                                                        {{ labels.ORG_ALL_LABEL }}
                                                     </a>
                                                 </li>
                                                 {% if "Product_Type_Add"|has_global_permission %}
                                                     <li>
                                                         <a id="pop-out-add-product-type" href="{% url 'add_product_type' %}">
-                                                            {{ labels.organization.create.label }}
+                                                            {{ labels.ORG_CREATE_LABEL }}
                                                         </a>
                                                     </li>
                                                 {% endif %}
@@ -285,7 +285,7 @@
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'engagements_all' %}">
-                                                        {{ labels.asset.engagements_by }}
+                                                        {{ labels.ASSET_ENGAGEMENTS_BY_LABEL }}
                                                     </a>
                                                 </li>
                                                 <li>
@@ -939,13 +939,13 @@
                                                             <li role="presentation">
                                                                 <a class="" href="{% url 'new_object' product_tab.product.id %}">
                                                                     <i class="fa-solid fa-plus"></i>
-                                                                    {{ labels.asset.add_tracking_files }}
+                                                                    {{ labels.ASSET_TRACKING_FILES_ADD_LABEL }}
                                                                 </a>
                                                             </li>
                                                             <li role="presentation">
                                                                 <a href="{% url 'view_objects' product_tab.product.id %}">
                                                                     <i class="fa-solid fa-rectangle-list"></i>
-                                                                    {{ labels.asset.view_tracking_files }}
+                                                                    {{ labels.ASSET_TRACKING_FILES_VIEW_LABEL }}
                                                                 </a>
                                                             </li>
                                                         {% endif %}

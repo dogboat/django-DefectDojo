@@ -2751,7 +2751,7 @@ def report_generate(request, obj, options):
     if type(obj).__name__ == "Product_Type":
         product_type = obj
 
-        report_name = str(labels.organization.report_title) + ": " + str(product_type)
+        report_name = labels.ORG_REPORT_WITH_NAME_TITLE % {"name": str(product_type)}
 
         findings = report_finding_filter_class(
             request.GET,
@@ -2780,7 +2780,7 @@ def report_generate(request, obj, options):
     elif type(obj).__name__ == "Product":
         product = obj
 
-        report_name = str(labels.asset.report_title) + ": " + str(product)
+        report_name = labels.ASSET_REPORT_WITH_NAME_TITLE % {"name": str(product)}
 
         findings = report_finding_filter_class(
             request.GET,

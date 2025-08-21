@@ -508,7 +508,7 @@ def delete_user(request, uid):
 
 @user_passes_test(lambda u: u.is_superuser)
 def add_product_type_member(request, uid):
-    page_name = str(labels.organization.relationships.users.add_label)
+    page_name = str(labels.ORG_USERS_ADD_LABEL)
     user = get_object_or_404(Dojo_User, id=uid)
     memberform = Add_Product_Type_Member_UserForm(initial={"user": user.id})
     if request.method == "POST":
@@ -525,7 +525,7 @@ def add_product_type_member(request, uid):
                         product_type_member.save()
                 messages.add_message(request,
                                     messages.SUCCESS,
-                                    labels.organization.relationships.users.add_success,
+                                    labels.ORG_USERS_ADD_SUCCESS_MESSAGE,
                                     extra_tags="alert-success")
                 return HttpResponseRedirect(reverse("view_user", args=(uid, )))
     add_breadcrumb(title=page_name, top_level=False, request=request)
@@ -538,7 +538,7 @@ def add_product_type_member(request, uid):
 
 @user_passes_test(lambda u: u.is_superuser)
 def add_product_member(request, uid):
-    page_name = str(labels.asset.relationships.users.add_label)
+    page_name = str(labels.ASSET_USERS_MEMBER_ADD_LABEL)
     user = get_object_or_404(Dojo_User, id=uid)
     memberform = Add_Product_Member_UserForm(initial={"user": user.id})
     if request.method == "POST":
@@ -555,7 +555,7 @@ def add_product_member(request, uid):
                         product_member.save()
             messages.add_message(request,
                                 messages.SUCCESS,
-                                labels.asset.relationships.users.add_success,
+                                labels.ASSET_USERS_MEMBER_ADD_SUCCESS_MESSAGE,
                                 extra_tags="alert-success")
             return HttpResponseRedirect(reverse("view_user", args=(uid, )))
     add_breadcrumb(title=page_name, top_level=False, request=request)

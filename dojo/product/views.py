@@ -161,7 +161,7 @@ def product(request):
     # Get benchmark types for the template
     benchmark_types = Benchmark_Type.objects.filter(enabled=True).order_by("name")
 
-    add_breadcrumb(title=str(labels.asset.list.label), top_level=not len(request.GET), request=request)
+    add_breadcrumb(title=str(labels.ASSET_READ_LIST_LABEL), top_level=not len(request.GET), request=request)
 
     return render(request, "dojo/product.html", {
         "prod_list": prod_list,
@@ -307,7 +307,7 @@ def view_product(request, pid):
 
     total = critical + high + medium + low + info
 
-    product_tab = Product_Tab(prod, title=str(labels.asset.label), tab="overview")
+    product_tab = Product_Tab(prod, title=str(labels.ASSET_LABEL), tab="overview")
     return render(request, "dojo/view_product_details.html", {
         "prod": prod,
         "product_tab": product_tab,
@@ -340,7 +340,7 @@ def view_product(request, pid):
 @user_is_authorized(Product, Permissions.Component_View, "pid")
 def view_product_components(request, pid):
     prod = get_object_or_404(Product, id=pid)
-    product_tab = Product_Tab(prod, title=str(labels.asset.label), tab="components")
+    product_tab = Product_Tab(prod, title=str(labels.ASSET_LABEL), tab="components")
     separator = ", "
 
     # Get components ordered by component_name and concat component versions to the same row
@@ -720,7 +720,7 @@ def view_product_metrics(request, pid):
     open_vulnerabilities = [["CWE-" + str(f.get("cwe")), f.get("count")] for f in open_vulnerabilities]
     all_vulnerabilities = [["CWE-" + str(f.get("cwe")), f.get("count")] for f in all_vulnerabilities]
 
-    product_tab = Product_Tab(prod, title=str(labels.asset.label), tab="metrics")
+    product_tab = Product_Tab(prod, title=str(labels.ASSET_LABEL), tab="metrics")
 
     return render(request, "dojo/product_metrics.html", {
         "prod": prod,
@@ -928,7 +928,7 @@ def new_product(request, ptid=None):
             product = form.save()
             messages.add_message(request,
                                  messages.SUCCESS,
-                                 labels.asset.create.success,
+                                 labels.ASSET_CREATE_SUCCESS_MESSAGE,
                                  extra_tags="alert-success")
             success, jira_project_form = jira_helper.process_jira_project_form(request, product=product)
             error = not success
@@ -975,7 +975,7 @@ def new_product(request, ptid=None):
 
         gform = GITHUB_Product_Form() if get_system_setting("enable_github") else None
 
-    add_breadcrumb(title=str(labels.asset.create.label), top_level=False, request=request)
+    add_breadcrumb(title=str(labels.ASSET_CREATE_LABEL), top_level=False, request=request)
     return render(request, "dojo/new_product.html",
                   {"form": form,
                    "jform": jira_project_form,
@@ -1005,10 +1005,10 @@ def edit_product(request, pid):
         if form.is_valid():
             initial_sla_config = Product.objects.get(pk=form.instance.id).sla_configuration
             form.save()
-            msg = labels.asset.update.success
+            msg = labels.ASSET_UPDATE_SUCCESS_MESSAGE
             # check if the SLA config was changed, append additional context to message
             if initial_sla_config != form.instance.sla_configuration:
-                msg += " " + labels.asset.update.sla_changed
+                msg += " " + labels.ASSET_UPDATE_SLA_CHANGED_MESSAGE
             messages.add_message(request,
                                  messages.SUCCESS,
                                  msg,
@@ -1048,7 +1048,7 @@ def edit_product(request, pid):
         else:
             gform = None
 
-    product_tab = Product_Tab(product, title=str(labels.asset.update.label), tab="settings")
+    product_tab = Product_Tab(product, title=str(labels.ASSET_UPDATE_LABEL), tab="settings")
     return render(request,
                   "dojo/edit_product.html",
                   {"form": form,
@@ -1072,9 +1072,9 @@ def delete_product(request, pid):
                 if get_setting("ASYNC_OBJECT_DELETE"):
                     async_del = async_delete()
                     async_del.delete(product)
-                    message = labels.asset.delete.success_async
+                    message = labels.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE
                 else:
-                    message = labels.asset.delete.success
+                    message = labels.ASSET_DELETE_SUCCESS_MESSAGE
                     product.delete()
                 messages.add_message(request,
                                      messages.SUCCESS,
@@ -1094,7 +1094,7 @@ def delete_product(request, pid):
         collector.collect([product])
         rels = collector.nested()
 
-    product_tab = Product_Tab(product, title=str(labels.asset.label), tab="settings")
+    product_tab = Product_Tab(product, title=str(labels.ASSET_LABEL), tab="settings")
 
     logger.debug("delete_product: GET RENDER")
 
@@ -1707,7 +1707,7 @@ def edit_notifications(request, pid):
 def add_product_member(request, pid):
     product = get_object_or_404(Product, pk=pid)
     memberform = Add_Product_MemberForm(initial={"product": product.id})
-    page_name = str(labels.asset.relationships.users.add_label)
+    page_name = str(labels.ASSET_USERS_MEMBER_ADD_LABEL)
     if request.method == "POST":
         memberform = Add_Product_MemberForm(request.POST, initial={"product": product.id})
         if memberform.is_valid():
@@ -1729,7 +1729,7 @@ def add_product_member(request, pid):
                             product_member.save()
                 messages.add_message(request,
                                      messages.SUCCESS,
-                                     labels.asset.relationships.users.add_success,
+                                     labels.ASSET_USERS_MEMBER_ADD_SUCCESS_MESSAGE,
                                      extra_tags="alert-success")
                 return HttpResponseRedirect(reverse("view_product", args=(pid,)))
     product_tab = Product_Tab(product, title=page_name, tab="settings")
@@ -1745,7 +1745,7 @@ def add_product_member(request, pid):
 def edit_product_member(request, memberid):
     member = get_object_or_404(Product_Member, pk=memberid)
     memberform = Edit_Product_MemberForm(instance=member)
-    page_name = str(labels.asset.relationships.users.edit_label)
+    page_name = str(labels.ASSET_USERS_MEMBER_UPDATE_LABEL)
     if request.method == "POST":
         memberform = Edit_Product_MemberForm(request.POST, instance=member)
         if memberform.is_valid():
@@ -1759,7 +1759,7 @@ def edit_product_member(request, memberid):
                 memberform.save()
                 messages.add_message(request,
                                      messages.SUCCESS,
-                                     labels.asset.relationships.users.edit_success,
+                                     labels.ASSET_USERS_MEMBER_UPDATE_SUCCESS_MESSAGE,
                                      extra_tags="alert-success")
                 if is_title_in_breadcrumbs("View User"):
                     return HttpResponseRedirect(reverse("view_user", args=(member.user.id,)))
@@ -1777,7 +1777,7 @@ def edit_product_member(request, memberid):
 def delete_product_member(request, memberid):
     member = get_object_or_404(Product_Member, pk=memberid)
     memberform = Delete_Product_MemberForm(instance=member)
-    page_name = str(labels.asset.relationships.users.delete_label)
+    page_name = str(labels.ASSET_USERS_MEMBER_DELETE_LABEL)
     if request.method == "POST":
         memberform = Delete_Product_MemberForm(request.POST, instance=member)
         member = memberform.instance
@@ -1785,7 +1785,7 @@ def delete_product_member(request, memberid):
         member.delete()
         messages.add_message(request,
                              messages.SUCCESS,
-                             labels.asset.relationships.users.delete_success,
+                             labels.ASSET_USERS_MEMBER_DELETE_SUCCESS_MESSAGE,
                              extra_tags="alert-success")
         if is_title_in_breadcrumbs("View User"):
             return HttpResponseRedirect(reverse("view_user", args=(member.user.id,)))
@@ -1937,7 +1937,7 @@ def edit_product_group(request, groupid):
     logger.error(groupid)
     group = get_object_or_404(Product_Group, pk=groupid)
     groupform = Edit_Product_Group_Form(instance=group)
-    page_name = str(labels.asset.relationships.groups.edit_label)
+    page_name = str(labels.ASSET_GROUPS_UPDATE_LABEL)
 
     if request.method == "POST":
         groupform = Edit_Product_Group_Form(request.POST, instance=group)
@@ -1952,7 +1952,7 @@ def edit_product_group(request, groupid):
                 groupform.save()
                 messages.add_message(request,
                                      messages.SUCCESS,
-                                     labels.asset.relationships.groups.edit_success,
+                                     labels.ASSET_GROUPS_UPDATE_SUCCESS_MESSAGE,
                                      extra_tags="alert-success")
                 if is_title_in_breadcrumbs("View Group"):
                     return HttpResponseRedirect(reverse("view_group", args=(group.group.id,)))
@@ -1971,7 +1971,7 @@ def edit_product_group(request, groupid):
 def delete_product_group(request, groupid):
     group = get_object_or_404(Product_Group, pk=groupid)
     groupform = Delete_Product_GroupForm(instance=group)
-    page_name = str(labels.asset.relationships.groups.delete_label)
+    page_name = str(labels.ASSET_GROUPS_DELETE_LABEL)
 
     if request.method == "POST":
         groupform = Delete_Product_GroupForm(request.POST, instance=group)
@@ -1979,7 +1979,7 @@ def delete_product_group(request, groupid):
         group.delete()
         messages.add_message(request,
                              messages.SUCCESS,
-                             labels.asset.relationships.groups.delete_success,
+                             labels.ASSET_GROUPS_DELETE_SUCCESS_MESSAGE,
                              extra_tags="alert-success")
         if is_title_in_breadcrumbs("View Group"):
             return HttpResponseRedirect(reverse("view_group", args=(group.group.id,)))
@@ -2000,7 +2000,7 @@ def delete_product_group(request, groupid):
 def add_product_group(request, pid):
     product = get_object_or_404(Product, pk=pid)
     group_form = Add_Product_GroupForm(initial={"product": product.id})
-    page_name = str(labels.asset.relationships.groups.add_label)
+    page_name = str(labels.ASSET_GROUPS_ADD_LABEL)
 
     if request.method == "POST":
         group_form = Add_Product_GroupForm(request.POST, initial={"product": product.id})
@@ -2023,7 +2023,7 @@ def add_product_group(request, pid):
                             product_group.save()
                 messages.add_message(request,
                                      messages.SUCCESS,
-                                     labels.asset.relationships.groups.add_success,
+                                     labels.ASSET_GROUPS_ADD_SUCCESS_MESSAGE,
                                      extra_tags="alert-success")
                 return HttpResponseRedirect(reverse("view_product", args=(pid,)))
     product_tab = Product_Tab(product, title=page_name, tab="settings")

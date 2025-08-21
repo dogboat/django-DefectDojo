@@ -518,7 +518,7 @@ def delete_group_member(request, mid):
 def add_product_group(request, gid):
     group = get_object_or_404(Dojo_Group, id=gid)
     group_form = Add_Product_Group_GroupForm(initial={"group": group.id})
-    page_name = str(labels.asset.relationships.groups.add_label)
+    page_name = str(labels.ASSET_GROUPS_ADD_LABEL)
 
     if request.method == "POST":
         group_form = Add_Product_Group_GroupForm(request.POST, initial={"group": group.id})
@@ -534,7 +534,7 @@ def add_product_group(request, gid):
                         product_group.save()
             messages.add_message(request,
                                  messages.SUCCESS,
-                                 labels.asset.relationships.groups.add_success,
+                                 labels.ASSET_GROUPS_ADD_SUCCESS_MESSAGE,
                                  extra_tags="alert-success")
             return HttpResponseRedirect(reverse("view_group", args=(gid, )))
 
@@ -550,7 +550,7 @@ def add_product_group(request, gid):
 def add_product_type_group(request, gid):
     group = get_object_or_404(Dojo_Group, id=gid)
     group_form = Add_Product_Type_Group_GroupForm(initial={"group": group.id})
-    page_name = str(labels.organization.relationships.groups.add_label)
+    page_name = str(labels.ORG_GROUPS_ADD_LABEL)
 
     if request.method == "POST":
         group_form = Add_Product_Type_Group_GroupForm(request.POST, initial={"group": group.id})
@@ -566,7 +566,7 @@ def add_product_type_group(request, gid):
                         product_type_group.save()
                 messages.add_message(request,
                                      messages.SUCCESS,
-                                     labels.organization.relationships.groups.add_success,
+                                     labels.ORG_GROUPS_ADD_SUCCESS_MESSAGE,
                                      extra_tags="alert-success")
                 return HttpResponseRedirect(reverse("view_group", args=(gid, )))
 

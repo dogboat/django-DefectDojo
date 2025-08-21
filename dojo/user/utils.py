@@ -27,7 +27,7 @@ class Permission_Helper:
         if self.name == "sla configuration":
             return "SLA Configurations"
         if self.name == "product type":
-            return str(labels.organization.label_plural)
+            return str(labels.ORG_PLURAL_LABEL)
         return self.name.title() + "s"
 
     def view_codename(self):

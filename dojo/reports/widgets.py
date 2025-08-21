@@ -301,7 +301,7 @@ class FindingList(Widget):
                                  "request": self.request,
                                  "title": self.title,
                                  "extra_help": self.extra_help,
-                                 "asset_label": labels.asset.label,
+                                 "asset_label": labels.ASSET_LABEL,
                                  })
         return mark_safe(html)
 

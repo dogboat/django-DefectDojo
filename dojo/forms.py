@@ -247,8 +247,8 @@ class Product_TypeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["critical_product"].label = labels.organization.fields.critical_product
-        self.fields["key_product"].label = labels.organization.fields.key_product
+        self.fields["critical_product"].label = labels.ORG_CRITICAL_PRODUCT_LABEL
+        self.fields["key_product"].label = labels.ORG_KEY_PRODUCT_LABEL
 
     class Meta:
         model = Product_Type
@@ -286,7 +286,7 @@ class Add_Product_Type_MemberForm(forms.ModelForm):
         self.fields["users"].queryset = Dojo_User.objects.exclude(
             Q(is_superuser=True)
             | Q(id__in=current_members)).exclude(is_active=False).order_by("first_name", "last_name")
-        self.fields["product_type"].label = labels.organization.label
+        self.fields["product_type"].label = labels.ORG_LABEL
         self.fields["product_type"].disabled = True
 
     class Meta:
@@ -295,7 +295,7 @@ class Add_Product_Type_MemberForm(forms.ModelForm):
 
 
 class Add_Product_Type_Member_UserForm(forms.ModelForm):
-    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label=labels.organization.label_plural)
+    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label=labels.ORG_PLURAL_LABEL)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -313,7 +313,7 @@ class Delete_Product_Type_MemberForm(Edit_Product_Type_MemberForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["role"].disabled = True
-        self.fields["product_type"].label = labels.organization.label
+        self.fields["product_type"].label = labels.ORG_LABEL
 
 
 class Test_TypeForm(forms.ModelForm):
@@ -339,7 +339,7 @@ class ProductForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={}),
                                   required=True)
 
-    prod_type = forms.ModelChoiceField(label=labels.organization.label,
+    prod_type = forms.ModelChoiceField(label=labels.ORG_LABEL,
                                        queryset=Product_Type.objects.none(),
                                        required=True)
 
@@ -348,15 +348,15 @@ class ProductForm(forms.ModelForm):
                                         required=True,
                                         initial="Default")
 
-    product_manager = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False, label=labels.asset.manager)
+    product_manager = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False, label=labels.ASSET_MANAGER_LABEL)
     technical_contact = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False)
     team_manager = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["prod_type"].queryset = get_authorized_product_types(Permissions.Product_Type_Add_Product)
-        self.fields["enable_product_tag_inheritance"].label = labels.asset.enable_tag_inheritance
-        self.fields["enable_product_tag_inheritance"].help_text = labels.asset.enable_tag_inheritance_help
+        self.fields["enable_product_tag_inheritance"].label = labels.ASSET_TAG_INHERITANCE_ENABLE_LABEL
+        self.fields["enable_product_tag_inheritance"].help_text = labels.ASSET_TAG_INHERITANCE_ENABLE_HELP
         if prod_type_id := kwargs.get("instance", Product()).prod_type_id:  # we are editing existing instance
             self.fields["prod_type"].queryset |= Product_Type.objects.filter(pk=prod_type_id)  # even if user does not have permission for any other ProdType we need to add at least assign ProdType to make form submittable (otherwise empty list was here which generated invalid form)
 
@@ -427,7 +427,7 @@ class Edit_Product_MemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
-        self.fields["product"].label = labels.asset.label
+        self.fields["product"].label = labels.ASSET_LABEL
         self.fields["user"].queryset = Dojo_User.objects.order_by("first_name", "last_name")
         self.fields["user"].disabled = True
 
@@ -442,7 +442,7 @@ class Add_Product_MemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
-        self.fields["product"].label = labels.asset.label
+        self.fields["product"].label = labels.ASSET_LABEL
         current_members = Product_Member.objects.filter(product=self.initial["product"]).values_list("user", flat=True)
         self.fields["users"].queryset = Dojo_User.objects.exclude(
             Q(is_superuser=True)
@@ -454,7 +454,7 @@ class Add_Product_MemberForm(forms.ModelForm):
 
 
 class Add_Product_Member_UserForm(forms.ModelForm):
-    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label=labels.asset.label_plural)
+    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label=labels.ASSET_PLURAL_LABEL)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -581,8 +581,8 @@ class ImportScanForm(forms.Form):
     close_old_findings_product_scope = forms.BooleanField(help_text=(
                                                 "Old findings no longer present in the new report get closed as mitigated when importing. "
                                                 + "If service has been set, only the findings for this service will be closed. "
-                                                + labels.asset.close_findings_help),
-                                            label=labels.asset.close_findings,
+                                                + labels.ASSET_FINDINGS_CLOSE_HELP),
+                                            label=labels.ASSET_FINDINGS_CLOSE_LABEL,
                                             required=False,
                                             initial=False)
     apply_tags_to_findings = forms.BooleanField(
@@ -1016,7 +1016,7 @@ class EngForm(forms.ModelForm):
         ))
     description = forms.CharField(widget=forms.Textarea(attrs={}),
                                   required=False, help_text="Description of the engagement and details regarding the engagement.")
-    product = forms.ModelChoiceField(label=labels.asset.label,
+    product = forms.ModelChoiceField(label=labels.ASSET_LABEL,
                                        queryset=Product.objects.none(),
                                        required=True)
     target_start = forms.DateField(widget=forms.TextInput(
@@ -1791,8 +1791,8 @@ class AddEndpointForm(forms.Form):
                                          "Each must be valid.",
                                widget=forms.widgets.Textarea(attrs={"rows": "15", "cols": "400"}))
     product = forms.CharField(required=True,
-                              label=labels.asset.label,
-                              widget=forms.widgets.HiddenInput(), help_text=labels.asset.endpoint_help)
+                              label=labels.ASSET_LABEL,
+                              widget=forms.widgets.HiddenInput(), help_text=labels.ASSET_ENDPOINT_HELP)
     tags = TagField(required=False,
                     help_text="Add tags that help describe this endpoint.  "
                               "Choose from the list or add new tags. Press Enter key to add.")
@@ -1804,7 +1804,7 @@ class AddEndpointForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["product"] = forms.ModelChoiceField(
             queryset=get_authorized_products(Permissions.Endpoint_Add),
-            label=labels.asset.label)
+            label=labels.ASSET_LABEL)
         if product is not None:
             self.fields["product"].initial = product.id
 
@@ -2211,7 +2211,7 @@ class Add_Product_GroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
-        self.fields["product"].label = labels.asset.label
+        self.fields["product"].label = labels.ASSET_LABEL
         current_groups = Product_Group.objects.filter(product=self.initial["product"]).values_list("group", flat=True)
         authorized_groups = get_authorized_groups(Permissions.Group_View)
         authorized_groups = authorized_groups.exclude(id__in=current_groups)
@@ -2223,7 +2223,7 @@ class Add_Product_GroupForm(forms.ModelForm):
 
 
 class Add_Product_Group_GroupForm(forms.ModelForm):
-    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label=labels.asset.label_plural)
+    products = forms.ModelMultipleChoiceField(queryset=Product.objects.none(), required=True, label=labels.ASSET_PLURAL_LABEL)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -2242,7 +2242,7 @@ class Edit_Product_Group_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product"].disabled = True
-        self.fields["product"].label = labels.asset.label
+        self.fields["product"].label = labels.ASSET_LABEL
         self.fields["group"].disabled = True
 
     class Meta:
@@ -2266,7 +2266,7 @@ class Add_Product_Type_GroupForm(forms.ModelForm):
         authorized_groups = authorized_groups.exclude(id__in=current_groups)
         self.fields["groups"].queryset = authorized_groups
         self.fields["product_type"].disabled = True
-        self.fields["product_type"].label = labels.organization.label
+        self.fields["product_type"].label = labels.ORG_LABEL
 
     class Meta:
         model = Product_Type_Group
@@ -2274,7 +2274,7 @@ class Add_Product_Type_GroupForm(forms.ModelForm):
 
 
 class Add_Product_Type_Group_GroupForm(forms.ModelForm):
-    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label=labels.organization.label_plural)
+    product_types = forms.ModelMultipleChoiceField(queryset=Product_Type.objects.none(), required=True, label=labels.ORG_PLURAL_LABEL)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -2293,7 +2293,7 @@ class Edit_Product_Type_Group_Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product_type"].disabled = True
-        self.fields["product_type"].label = labels.organization.label
+        self.fields["product_type"].label = labels.ORG_LABEL
         self.fields["group"].disabled = True
 
     class Meta:
@@ -2434,7 +2434,7 @@ class GlobalRoleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         current_user = get_current_user()
-        self.fields["role"].help_text = labels.asset.relationships.global_role_help
+        self.fields["role"].help_text = labels.ASSET_GLOBAL_ROLE_HELP
         if not current_user.is_superuser:
             self.fields["role"].disabled = True
 
@@ -2460,13 +2460,13 @@ class ProductTypeCountsForm(ProductCountsFormBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["product_type"].queryset = get_authorized_product_types(Permissions.Product_Type_View)
-        self.fields["product_type"].label = labels.organization.label
+        self.fields["product_type"].label = labels.ORG_LABEL
 
 
 class ProductTagCountsForm(ProductCountsFormBase):
     product_tag = forms.ModelChoiceField(required=True,
                                          queryset=Product.tags.tag_model.objects.none().order_by("name"),
-                                         label=labels.asset.tag_label,
+                                         label=labels.ASSET_TAG_LABEL,
                                          error_messages={
                                              "required": "*"})
 
