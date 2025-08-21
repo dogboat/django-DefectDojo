@@ -1099,6 +1099,7 @@ def delete_product(request, pid):
     logger.debug("delete_product: GET RENDER")
 
     return render(request, "dojo/delete_product.html", {
+        "label_delete_with_name": labels.ASSET_DELETE_WITH_NAME_LABEL % {"name": product},
         "product": product,
         "form": form,
         "product_tab": product_tab,

@@ -368,6 +368,8 @@ class K:
     ASSET_UPDATE_SUCCESS_MESSAGE = "asset.update.success_message"
     ASSET_UPDATE_SLA_CHANGED_MESSAGE = "asset.update.sla_changed_message"
     ASSET_DELETE_LABEL = "asset.delete.label"
+    ASSET_DELETE_WITH_NAME_LABEL = "asset.delete.with_name_label"
+    ASSET_DELETE_CONFIRM_MESSAGE = "asset.delete.confirm_message"
     ASSET_DELETE_SUCCESS_MESSAGE = "asset.delete.success_message"
     ASSET_DELETE_SUCCESS_ASYNC_MESSAGE = "asset.delete.success_async_message"
     ASSET_FILTERS_LABEL = "asset.filters.label"
@@ -514,6 +516,9 @@ V2_LABELS = {
     K.ASSET_UPDATE_SLA_CHANGED_MESSAGE: _(
         "All SLA expiration dates for Findings within this Product will be recalculated asynchronously for the newly assigned SLA configuration."),
     K.ASSET_DELETE_LABEL: _("Delete Product"),
+    K.ASSET_DELETE_WITH_NAME_LABEL: _("Delete Product %(name)s"),
+    K.ASSET_DELETE_CONFIRM_MESSAGE: _(
+        "Deleting this Product will remove any related objects associated with it. These relationships are listed below: "),
     K.ASSET_DELETE_SUCCESS_MESSAGE: _("Product and relationships removed."),
     K.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE: _("Product and relationships will be removed in the background."),
     K.ASSET_FILTERS_LABEL: _("Product"),
@@ -662,6 +667,9 @@ V3_LABELS = {
     K.ASSET_UPDATE_SUCCESS_MESSAGE: _("Asset updated successfully."),
     K.ASSET_UPDATE_SLA_CHANGED_MESSAGE: _("All SLA expiration dates for Findings within this Asset will be recalculated asynchronously for the newly assigned SLA configuration."),
     K.ASSET_DELETE_LABEL: _("Delete Asset"),
+    K.ASSET_DELETE_WITH_NAME_LABEL: _("Delete Asset %(name)s"),
+    K.ASSET_DELETE_CONFIRM_MESSAGE: _(
+        "Deleting this Asset will remove any related objects associated with it. These relationships are listed below: "),
     K.ASSET_DELETE_SUCCESS_MESSAGE: _("Asset and relationships removed."),
     K.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE: _("Asset and relationships will be removed in the background."),
     K.ASSET_FILTERS_LABEL: _("Asset"),
