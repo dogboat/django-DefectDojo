@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from dojo.models import System_Settings
-
+from dojo.v3_migration import enable_v3_migration
 
 """
     _label -> short label, used for UI/API fields
@@ -462,11 +462,7 @@ class LabelsManager(K):
                 setattr(self, _l, labels[_v])
 
 
-def should_use_v3_migration():
-    return System_Settings.objects.get().enable_v3_migration
-
-
 def get_labels() -> K:
-    if should_use_v3_migration():
+    if enable_v3_migration():
         return LabelsManager(V3_LABELS)
     return LabelsManager(V2_LABELS)
