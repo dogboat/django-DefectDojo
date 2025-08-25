@@ -158,6 +158,13 @@ v2_api.register(r"notes", NotesViewSet, basename="notes")
 v2_api.register(r"note_type", NoteTypeViewSet, basename="note_type")
 v2_api.register(r"notifications", NotificationsViewSet, basename="notifications")
 v2_api.register(r"notification_webhooks", NotificationWebhooksViewSet)
+v2_api.register(r"products", ProductViewSet, basename="product")
+v2_api.register(r"product_api_scan_configurations", ProductAPIScanConfigurationViewSet, basename="product_api_scan_configuration")
+v2_api.register(r"product_groups", ProductGroupViewSet, basename="product_group")
+v2_api.register(r"product_members", ProductMemberViewSet, basename="product_member")
+v2_api.register(r"product_types", ProductTypeViewSet, basename="product_type")
+v2_api.register(r"product_type_members", ProductTypeMemberViewSet, basename="product_type_member")
+v2_api.register(r"product_type_groups", ProductTypeGroupViewSet, basename="product_type_group")
 v2_api.register(r"regulations", RegulationsViewSet, basename="regulations")
 v2_api.register(r"reimport-scan", ReImportScanView, basename="reimportscan")
 v2_api.register(r"request_response_pairs", BurpRawRequestResponseViewSet, basename="request_response_pairs")
@@ -184,23 +191,14 @@ v2_api.register(r"questionnaire_general_questionnaires", QuestionnaireGeneralSur
 v2_api.register(r"questionnaire_questions", QuestionnaireQuestionViewSet, basename="question")
 
 if enable_v3_migration():
-    v2_api.register(r"assets", AssetViewSet, basename="product")
+    v2_api.register(r"assets", AssetViewSet, basename="asset")
     v2_api.register(r"asset_api_scan_configurations", AssetAPIScanConfigurationViewSet,
-                    basename="product_api_scan_configuration")
-    v2_api.register(r"asset_groups", AssetGroupViewSet, basename="product_group")
-    v2_api.register(r"asset_members", AssetMemberViewSet, basename="product_member")
-    v2_api.register(r"organizations", OrganizationViewSet, basename="product_type")
-    v2_api.register(r"organization_members", OrganizationMemberViewSet, basename="product_type_member")
-    v2_api.register(r"organization_groups", OrganizationGroupViewSet, basename="product_type_group")
-else:
-    v2_api.register(r"products", ProductViewSet, basename="product")
-    v2_api.register(r"product_api_scan_configurations", ProductAPIScanConfigurationViewSet,
-                    basename="product_api_scan_configuration")
-    v2_api.register(r"product_groups", ProductGroupViewSet, basename="product_group")
-    v2_api.register(r"product_members", ProductMemberViewSet, basename="product_member")
-    v2_api.register(r"product_types", ProductTypeViewSet, basename="product_type")
-    v2_api.register(r"product_type_members", ProductTypeMemberViewSet, basename="product_type_member")
-    v2_api.register(r"product_type_groups", ProductTypeGroupViewSet, basename="product_type_group")
+                    basename="asset_api_scan_configuration")
+    v2_api.register(r"asset_groups", AssetGroupViewSet, basename="asset_group")
+    v2_api.register(r"asset_members", AssetMemberViewSet, basename="asset_member")
+    v2_api.register(r"organizations", OrganizationViewSet, basename="organization")
+    v2_api.register(r"organization_members", OrganizationMemberViewSet, basename="organization_member")
+    v2_api.register(r"organization_groups", OrganizationGroupViewSet, basename="organization_group")
 
 ur = []
 ur += dev_env_urls

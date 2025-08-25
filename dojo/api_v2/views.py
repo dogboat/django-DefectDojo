@@ -3194,12 +3194,18 @@ class NotificationWebhooksViewSet(
     permission_classes = (permissions.IsSuperUser, DjangoModelPermissions)  # TODO: add permission also for other users
 
 
+# V3
+
+from django_filters.rest_framework import FilterSet
+class AssetApiScanConfigurationFilterSet(FilterSet):
+    pass
+
 # Authorization: object-based
 @extend_schema_view(**schema_with_prefetch())
 class AssetAPIScanConfigurationViewSet(
     PrefetchDojoModelViewSet,
 ):
-    serializer_class = serializers.ProductAPIScanConfigurationSerializer
+    serializer_class = serializers.AssetAPIScanConfigurationSerializer
     queryset = Product_API_Scan_Configuration.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = [
@@ -3231,7 +3237,7 @@ class AssetViewSet(
     viewsets.GenericViewSet,
     dojo_mixins.DeletePreviewModelMixin,
 ):
-    serializer_class = serializers.ProductSerializer
+    serializer_class = serializers.AssetSerializer
     queryset = Product.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ApiProductFilter
@@ -3301,7 +3307,7 @@ class AssetViewSet(
 class AssetMemberViewSet(
     PrefetchDojoModelViewSet,
 ):
-    serializer_class = serializers.ProductMemberSerializer
+    serializer_class = serializers.AssetMemberSerializer
     queryset = Product_Member.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ["id", "product_id", "user_id"]
@@ -3329,7 +3335,7 @@ class AssetMemberViewSet(
 class AssetGroupViewSet(
     PrefetchDojoModelViewSet,
 ):
-    serializer_class = serializers.ProductGroupSerializer
+    serializer_class = serializers.AssetGroupSerializer
     queryset = Product_Group.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ["id", "product_id", "group_id"]
@@ -3357,7 +3363,7 @@ class AssetGroupViewSet(
 class OrganizationViewSet(
     PrefetchDojoModelViewSet,
 ):
-    serializer_class = serializers.ProductTypeSerializer
+    serializer_class = serializers.OrganizationSerializer
     queryset = Product_Type.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = [
@@ -3442,7 +3448,7 @@ class OrganizationViewSet(
 class OrganizationMemberViewSet(
     PrefetchDojoModelViewSet,
 ):
-    serializer_class = serializers.ProductTypeMemberSerializer
+    serializer_class = serializers.OrganizationMemberSerializer
     queryset = Product_Type_Member.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ["id", "product_type_id", "user_id"]
@@ -3484,7 +3490,7 @@ class OrganizationMemberViewSet(
 class OrganizationGroupViewSet(
     PrefetchDojoModelViewSet,
 ):
-    serializer_class = serializers.ProductTypeGroupSerializer
+    serializer_class = serializers.OrganizationGroupSerializer
     queryset = Product_Type_Group.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ["id", "product_type_id", "group_id"]
