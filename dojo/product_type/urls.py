@@ -1,12 +1,12 @@
 from django.urls import re_path
 
-from dojo.labels import enable_v3_migration
+from dojo.labels import v3_migration_enabled
 from dojo.product import views as product_views
 from dojo.product_type import views
 from dojo.v3_migration import redirect_view
 
 
-if enable_v3_migration():
+if v3_migration_enabled():
     # Organization
     urlpatterns = [
         re_path(r"^organization$", views.product_type, name="product_type"),

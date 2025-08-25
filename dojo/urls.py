@@ -115,7 +115,7 @@ from dojo.tool_product.urls import urlpatterns as tool_product_urls
 from dojo.tool_type.urls import urlpatterns as tool_type_urls
 from dojo.user.urls import urlpatterns as user_urls
 from dojo.utils import get_system_setting
-from dojo.v3_migration import enable_v3_migration
+from dojo.v3_migration import v3_migration_enabled
 
 logger = logging.getLogger(__name__)
 
@@ -190,7 +190,7 @@ v2_api.register(r"questionnaire_engagement_questionnaires", QuestionnaireEngagem
 v2_api.register(r"questionnaire_general_questionnaires", QuestionnaireGeneralSurveyViewSet, basename="general_survey")
 v2_api.register(r"questionnaire_questions", QuestionnaireQuestionViewSet, basename="question")
 
-if enable_v3_migration():
+if v3_migration_enabled():
     v2_api.register(r"assets", AssetViewSet, basename="asset")
     v2_api.register(r"asset_api_scan_configurations", AssetAPIScanConfigurationViewSet,
                     basename="asset_api_scan_configuration")

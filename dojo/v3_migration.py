@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from dojo.models import System_Settings
 
 
-def enable_v3_migration():
+def v3_migration_enabled():
     return System_Settings.objects.get().enable_v3_migration
 
 

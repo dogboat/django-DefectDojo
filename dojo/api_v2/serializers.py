@@ -113,10 +113,12 @@ from dojo.models import (
     Vulnerability_Id_Template,
     get_current_date,
 )
+from dojo.product.queries import get_authorized_products
 from dojo.product_announcements import (
     LargeScanSizeProductAnnouncement,
     ScanTypeProductAnnouncement,
 )
+from dojo.product_type.queries import get_authorized_product_types
 from dojo.tools.factory import (
     get_choices_sorted,
     requires_file,
@@ -3073,10 +3075,23 @@ class NotificationWebhooksSerializer(serializers.ModelSerializer):
 
 # V3
 
+
+class RelatedAssetField(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        return get_authorized_products(Permissions.Product_View)
+
+
+class RelatedOrganizationField(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        return get_authorized_product_types(Permissions.Product_Type_View)
+
+
 class AssetAPIScanConfigurationSerializer(serializers.ModelSerializer):
+    asset = RelatedAssetField(source="product")
+
     class Meta:
         model = Product_API_Scan_Configuration
-        fields = "__all__"
+        exclude = ("product",)
 
 
 class AssetSerializer(serializers.ModelSerializer):
@@ -3084,7 +3099,16 @@ class AssetSerializer(serializers.ModelSerializer):
     findings_list = serializers.SerializerMethodField()
 
     tags = TagListSerializerField(required=False)
-    product_meta = ProductMetaSerializer(read_only=True, many=True)
+
+    # V3 fields
+    asset_meta = ProductMetaSerializer(source="product_meta", read_only=True, many=True)
+    organization = RelatedOrganizationField(source="prod_type")
+    asset_numeric_grade = serializers.IntegerField(source="prod_numeric_grade")
+    enable_asset_tag_inheritance = serializers.BooleanField(source="enable_product_tag_inheritance")
+    asset_managers = serializers.PrimaryKeyRelatedField(
+        source="product_manager",
+        queryset=Dojo_User.objects.exclude(is_active=False))
+
 
     class Meta:
         model = Product
@@ -3092,6 +3116,11 @@ class AssetSerializer(serializers.ModelSerializer):
             "tid",
             "updated",
             "async_updating",
+            # Below here excluded for V3 migration
+            "prod_type",
+            "prod_numeric_grade",
+            "enable_product_tag_inheritance",
+            "product_manager",
         )
 
     def validate(self, data):
@@ -3100,7 +3129,7 @@ class AssetSerializer(serializers.ModelSerializer):
             new_sla_config = data.get("sla_configuration", None)
             old_sla_config = getattr(self.instance, "sla_configuration", None)
             if new_sla_config and old_sla_config and new_sla_config != old_sla_config:
-                msg = "Finding SLA expiration dates are currently being recalculated. The SLA configuration for this product cannot be changed until the calculation is complete."
+                msg = "Finding SLA expiration dates are currently being recalculated. The SLA configuration for this asset cannot be changed until the calculation is complete."
                 raise serializers.ValidationError(msg)
         return data
 
@@ -3111,122 +3140,129 @@ class AssetSerializer(serializers.ModelSerializer):
     def get_findings_list(self, obj) -> list[int]:
         return obj.open_findings_list()
 
+
 class AssetMemberSerializer(serializers.ModelSerializer):
+    asset = RelatedAssetField(source="product")
+
     class Meta:
         model = Product_Member
-        fields = "__all__"
+        exclude = ("product",)
 
     def validate(self, data):
         if (
             self.instance is not None
-            and data.get("product") != self.instance.product
+            and data.get("asset") != self.instance.product
             and not user_has_permission(
                 self.context["request"].user,
-                data.get("product"),
+                data.get("asset"),
                 Permissions.Product_Manage_Members,
             )
         ):
-            msg = "You are not permitted to add a member to this product"
+            msg = "You are not permitted to add a member to this Asset"
             raise PermissionDenied(msg)
 
         if (
             self.instance is None
-            or data.get("product") != self.instance.product
+            or data.get("asset") != self.instance.product
             or data.get("user") != self.instance.user
         ):
             members = Product_Member.objects.filter(
-                product=data.get("product"), user=data.get("user"),
+                product=data.get("asset"), user=data.get("user"),
             )
             if members.count() > 0:
-                msg = "Product_Member already exists"
+                msg = "Asset Member already exists"
                 raise ValidationError(msg)
 
         if data.get("role").is_owner and not user_has_permission(
             self.context["request"].user,
-            data.get("product"),
+            data.get("asset"),
             Permissions.Product_Member_Add_Owner,
         ):
-            msg = "You are not permitted to add a member as Owner to this product"
+            msg = "You are not permitted to add a member as Owner to this Asset"
             raise PermissionDenied(msg)
 
         return data
 
 
 class AssetGroupSerializer(serializers.ModelSerializer):
+    asset = RelatedAssetField(source="product")
+
     class Meta:
         model = Product_Group
-        fields = "__all__"
+        exclude = ("product",)
 
     def validate(self, data):
         if (
             self.instance is not None
-            and data.get("product") != self.instance.product
+            and data.get("asset") != self.instance.product
             and not user_has_permission(
                 self.context["request"].user,
-                data.get("product"),
+                data.get("asset"),
                 Permissions.Product_Group_Add,
             )
         ):
-            msg = "You are not permitted to add a group to this product"
+            msg = "You are not permitted to add a group to this Asset"
             raise PermissionDenied(msg)
 
         if (
             self.instance is None
-            or data.get("product") != self.instance.product
+            or data.get("asset") != self.instance.product
             or data.get("group") != self.instance.group
         ):
             members = Product_Group.objects.filter(
-                product=data.get("product"), group=data.get("group"),
+                product=data.get("asset"), group=data.get("group"),
             )
             if members.count() > 0:
-                msg = "Product_Group already exists"
+                msg = "Asset Group already exists"
                 raise ValidationError(msg)
 
         if data.get("role").is_owner and not user_has_permission(
             self.context["request"].user,
-            data.get("product"),
+            data.get("asset"),
             Permissions.Product_Group_Add_Owner,
         ):
-            msg = "You are not permitted to add a group as Owner to this product"
+            msg = "You are not permitted to add a group as Owner to this Asset"
             raise PermissionDenied(msg)
 
         return data
 
 
 class OrganizationMemberSerializer(serializers.ModelSerializer):
+    organization = RelatedOrganizationField(source="product_type")
+
     class Meta:
         model = Product_Type_Member
-        fields = "__all__"
+        exclude = ("product_type",)
 
     def validate(self, data):
         if (
             self.instance is not None
-            and data.get("product_type") != self.instance.product_type
+            and data.get("organization") != self.instance.product_type
             and not user_has_permission(
                 self.context["request"].user,
-                data.get("product_type"),
+                data.get("organization"),
                 Permissions.Product_Type_Manage_Members,
             )
         ):
-            msg = "You are not permitted to add a member to this product type"
+            msg = "You are not permitted to add a member to this Organization"
             raise PermissionDenied(msg)
 
         if (
             self.instance is None
-            or data.get("product_type") != self.instance.product_type
+            or data.get("organization") != self.instance.product_type
             or data.get("user") != self.instance.user
         ):
             members = Product_Type_Member.objects.filter(
-                product_type=data.get("product_type"), user=data.get("user"),
+                product_type=data.get("organization"), user=data.get("user"),
             )
             if members.count() > 0:
-                msg = "Product_Type_Member already exists"
+                msg = "Organization Member already exists"
                 raise ValidationError(msg)
 
         if self.instance is not None and not data.get("role").is_owner:
             owners = (
                 Product_Type_Member.objects.filter(
-                    product_type=data.get("product_type"), role__is_owner=True,
+                    product_type=data.get("organization"), role__is_owner=True,
                 )
                 .exclude(id=self.instance.id)
                 .count()
@@ -3237,57 +3273,62 @@ class OrganizationMemberSerializer(serializers.ModelSerializer):
 
         if data.get("role").is_owner and not user_has_permission(
             self.context["request"].user,
-            data.get("product_type"),
+            data.get("organization"),
             Permissions.Product_Type_Member_Add_Owner,
         ):
-            msg = "You are not permitted to add a member as Owner to this product type"
+            msg = "You are not permitted to add a member as Owner to this Organization"
             raise PermissionDenied(msg)
 
         return data
 
 
 class OrganizationGroupSerializer(serializers.ModelSerializer):
+    organization = RelatedOrganizationField(source="product_type")
+
     class Meta:
         model = Product_Type_Group
-        fields = "__all__"
+        exclude = ("product_type",)
 
     def validate(self, data):
         if (
             self.instance is not None
-            and data.get("product_type") != self.instance.product_type
+            and data.get("organization") != self.instance.product_type
             and not user_has_permission(
                 self.context["request"].user,
-                data.get("product_type"),
+                data.get("organization"),
                 Permissions.Product_Type_Group_Add,
             )
         ):
-            msg = "You are not permitted to add a group to this product type"
+            msg = "You are not permitted to add a group to this Organization"
             raise PermissionDenied(msg)
 
         if (
             self.instance is None
-            or data.get("product_type") != self.instance.product_type
+            or data.get("organization") != self.instance.product_type
             or data.get("group") != self.instance.group
         ):
             members = Product_Type_Group.objects.filter(
-                product_type=data.get("product_type"), group=data.get("group"),
+                product_type=data.get("organization"), group=data.get("group"),
             )
             if members.count() > 0:
-                msg = "Product_Type_Group already exists"
+                msg = "Organization Group already exists"
                 raise ValidationError(msg)
 
         if data.get("role").is_owner and not user_has_permission(
             self.context["request"].user,
-            data.get("product_type"),
+            data.get("organization"),
             Permissions.Product_Type_Group_Add_Owner,
         ):
-            msg = "You are not permitted to add a group as Owner to this product type"
+            msg = "You are not permitted to add a group as Owner to this Organization"
             raise PermissionDenied(msg)
 
         return data
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
+    critical_asset = serializers.BooleanField(source="critical_product")
+    key_asset = serializers.BooleanField(source="key_product")
+
     class Meta:
         model = Product_Type
-        fields = "__all__"
+        exclude = ("critical_product", "key_product",)

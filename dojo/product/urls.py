@@ -1,11 +1,10 @@
 from django.urls import re_path
 
 from dojo.engagement import views as dojo_engagement_views
-from dojo.labels import enable_v3_migration
 from dojo.product import views
-from dojo.v3_migration import redirect_view
+from dojo.v3_migration import redirect_view, v3_migration_enabled
 
-if enable_v3_migration():
+if v3_migration_enabled():
     # Asset
     urlpatterns = [
         re_path(r"^asset$", views.product, name="product"),

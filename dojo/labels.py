@@ -1,14 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 
-from dojo.models import System_Settings
-from dojo.v3_migration import enable_v3_migration
+
+from dojo.v3_migration import v3_migration_enabled
 
 """
     _label -> short label, used for UI/API fields
     _message -> a longer message displayed as a toast or displayed on the page
     _help -> helptext (for help_text kwargs/popover content)
-    
-    
 """
 
 
@@ -463,6 +461,6 @@ class LabelsManager(K):
 
 
 def get_labels() -> K:
-    if enable_v3_migration():
+    if v3_migration_enabled():
         return LabelsManager(V3_LABELS)
     return LabelsManager(V2_LABELS)
