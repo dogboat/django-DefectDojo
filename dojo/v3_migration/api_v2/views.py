@@ -3,12 +3,13 @@ from rest_framework.response import Response
 
 import dojo.api_v2.mixins as dojo_mixins
 
-from django_filters.rest_framework import FilterSet, DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated
 
 from dojo.api_v2 import permissions, prefetch
+from dojo.api_v2.serializers import ReportGenerateOptionSerializer
 from dojo.api_v2.views import schema_with_prefetch, PrefetchDojoModelViewSet, report_generate
 
 from dojo.authorization.roles_permissions import Permissions
@@ -82,7 +83,7 @@ class AssetViewSet(
     #     return Response(serializer.data)
 
     @extend_schema(
-        request=serializers.ReportGenerateOptionSerializer,
+        request=ReportGenerateOptionSerializer,
         responses={status.HTTP_200_OK: serializers.ReportGenerateSerializer},
     )
     @action(
@@ -93,7 +94,7 @@ class AssetViewSet(
 
         options = {}
         # prepare post data
-        report_options = serializers.ReportGenerateOptionSerializer(
+        report_options = ReportGenerateOptionSerializer(
             data=request.data,
         )
         if report_options.is_valid():
@@ -223,7 +224,7 @@ class OrganizationViewSet(
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
-        request=serializers.ReportGenerateOptionSerializer,
+        request=ReportGenerateOptionSerializer,
         responses={status.HTTP_200_OK: serializers.ReportGenerateSerializer},
     )
     @action(
@@ -234,7 +235,7 @@ class OrganizationViewSet(
 
         options = {}
         # prepare post data
-        report_options = serializers.ReportGenerateOptionSerializer(
+        report_options = ReportGenerateOptionSerializer(
             data=request.data,
         )
         if report_options.is_valid():
