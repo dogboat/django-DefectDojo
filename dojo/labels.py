@@ -1,16 +1,20 @@
-from django.utils.translation import gettext_lazy as _
-
-
-from dojo.v3_migration import v3_migration_enabled
-
 """
+Labels! This module provides a centralized location for labels.
+
+Some conventions used:
     _label -> short label, used for UI/API fields
     _message -> a longer message displayed as a toast or displayed on the page
     _help -> helptext (for help_text kwargs/popover content)
 """
+from django.utils.translation import gettext_lazy as _
+
+from dojo.v3_migration import v3_migration_enabled
 
 
 class K:
+    """
+    Directory of labels used throughout the app.
+    """
     ORG_LABEL = "org.label"
     ORG_PLURAL_LABEL = "org.plural_label"
     ORG_ALL_LABEL = "org.all_label"
@@ -154,6 +158,7 @@ class K:
     ASSET_GROUPS_NUM_ASSETS_LABEL = "asset.groups.num_assets_label"
 
 
+# V2 labels: uses "Product" and "Product Type."
 V2_LABELS = {
     K.ORG_LABEL: _("Product Type"),
     K.ORG_PLURAL_LABEL: _("Product Types"),
@@ -307,6 +312,7 @@ V2_LABELS = {
 }
 
 
+# V3 labels: uses "Asset" and "Organization."
 V3_LABELS = {
     K.ORG_LABEL: _("Organization"),
     K.ORG_PLURAL_LABEL: _("Organizations"),
@@ -453,14 +459,29 @@ V3_LABELS = {
 }
 
 
-class LabelsManager(K):
-    def __init__(self, labels):
+class LabelsProxy(K):
+    """
+    Proxy class for labels. The purpose of this is almost entirely to allow for IDE code completion. This inherits from
+    K so IDEs can statically determine what attributes ("labels") are represented.
+    """
+    def __init__(self, labels: dict[str, str]):
+        """
+        The initializer takes a dict set of labels and sets the corresponding attribute defined in K to the value
+        specified in the dict (e.g., self.ASSET_GROUPS_DELETE_SUCCESS_MESSAGE is set to
+        labels[K.ASSET_GROUPS_DELETE_SUCCESS_MESSAGE]).
+
+        As a side benefit, this will explode if any label defined in K is not present in the given dict: a runtime check
+        that a labels dict must be complete.
+        """
         for _l, _v in K.__dict__.items():
-            if not _l.startswith("__"):
+            if not _l.startswith("_"):
                 setattr(self, _l, labels[_v])
 
 
-def get_labels() -> K:
+def get_labels() -> LabelsProxy:
+    """
+    Method for getting a LabelsProxy initialized with the correct set of labels.
+    """
     if v3_migration_enabled():
-        return LabelsManager(V3_LABELS)
-    return LabelsManager(V2_LABELS)
+        return LabelsProxy(V3_LABELS)
+    return LabelsProxy(V2_LABELS)
