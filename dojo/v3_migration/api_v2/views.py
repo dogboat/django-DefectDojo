@@ -9,7 +9,7 @@ from rest_framework import mixins, viewsets, status
 from rest_framework.permissions import IsAuthenticated
 
 from dojo.api_v2 import permissions, prefetch
-from dojo.api_v2.serializers import ReportGenerateOptionSerializer
+from dojo.api_v2.serializers import ReportGenerateOptionSerializer, ReportGenerateSerializer
 from dojo.api_v2.views import schema_with_prefetch, PrefetchDojoModelViewSet, report_generate
 
 from dojo.authorization.roles_permissions import Permissions
@@ -84,7 +84,7 @@ class AssetViewSet(
 
     @extend_schema(
         request=ReportGenerateOptionSerializer,
-        responses={status.HTTP_200_OK: serializers.ReportGenerateSerializer},
+        responses={status.HTTP_200_OK: ReportGenerateSerializer},
     )
     @action(
         detail=True, methods=["post"], permission_classes=[IsAuthenticated],
@@ -116,7 +116,7 @@ class AssetViewSet(
             )
 
         data = report_generate(request, product, options)
-        report = serializers.ReportGenerateSerializer(data)
+        report = ReportGenerateSerializer(data)
         return Response(report.data)
 
 
@@ -225,7 +225,7 @@ class OrganizationViewSet(
 
     @extend_schema(
         request=ReportGenerateOptionSerializer,
-        responses={status.HTTP_200_OK: serializers.ReportGenerateSerializer},
+        responses={status.HTTP_200_OK: ReportGenerateSerializer},
     )
     @action(
         detail=True, methods=["post"], permission_classes=[IsAuthenticated],
@@ -257,7 +257,7 @@ class OrganizationViewSet(
             )
 
         data = report_generate(request, product_type, options)
-        report = serializers.ReportGenerateSerializer(data)
+        report = ReportGenerateSerializer(data)
         return Response(report.data)
 
 
