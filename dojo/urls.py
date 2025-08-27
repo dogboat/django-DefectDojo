@@ -72,14 +72,6 @@ from dojo.api_v2.views import (
     UserContactInfoViewSet,
     UserProfileView,
     UsersViewSet,
-    # V3 Migration
-    AssetViewSet,
-    AssetAPIScanConfigurationViewSet,
-    AssetGroupViewSet,
-    AssetMemberViewSet,
-    OrganizationViewSet,
-    OrganizationMemberViewSet,
-    OrganizationGroupViewSet,
 )
 from dojo.api_v2.views import DojoSpectacularAPIView as SpectacularAPIView
 from dojo.banner.urls import urlpatterns as banner_urls
@@ -115,7 +107,17 @@ from dojo.tool_product.urls import urlpatterns as tool_product_urls
 from dojo.tool_type.urls import urlpatterns as tool_type_urls
 from dojo.user.urls import urlpatterns as user_urls
 from dojo.utils import get_system_setting
+# V3 Migration
 from dojo.v3_migration import v3_migration_enabled
+from dojo.v3_migration.api_v2.views import (
+    AssetViewSet,
+    AssetAPIScanConfigurationViewSet,
+    AssetGroupViewSet,
+    AssetMemberViewSet,
+    OrganizationViewSet,
+    OrganizationMemberViewSet,
+    OrganizationGroupViewSet,
+)
 
 logger = logging.getLogger(__name__)
 
