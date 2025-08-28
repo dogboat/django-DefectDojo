@@ -13,6 +13,8 @@ from dojo.models import Product_Type
 from dojo.notifications.helper import create_notification
 
 
+labels = get_labels()
+
 @receiver(post_save, sender=Product_Type)
 def product_type_post_save(sender, instance, created, **kwargs):
     if created:
@@ -28,16 +30,15 @@ def product_type_post_save(sender, instance, created, **kwargs):
 def product_type_post_delete(sender, instance, **kwargs):
     # Catch instances in async delete where a single object is deleted more than once
     with contextlib.suppress(sender.DoesNotExist):
-        labels = get_labels()
-        description = _('The %(label)s "%(name)s" was deleted') % {"name": instance.name, "label": labels.Organization.cap}
+
+        description = labels.ORG_DELETE_WITH_NAME_SUCCESS_MESSAGE % {"name": instance.name}
         if settings.ENABLE_AUDITLOG:
             if le := LogEntry.objects.filter(
                 action=LogEntry.Action.DELETE,
                 content_type=ContentType.objects.get(app_label="dojo", model="product_type"),
                 object_id=instance.id,
             ).order_by("-id").first():
-                description = _('The %(label)s "%(name)s" was deleted by %(user)s') % {
-                    "label": labels.Organization.cap, "name": instance.name, "user": le.actor}
+                description = labels.ORG_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE % {"name": instance.name, "user": le.actor}
         create_notification(event="product_type_deleted",  # template does not exists, it will default to "other" but this event name needs to stay because of unit testing
                             title=_("Deletion of %(name)s") % {"name": instance.name},
                             description=description,

@@ -83,6 +83,8 @@ class _K:
     ORG_DELETE_CONFIRM_MESSAGE = "org.delete.confirm_message"
     ORG_DELETE_SUCCESS_MESSAGE = "org.delete.success_message"
     ORG_DELETE_SUCCESS_ASYNC_MESSAGE = "org.delete.success_async_message"
+    ORG_DELETE_WITH_NAME_SUCCESS_MESSAGE = "org.delete.with_name_success_message"
+    ORG_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE = "org.delete.with_name_with_user_success_message"
     ASSET_LABEL = "asset.label"
     ASSET_PLURAL_LABEL = "asset.plural_label"
     ASSET_ALL_LABEL = "asset.all_label"
@@ -229,6 +231,8 @@ V2_LABELS = {
         "Deleting this Product Type will remove any related objects associated with it. These relationships are listed below:"),
     _K.ORG_DELETE_SUCCESS_MESSAGE: _("Product Type and relationships removed."),
     _K.ORG_DELETE_SUCCESS_ASYNC_MESSAGE: _("Product Type and relationships will be removed in the background."),
+    _K.ORG_DELETE_WITH_NAME_SUCCESS_MESSAGE: _("The Product Type \"%(name)s\" was deleted"),
+    _K.ORG_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _("The Product Type \"%(name)s\" was deleted by %(user)s"),
     _K.ASSET_LABEL: _("Product"),
     _K.ASSET_PLURAL_LABEL: _("Products"),
     _K.ASSET_ALL_LABEL: _("All Products"),
@@ -382,6 +386,8 @@ V3_LABELS = {
     _K.ORG_DELETE_CONFIRM_MESSAGE: _("Deleting this Organization will remove any related objects associated with it. These relationships are listed below:"),
     _K.ORG_DELETE_SUCCESS_MESSAGE: _("Organization and relationships removed."),
     _K.ORG_DELETE_SUCCESS_ASYNC_MESSAGE: _("Organization and relationships will be removed in the background."),
+    _K.ORG_DELETE_WITH_NAME_SUCCESS_MESSAGE: _("The Organization \"%(name)s\" was deleted"),
+    _K.ORG_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _("The Organization \"%(name)s\" was deleted by %(user)s"),
     _K.ASSET_LABEL: _("Asset"),
     _K.ASSET_PLURAL_LABEL: _("Assets"),
     _K.ASSET_ALL_LABEL: _("All Assets"),
@@ -489,7 +495,10 @@ class LabelsProxy(_K):
         """
         for _l, _v in _K.__dict__.items():
             if not _l.startswith("_"):
-                setattr(self, _l, labels[_v])
+                try:
+                    setattr(self, _l, labels[_v])
+                except KeyError:
+                    raise ValueError(f"Supplied copy dictionary does not provide entry for {_l}")
 
 
 def get_labels() -> LabelsProxy:
