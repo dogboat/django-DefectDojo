@@ -12,7 +12,6 @@ from dojo.labels import get_labels
 from dojo.models import Product
 from dojo.notifications.helper import create_notification
 
-
 labels = get_labels()
 
 

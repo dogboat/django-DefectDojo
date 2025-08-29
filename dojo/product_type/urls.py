@@ -5,7 +5,6 @@ from dojo.product import views as product_views
 from dojo.product_type import views
 from dojo.v3_migration import redirect_view
 
-
 if v3_migration_enabled():
     # Organization
     urlpatterns = [
@@ -39,12 +38,12 @@ if v3_migration_enabled():
         re_path(r"^product/type/(?P<ptid>\d+)/edit$", redirect_view("edit_product_type")),
         re_path(r"^product/type/(?P<ptid>\d+)/delete$", redirect_view("delete_product_type")),
         re_path(r"^product/type/add$", redirect_view("add_product_type")),
-        re_path(r"^product/type/(?P<ptid>\d+)/add_product",redirect_view("add_product_to_product_type")),
+        re_path(r"^product/type/(?P<ptid>\d+)/add_product", redirect_view("add_product_to_product_type")),
         re_path(r"^product/type/(?P<ptid>\d+)/add_member$", redirect_view("add_product_type_member")),
         re_path(r"^product/type/member/(?P<memberid>\d+)/edit$", redirect_view("edit_product_type_member")),
         re_path(r"^product/type/member/(?P<memberid>\d+)/delete$", redirect_view("delete_product_type_member")),
-        re_path(r"^product/type/(?P<ptid>\d+)/add_group$",redirect_view("add_product_type_group")),
-        re_path(r"^product/type/group/(?P<groupid>\d+)/edit$",redirect_view("edit_product_type_group")),
+        re_path(r"^product/type/(?P<ptid>\d+)/add_group$", redirect_view("add_product_type_group")),
+        re_path(r"^product/type/group/(?P<groupid>\d+)/edit$", redirect_view("edit_product_type_group")),
         re_path(r"^product/type/group/(?P<groupid>\d+)/delete$", redirect_view("delete_product_type_group")),
     ]
 else:

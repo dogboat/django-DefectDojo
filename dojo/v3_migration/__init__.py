@@ -1,4 +1,9 @@
 from dojo.v3_migration.utils import (
-    v3_migration_enabled,
     redirect_view,
+    v3_migration_enabled,
 )
+
+__all__ = [
+    "redirect_view",
+    "v3_migration_enabled",
+]

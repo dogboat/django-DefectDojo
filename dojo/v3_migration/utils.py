@@ -11,4 +11,3 @@ def redirect_view(to):
     def _redirect(request, **kwargs):
         return redirect(to, **kwargs)
     return _redirect
-

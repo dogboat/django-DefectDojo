@@ -1,28 +1,46 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 import dojo.api_v2.mixins as dojo_mixins
-
-from django_filters.rest_framework import DjangoFilterBackend
-from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import mixins, viewsets, status
-from rest_framework.permissions import IsAuthenticated
-
 from dojo.api_v2 import permissions, prefetch
 from dojo.api_v2.serializers import ReportGenerateOptionSerializer, ReportGenerateSerializer
-from dojo.api_v2.views import schema_with_prefetch, PrefetchDojoModelViewSet, report_generate
-
+from dojo.api_v2.views import PrefetchDojoModelViewSet, report_generate, schema_with_prefetch
 from dojo.authorization.roles_permissions import Permissions
-from dojo.models import Product_API_Scan_Configuration, Product, Product_Member, Product_Group, Product_Type, \
-    Product_Type_Member, Role, Product_Type_Group
-from dojo.product.queries import get_authorized_product_api_scan_configurations, get_authorized_products, \
-    get_authorized_product_members, get_authorized_product_groups
-from dojo.product_type.queries import get_authorized_product_types, get_authorized_product_type_members, \
-    get_authorized_product_type_groups
-from dojo.utils import get_setting, async_delete
+from dojo.models import (
+    Product,
+    Product_API_Scan_Configuration,
+    Product_Group,
+    Product_Member,
+    Product_Type,
+    Product_Type_Group,
+    Product_Type_Member,
+    Role,
+)
+from dojo.product.queries import (
+    get_authorized_product_api_scan_configurations,
+    get_authorized_product_groups,
+    get_authorized_product_members,
+    get_authorized_products,
+)
+from dojo.product_type.queries import (
+    get_authorized_product_type_groups,
+    get_authorized_product_type_members,
+    get_authorized_product_types,
+)
+from dojo.utils import async_delete, get_setting
 from dojo.v3_migration.api_v2 import serializers
-from dojo.v3_migration.api_v2.filters import ApiAssetFilter, AssetAPIScanConfigurationFilterSet, AssetMemberFilterSet, \
-    AssetGroupFilterSet, OrganizationGroupFilterSet, OrganizationMemberFilterSet
+from dojo.v3_migration.api_v2.filters import (
+    ApiAssetFilter,
+    AssetAPIScanConfigurationFilterSet,
+    AssetGroupFilterSet,
+    AssetMemberFilterSet,
+    OrganizationGroupFilterSet,
+    OrganizationMemberFilterSet,
+)
 
 
 # Authorization: object-based

@@ -581,8 +581,8 @@ class ImportScanForm(forms.Form):
                                             initial=False)
     close_old_findings_product_scope = forms.BooleanField(help_text=(
                                                 "Old findings no longer present in the new report get closed as mitigated when importing. "
-                                                + "If service has been set, only the findings for this service will be closed. "
-                                                + labels.ASSET_FINDINGS_CLOSE_HELP),
+                                                "If service has been set, only the findings for this service will be closed. ")
+                                                + labels.ASSET_FINDINGS_CLOSE_HELP,
                                             label=labels.ASSET_FINDINGS_CLOSE_LABEL,
                                             required=False,
                                             initial=False)

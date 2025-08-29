@@ -3,11 +3,24 @@ from django_filters.rest_framework import FilterSet
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 
-from dojo.filters import DojoFilter, custom_filter, NumberInFilter, CharFieldInFilter, CharFieldFilterANDExpression, \
-    ProductSLAFilter, DateRangeFilter
+from dojo.filters import (
+    CharFieldFilterANDExpression,
+    CharFieldInFilter,
+    DateRangeFilter,
+    DojoFilter,
+    NumberInFilter,
+    ProductSLAFilter,
+    custom_filter,
+)
 from dojo.labels import get_labels
-from dojo.models import Product_API_Scan_Configuration, Product_Member, Product_Group, Product_Type_Group, \
-    Product_Type_Member, Product_Type
+from dojo.models import (
+    Product_API_Scan_Configuration,
+    Product_Group,
+    Product_Member,
+    Product_Type,
+    Product_Type_Group,
+    Product_Type_Member,
+)
 
 labels = get_labels()
 
@@ -21,12 +34,14 @@ filterset_fields = [
     "service_key_3",
 ]
 """
+
+
 class AssetAPIScanConfigurationFilterSet(FilterSet):
     asset = NumberFilter(field_name="product")
 
     class Meta:
         model = Product_API_Scan_Configuration
-        fields = ("id", "tool_configuration", "service_key_1", "service_key_2", "service_key_3",)
+        fields = ("id", "tool_configuration", "service_key_1", "service_key_2", "service_key_3")
 
 
 class ApiAssetFilter(DojoFilter):
@@ -110,7 +125,7 @@ class AssetMemberFilterSet(FilterSet):
 
     class Meta:
         model = Product_Member
-        fields = ("id", "user_id",)
+        fields = ("id", "user_id")
 
 
 """
@@ -123,13 +138,15 @@ filterset_fields = [
     "updated",
 ]
 """
+
+
 class OrganizationFilterSet(FilterSet):
     critical_asset = BooleanFilter(field_name="critical_product")
     key_asset = BooleanFilter(field_name="key_product")
 
     class Meta:
         model = Product_Type
-        fields = ("id", "name", "created", "updated",)
+        fields = ("id", "name", "created", "updated")
 
 
 # filterset_fields = ["id", "product_id", "group_id"]
@@ -138,7 +155,7 @@ class AssetGroupFilterSet(FilterSet):
 
     class Meta:
         model = Product_Group
-        fields = ("id", "group_id",)
+        fields = ("id", "group_id")
 
 
 # filterset_fields = ["id", "product_type_id", "user_id"]
@@ -147,7 +164,7 @@ class OrganizationMemberFilterSet(FilterSet):
 
     class Meta:
         model = Product_Type_Member
-        fields = ("id", "user_id",)
+        fields = ("id", "user_id")
 
 
 # filterset_fields = ["id", "product_type_id", "group_id"]
@@ -156,4 +173,4 @@ class OrganizationGroupFilterSet(FilterSet):
 
     class Meta:
         model = Product_Type_Group
-        fields = ("id", "group_id",)
+        fields = ("id", "group_id")

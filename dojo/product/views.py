@@ -136,6 +136,7 @@ logger = logging.getLogger(__name__)
 
 labels = get_labels()
 
+
 def product(request):
     prods = get_authorized_products(Permissions.Product_View)
     # perform all stuff for filtering and pagination first, before annotation/prefetching

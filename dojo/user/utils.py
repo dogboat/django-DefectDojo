@@ -1,8 +1,8 @@
 from dojo.labels import get_labels
 from dojo.utils import get_system_setting
 
-
 labels = get_labels()
+
 
 class Permission_Helper:
     def __init__(self, *args, **kwargs):

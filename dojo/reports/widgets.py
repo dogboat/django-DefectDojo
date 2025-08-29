@@ -29,6 +29,7 @@ Widgets are content sections that can be included on reports.  The report builde
 
 labels = get_labels()
 
+
 class CustomReportJsonForm(forms.Form):
     json = forms.CharField()
 

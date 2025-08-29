@@ -295,6 +295,7 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
+
 class System_Settings(models.Model):
     enable_deduplication = models.BooleanField(
         default=False,

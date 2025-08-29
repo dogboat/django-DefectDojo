@@ -197,7 +197,7 @@ def report_findings(request):
                    "title_words": title_words,
                     "component_words": component_words,
                    "title": "finding-list",
-                   "asset_label": labels.ASSET_LABEL
+                   "asset_label": labels.ASSET_LABEL,
                    })
 
 

@@ -12,8 +12,8 @@ from dojo.labels import get_labels
 from dojo.models import Product_Type
 from dojo.notifications.helper import create_notification
 
-
 labels = get_labels()
+
 
 @receiver(post_save, sender=Product_Type)
 def product_type_post_save(sender, instance, created, **kwargs):

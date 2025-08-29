@@ -1,11 +1,19 @@
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied, ValidationError
 
-from dojo.api_v2.serializers import TagListSerializerField, ProductMetaSerializer
+from dojo.api_v2.serializers import ProductMetaSerializer, TagListSerializerField
 from dojo.authorization.authorization import user_has_permission
 from dojo.authorization.roles_permissions import Permissions
-from dojo.models import Product_API_Scan_Configuration, Dojo_User, Product, Product_Member, Product_Group, \
-    Product_Type_Member, Product_Type_Group, Product_Type
+from dojo.models import (
+    Dojo_User,
+    Product,
+    Product_API_Scan_Configuration,
+    Product_Group,
+    Product_Member,
+    Product_Type,
+    Product_Type_Group,
+    Product_Type_Member,
+)
 from dojo.product.queries import get_authorized_products
 from dojo.product_type.queries import get_authorized_product_types
 
@@ -42,7 +50,6 @@ class AssetSerializer(serializers.ModelSerializer):
     asset_managers = serializers.PrimaryKeyRelatedField(
         source="product_manager",
         queryset=Dojo_User.objects.exclude(is_active=False))
-
 
     class Meta:
         model = Product
@@ -265,4 +272,4 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product_Type
-        exclude = ("critical_product", "key_product",)
+        exclude = ("critical_product", "key_product")
