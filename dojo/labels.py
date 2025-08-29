@@ -122,6 +122,8 @@ class _K:
     ASSET_DELETE_CONFIRM_MESSAGE = "asset.delete.confirm_message"
     ASSET_DELETE_SUCCESS_MESSAGE = "asset.delete.success_message"
     ASSET_DELETE_SUCCESS_ASYNC_MESSAGE = "asset.delete.success_async_message"
+    ASSET_DELETE_WITH_NAME_SUCCESS_MESSAGE = "asset.delete.with_name_success_message"
+    ASSET_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE = "asset.delete.with_name_with_user_success_message"
     ASSET_FILTERS_LABEL = "asset.filters.label"
     ASSET_FILTERS_NAME_LABEL = "asset.filters.name_label"
     ASSET_FILTERS_NAME_HELP = "asset.filters.name_help"
@@ -273,6 +275,8 @@ V2_LABELS = {
         "Deleting this Product will remove any related objects associated with it. These relationships are listed below: "),
     _K.ASSET_DELETE_SUCCESS_MESSAGE: _("Product and relationships removed."),
     _K.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE: _("Product and relationships will be removed in the background."),
+    _K.ASSET_DELETE_WITH_NAME_SUCCESS_MESSAGE: _("The Product \"%(name)s\" was deleted"),
+    _K.ASSET_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _("The Product \"%(name)s\" was deleted by %(user)s"),
     _K.ASSET_FILTERS_LABEL: _("Product"),
     _K.ASSET_FILTERS_NAME_LABEL: _("Product Name"),
     _K.ASSET_FILTERS_NAME_HELP: _("Search for Product names that are an exact match"),
@@ -426,6 +430,8 @@ V3_LABELS = {
         "Deleting this Asset will remove any related objects associated with it. These relationships are listed below: "),
     _K.ASSET_DELETE_SUCCESS_MESSAGE: _("Asset and relationships removed."),
     _K.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE: _("Asset and relationships will be removed in the background."),
+    _K.ASSET_DELETE_WITH_NAME_SUCCESS_MESSAGE: _("The Asset \"%(name)s\" was deleted"),
+    _K.ASSET_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _("The Asset \"%(name)s\" was deleted by %(user)s"),
     _K.ASSET_FILTERS_LABEL: _("Asset"),
     _K.ASSET_FILTERS_NAME_LABEL: _("Asset Name"),
     _K.ASSET_FILTERS_NAME_HELP: _("Search for Asset names that are an exact match"),
