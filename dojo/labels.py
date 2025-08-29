@@ -1,19 +1,21 @@
 """
 This module provides a centralized location for application copy.
 
-Class _K defines the keys used to refer to the label in application code/templates. The labels dictionaries set
+Class _K defines the keys used to refer to the copy in application code/templates. The labels dictionaries define
 translatable copy entries for each of these keys. As the creation of this whole thing was to facilitate the migration of
 Dojo terminology, two dictionaries are provided, one each for v2 and v3 terminology. Translators can provide translated
-text for both terminologies as desired.
+text for both versions of terminology as desired.
 
 New copy can be added by doing the following:
     * Add a new attribute to _K
-
-
+    * Add entries for the new attribute to the version dictionaries
+    * Use it:
+        * In templates, a `label` context processor has been added, so you can just use labels.ATTRIBUTE_NAME
+        * In views/Python code, first import get_labels() and set it to a variable (e.g., labels = get_labels()). Then
+            you can simply use labels.ATTRIBUTE_NAME
 
 Some conventions used:
     Each copy attribute name starts with a noun representing the overarching model/object type the label is for.
-
     Attribute suffixes are as follows:
         _label -> short label, used for UI/API fields
         _message -> a longer message displayed as a toast or displayed on the page
