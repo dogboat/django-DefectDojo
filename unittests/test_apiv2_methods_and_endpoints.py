@@ -50,7 +50,8 @@ class ApiEndpointMethods(DojoTestCase):
             "questionnaire_answers", "questionnaire_answered_questionnaires",
             "questionnaire_engagement_questionnaires", "questionnaire_general_questionnaires",
             "dojo_group_members", "product_members", "product_groups", "product_type_groups",
-            "product_type_members",
+            "product_type_members", "asset_members", "asset_groups", "organization_groups",
+            "organization_members",
         ]
         for reg, _, _ in sorted(self.registry):
             if reg in exempt_list:
