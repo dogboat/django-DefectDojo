@@ -518,6 +518,12 @@ class LabelsProxy(_K):
     available. After initialization, all attributes defined on K are set to the value of the appropriate text.
     """
 
+    def _get_label_entries(self):
+        """Returns a dict of all "label" entries from this class."""
+        cl = self.__class__
+        return {
+            name: getattr(cl, name) for name in dir(cl) if not name.startswith('_')}
+
     def __init__(self, labels: dict[str, str]):
         """
         The initializer takes a dict set of labels and sets the corresponding attribute defined in K to the value
@@ -527,14 +533,13 @@ class LabelsProxy(_K):
         As a side benefit, this will explode if any label defined in K is not present in the given dict: a runtime check
         that a labels dict must be complete.
         """
-        for _l, _v in _K.__dict__.items():
-            if not _l.startswith("_"):
-                try:
-                    setattr(self, _l, labels[_v])
-                except KeyError:
-                    error_message = f"Supplied copy dictionary does not provide entry for {_l}"
-                    logger.error(error_message)
-                    raise ValueError(error_message)
+        for _l, _v in self._get_label_entries().items():
+            try:
+                setattr(self, _l, labels[_v])
+            except KeyError:
+                error_message = f"Supplied copy dictionary does not provide entry for {_l}"
+                logger.error(error_message)
+                raise ValueError(error_message)
 
 
 def get_labels() -> LabelsProxy:
