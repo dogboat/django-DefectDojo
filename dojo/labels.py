@@ -111,6 +111,7 @@ class _K:
     ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE = "asset.metrics.tag_counts_error_message"
     ASSET_METRICS_CRITICAL_LABEL = "asset.metrics.critical_label"
     ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE = "asset.metrics.no_critical_error_message"
+    ASSET_METRICS_TOP_TEN_BY_SEVERITY_LABEL = "asset.metrics.top_by_severity_label"
     ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE = "asset.notification_with_name_created_message"
     ASSET_REPORT_LABEL = "asset.report_label"
     ASSET_REPORT_TITLE = "asset.report_title"
@@ -267,6 +268,7 @@ V2_LABELS = {
     _K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Product Tag."),
     _K.ASSET_METRICS_CRITICAL_LABEL: _("Critical Product Metrics"),
     _K.ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE: _("No Critical Products registered"),
+    _K.ASSET_METRICS_TOP_TEN_BY_SEVERITY_LABEL: _("Top 10 Products by bug severity"),
     _K.ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Product %(name)s has been created successfully."),
     _K.ASSET_REPORT_LABEL: _("Product Report"),
     _K.ASSET_REPORT_TITLE: _("Product Report"),
@@ -431,6 +433,7 @@ V3_LABELS = {
     _K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Asset Tag."),
     _K.ASSET_METRICS_CRITICAL_LABEL: _("Critical Asset Metrics"),
     _K.ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE: _("No Critical Assets registered"),
+    _K.ASSET_METRICS_TOP_TEN_BY_SEVERITY_LABEL: _("Top 10 Assets by bug severity"),
     _K.ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Asset %(name)s has been created successfully."),
     _K.ASSET_REPORT_LABEL: _("Asset Report"),
     _K.ASSET_REPORT_TITLE: _("Asset Report"),
