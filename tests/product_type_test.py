@@ -57,10 +57,10 @@ class ProductTypeTest(BaseTestCase):
         driver.find_element(By.PARTIAL_LINK_TEXT, "View").click()
         product_type_text = driver.find_element(By.ID, "id_heading").text
 
-        self.assertEqual("Product Type Product test type", product_type_text)
+        self.assertEqual("Organization Product test type", product_type_text)
 
     def test_edit_product_type(self):
-        logger.debug("\n\nDebug Print Log: testing 'edit product type' \n")
+        logger.debug("\n\nDebug Print Log: testing 'edit organization' \n")
         driver = self.driver
         driver.get(self.base_url + "organization")
         driver.find_element(By.ID, "dropdownMenuProductType").click()
