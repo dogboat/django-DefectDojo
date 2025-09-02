@@ -392,7 +392,7 @@ class ProductTest(BaseTestCase):
         # "Click" the dropdown option
         driver.find_element(By.ID, "dropdownMenu1").click()
         # 'click' the Add Product Tracking Files
-        driver.find_element(By.LINK_TEXT, "Add Tracked File").click()
+        driver.find_element(By.LINK_TEXT, "Add Tracked Files").click()
         # Keep a good practice of clearing field before entering value
         # Just fill up to main required fields: 'File path' nd 'review status'
         # Full File path
