@@ -208,10 +208,10 @@
                         </div>
                     {% endfor %}
                 </div>
-            {% elif name == "Critical Product Metrics" %}
+            {% elif name == labels.ASSET_METRICS_CRITICAL_LABEL %}
                 <div class="row">
                     <div class="col-lg-6">
-                        <h3><b>{% trans "No Critical Products registered" %}</b></h3>
+                        <h3><b>{{ labels.ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE }}</b></h3>
                     </div>
                 </div>
             {% endif %}

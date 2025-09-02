@@ -62,7 +62,7 @@ generic metrics method
 
 def critical_product_metrics(request, mtype):
     template = "dojo/metrics.html"
-    page_name = _("Critical Product Metrics")
+    page_name = str(labels.ASSET_METRICS_CRITICAL_LABEL)
     critical_products = get_authorized_product_types(Permissions.Product_Type_View)
     critical_products = critical_products.filter(critical_product=True)
     add_breadcrumb(title=page_name, top_level=not len(request.GET), request=request)

@@ -105,7 +105,9 @@ class _K:
     ASSET_ENGAGEMENTS_BY_LABEL = "asset.engagements_by_label"
     ASSET_LIFECYCLE_LABEL = "asset.lifecycle_label"
     ASSET_TAG_LABEL = "asset.tag_label"
-    ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE = "asset.metrics_tag_counts_error_message"
+    ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE = "asset.metrics.tag_counts_error_message"
+    ASSET_METRICS_CRITICAL_LABEL = "asset.metrics.critical_label"
+    ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE = "asset.metrics.no_critical_error_message"
     ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE = "asset.notification_with_name_created_message"
     ASSET_REPORT_LABEL = "asset.report_label"
     ASSET_REPORT_TITLE = "asset.report_title"
@@ -257,6 +259,8 @@ V2_LABELS = {
     _K.ASSET_LIFECYCLE_LABEL: _("Product Lifecycle"),
     _K.ASSET_TAG_LABEL: _("Product Tag"),
     _K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Product Tag."),
+    _K.ASSET_METRICS_CRITICAL_LABEL: _("Critical Product Metrics"),
+    _K.ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE: _("No Critical Products registered"),
     _K.ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Product %(name)s has been created successfully."),
     _K.ASSET_REPORT_LABEL: _("Product Report"),
     _K.ASSET_REPORT_TITLE: _("Product Report"),
@@ -416,6 +420,8 @@ V3_LABELS = {
     _K.ASSET_LIFECYCLE_LABEL: _("Asset Lifecycle"),
     _K.ASSET_TAG_LABEL: _("Asset Tag"),
     _K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Asset Tag."),
+    _K.ASSET_METRICS_CRITICAL_LABEL: _("Critical Asset Metrics"),
+    _K.ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE: _("No Critical Assets registered"),
     _K.ASSET_NOTIFICATION_WITH_NAME_CREATED_MESSAGE: _("Asset %(name)s has been created successfully."),
     _K.ASSET_REPORT_LABEL: _("Asset Report"),
     _K.ASSET_REPORT_TITLE: _("Asset Report"),
