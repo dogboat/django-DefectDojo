@@ -2032,7 +2032,7 @@ class FindingGroupsFilter(FilterSet):
         label="Min Severity",
     )
     engagement = ModelMultipleChoiceFilter(queryset=Engagement.objects.none(), label="Engagement")
-    product = ModelMultipleChoiceFilter(queryset=Product.objects.none(), label="Product")
+    product = ModelMultipleChoiceFilter(queryset=Product.objects.none(), label=labels.ASSET_LABEL)
 
     class Meta:
         model = Finding
