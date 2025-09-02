@@ -98,10 +98,10 @@ def metrics(request, mtype):
 
     filters = {}
     if view == "Finding":
-        page_name = labels.ORG_METRICS_BY_FINDINGS_LABEL
+        page_name = str(labels.ORG_METRICS_BY_FINDINGS_LABEL)
         filters = finding_queries(prod_type, request)
     elif view == "Endpoint":
-        page_name = labels.ORG_METRICS_BY_ENDPOINTS_LABEL
+        page_name = str(labels.ORG_METRICS_BY_ENDPOINTS_LABEL)
         filters = endpoint_queries(prod_type, request)
 
     all_findings = findings_queryset(queryset_check(filters["all"]))
