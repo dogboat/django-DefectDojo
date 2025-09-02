@@ -419,7 +419,7 @@ class ProductTest(BaseTestCase):
         # "Click" the dropdown option
         driver.find_element(By.ID, "dropdownMenu1").click()
         # 'click' the Edit Product Tracking Files
-        driver.find_element(By.LINK_TEXT, "View Asset Tracking Files").click()
+        driver.find_element(By.LINK_TEXT, "View Tracked Files").click()
         # Keep a good practice of clearing field before entering value
         # Edit Custom Value of First field
         driver.find_element(By.LINK_TEXT, "Edit").click()
