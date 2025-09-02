@@ -1708,7 +1708,7 @@ class FindingFilterHelper(FilterSet):
     status = FindingStatusFilter(label="Status")
     test__engagement__product__lifecycle = MultipleChoiceFilter(
         choices=Product.LIFECYCLE_CHOICES,
-        label="Product lifecycle")
+        label=labels.ASSET_LIFECYCLE_LABEL)
 
     has_component = BooleanFilter(
         field_name="component_name",
