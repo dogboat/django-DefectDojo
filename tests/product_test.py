@@ -431,7 +431,7 @@ class ProductTest(BaseTestCase):
         # Query the site to determine if the Tracking file has been updated
 
         # Assert ot the query to dtermine status of failure
-        self.assertTrue(self.is_success_message_present(text="Tool Asset Configuration Successfully Updated"))
+        self.assertTrue(self.is_success_message_present(text="Tracked File Successfully Updated."))
 
     def test_product_metrics(self):
         # Test To Edit Product Tracking Files
