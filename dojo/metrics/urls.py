@@ -1,7 +1,7 @@
 from django.urls import re_path
 
 from dojo.metrics import views
-from dojo.v3_migration import v3_migration_enabled, redirect_view
+from dojo.v3_migration import redirect_view, v3_migration_enabled
 
 if v3_migration_enabled():
     # References Asset and Organization.
