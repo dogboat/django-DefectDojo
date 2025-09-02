@@ -436,22 +436,22 @@
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'critical_product_metrics' %}">
-                                                        {% trans "Critical Asset Metrics" %}
+                                                        {{ labels.ASSET_METRICS_CRITICAL_LABEL }}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'metrics_product_type' %}">
-                                                        {% trans "Organization Metrics" %}
+                                                        {{ labels.ORG_METRICS_LABEL }}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'product_type_counts' %}">
-                                                        {% trans "Organization Counts" %}
+                                                        {{ labels.ORG_METRICS_COUNTS_LABEL }}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'product_tag_counts' %}">
-                                                        {% trans "Asset Tag Counts" %}
+                                                        {{ labels.ASSET_METRICS_TAG_COUNTS_LABEL }}
                                                     </a>
                                                 </li>
                                                 <li>

@@ -42,6 +42,8 @@ class _K:
     ORG_REPORT_LABEL = "org.report_label"
     ORG_REPORT_TITLE = "org.report_title"
     ORG_REPORT_WITH_NAME_TITLE = "org.report_with_name_title"
+    ORG_METRICS_LABEL = "org.metrics.label"
+    ORG_METRICS_COUNTS_LABEL = "org.metrics.counts_label"
     ORG_METRICS_BY_FINDINGS_LABEL = "org.metrics_by_findings_label"
     ORG_METRICS_BY_ENDPOINTS_LABEL = "org.metrics_by_endpoints_label"
     ORG_METRICS_TYPE_COUNTS_ERROR_MESSAGE = "org.metrics_type_counts_error_message"
@@ -105,6 +107,7 @@ class _K:
     ASSET_ENGAGEMENTS_BY_LABEL = "asset.engagements_by_label"
     ASSET_LIFECYCLE_LABEL = "asset.lifecycle_label"
     ASSET_TAG_LABEL = "asset.tag_label"
+    ASSET_METRICS_TAG_COUNTS_LABEL = "asset.metrics.tag_counts_label"
     ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE = "asset.metrics.tag_counts_error_message"
     ASSET_METRICS_CRITICAL_LABEL = "asset.metrics.critical_label"
     ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE = "asset.metrics.no_critical_error_message"
@@ -194,6 +197,8 @@ V2_LABELS = {
     _K.ORG_REPORT_LABEL: _("Product Type Report"),
     _K.ORG_REPORT_TITLE: _("Product Type Report"),
     _K.ORG_REPORT_WITH_NAME_TITLE: _("Product Type Report: %(name)s"),
+    _K.ORG_METRICS_LABEL: _("Product Type Metrics"),
+    _K.ORG_METRICS_COUNTS_LABEL: _("Product Type Counts"),
     _K.ORG_METRICS_BY_FINDINGS_LABEL: _("Product Type Metrics by Findings"),
     _K.ORG_METRICS_BY_ENDPOINTS_LABEL: _("Product Type Metrics by Affected Endpoints"),
     _K.ORG_METRICS_TYPE_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Product Type."),
@@ -258,6 +263,7 @@ V2_LABELS = {
     _K.ASSET_ENGAGEMENTS_BY_LABEL: _("Engagements by Product"),
     _K.ASSET_LIFECYCLE_LABEL: _("Product Lifecycle"),
     _K.ASSET_TAG_LABEL: _("Product Tag"),
+    _K.ASSET_METRICS_TAG_COUNTS_LABEL: _("Product Tag Counts"),
     _K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Product Tag."),
     _K.ASSET_METRICS_CRITICAL_LABEL: _("Critical Product Metrics"),
     _K.ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE: _("No Critical Products registered"),
@@ -356,6 +362,8 @@ V3_LABELS = {
     _K.ORG_REPORT_LABEL: _("Organization Report"),
     _K.ORG_REPORT_TITLE: _("Organization Report"),
     _K.ORG_REPORT_WITH_NAME_TITLE: _("Organization Report: %(name)s"),
+    _K.ORG_METRICS_LABEL: _("Organization Metrics"),
+    _K.ORG_METRICS_COUNTS_LABEL: _("Organization Counts"),
     _K.ORG_METRICS_BY_FINDINGS_LABEL: _("Organization Metrics by Findings"),
     _K.ORG_METRICS_BY_ENDPOINTS_LABEL: _("Organization Metrics by Affected Endpoints"),
     _K.ORG_METRICS_TYPE_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Organization."),
@@ -419,6 +427,7 @@ V3_LABELS = {
     _K.ASSET_ENGAGEMENTS_BY_LABEL: _("Engagements by Asset"),
     _K.ASSET_LIFECYCLE_LABEL: _("Asset Lifecycle"),
     _K.ASSET_TAG_LABEL: _("Asset Tag"),
+    _K.ASSET_METRICS_TAG_COUNTS_LABEL: _("Asset Tag Counts"),
     _K.ASSET_METRICS_TAG_COUNTS_ERROR_MESSAGE: _("Please choose month and year and the Asset Tag."),
     _K.ASSET_METRICS_CRITICAL_LABEL: _("Critical Asset Metrics"),
     _K.ASSET_METRICS_NO_CRITICAL_ERROR_MESSAGE: _("No Critical Assets registered"),
