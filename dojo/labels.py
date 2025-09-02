@@ -522,7 +522,7 @@ class LabelsProxy(_K):
         """Returns a dict of all "label" entries from this class."""
         cl = self.__class__
         return {
-            name: getattr(cl, name) for name in dir(cl) if not name.startswith('_')}
+            name: getattr(cl, name) for name in dir(cl) if not name.startswith("_")}
 
     def __init__(self, labels: dict[str, str]):
         """
