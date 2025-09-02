@@ -11,12 +11,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading tight">
                     <h3 class="has-filters">
-                        {{ labels.Organization.cap }}
+                        {{ labels.organization.label }}
                         <div class="dropdown pull-right">
                             <button id="show-filters" aria-label="Filters" data-toggle="collapse" data-target="#the-filters" class="btn btn-primary toggle-filters"> <i class="fa-solid fa-filter"></i> <i class="caret"></i> </button>
                             {% if "Product_Type_Add"|has_global_permission %}
                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1"
-                                    data-toggle="dropdown" aria-expanded="true" aria-label="{{ labels.Organization.cap }} options">
+                                    data-toggle="dropdown" aria-expanded="true" aria-label="{{ labels.organization.label }} options">
                                 <span class="fa-solid fa-screwdriver-wrench"></span>
                                 <span class="caret"></span>
                             </button>
@@ -25,7 +25,7 @@
                                     <li role="presentation">
                                         <a href="{% url 'add_product_type' %}">
                                             <i class="fa-solid fa-plus"></i>
-                                            {% blocktrans with label=labels.Organization.cap %}Add {{ label }}{% endblocktrans %}
+                                            {{ labels.organization.create.label }}
                                         </a>
                                     </li>
                             </ul>
@@ -50,21 +50,11 @@
                         <tr>
                             <th></th>
                             {% comment %} The display field is translated in the function. No need to translate here as well{% endcomment %}
-                            <th>
-                                {% with label=labels.Organization.cap %}
-                                {% dojo_sort request label|stringformat:"s" 'name' 'asc' %}
-                                {% endwith %}
-                            </th>
-                            <th>
-                                {% blocktrans with label=labels.Asset.cap %}{{ label }} count{% endblocktrans %}
-                            </th>
+                            <th>{% dojo_sort request labels.organization.label 'name' 'asc' %}</th>
+                            <th>{{ labels.asset.count_label }}</th>
                             <th>{% trans "Active (Verified) findings" %}</th>
-                            <th class="text-center">
-                                {% blocktrans with label=labels.Asset.cap %}Critical {{ label }}{% endblocktrans %}
-                            </th>
-                            <th class="text-center">
-                                {% blocktrans with label=labels.Asset.cap %}Key {{ label }}{% endblocktrans %}
-                            </th>
+                            <th class="text-center">{{ labels.organization.fields.critical_product }}</th>
+                            <th class="text-center">{{ labels.organization.fields.key_product }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -89,7 +79,7 @@
                                                 <li role="presentation">
                                                     <a class="" href="{% url 'add_product_to_product_type' pt.id %}" role="menuitem">
                                                         <i class="fa-solid fa-plus"></i>
-                                                        {% blocktrans with label=labels.Asset %}Add {{ label }}{% endblocktrans %}
+                                                        {{ labels.asset.create.label }}
                                                     </a>
                                                 </li>
                                                 {% endif %}
@@ -101,7 +91,7 @@
                                                 <li role="presentation">
                                                     <a class="" href="{% url 'product_type_report' pt.id %}" role="menuitem">
                                                         <i class="fa-solid fa-file-lines"></i>
-                                                        {% blocktrans with label=labels.Organization.cap %}{{ label }} Report{% endblocktrans %}
+                                                        {{ labels.organization.report_label }}
                                                     </a>
                                                 </li>
                                                 {% if pt|has_object_permission:"Product_Type_Delete" %}
@@ -144,7 +134,7 @@
                     {% include "dojo/paging_snippet.html" with page=pts page_size=True %}
                 </div>
             {% else %}
-                <p class="text-center">{% blocktrans with label=labels.Organization.cap %} No {{ label.plural_cap }} found." {% endblocktrans %}</p>
+                <p class="text-center">{{ labels.organization.none_found_label }}</p>
             {% endif %}
         </div>
     </div>

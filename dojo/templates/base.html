@@ -233,33 +233,33 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a id="product-side-menu" href="{% url 'product' %}" aria-expanded="false" aria-label="Assets">
+                                            <a id="product-side-menu" href="{% url 'product' %}" aria-expanded="false" aria-label="{{ labels.asset.label_plural }}">
                                                 <i class="fa-solid fa-list-ul fa-fw"></i>
-                                                <span>{% trans "Assets" %}</span>
+                                                <span>{{ labels.asset.label_plural }}</span>
                                                 <span class="glyphicon arrow"></span>
                                             </a>
                                             <ul class="nav nav-second-level">
                                                 <li>
                                                     <a href="{% url 'product' %}">
-                                                        {% trans labels.Asset.plural %}
+                                                        {{ labels.asset.label_all }}
                                                     </a>
                                                 </li>
                                                 {% if request.user|can_add_product %}
                                                     <li>
                                                         <a href="{% url 'new_product' %}">
-                                                            {% trans "Add Asset" %}
+                                                            {{ labels.asset.create.label }}
                                                         </a>
                                                     </li>
                                                 {% endif %}
                                                 <li>
                                                     <a href="{% url 'product_type' %}">
-                                                        {% trans "All Organizations" %}
+                                                        {{ labels.organization.label_all }}
                                                     </a>
                                                 </li>
                                                 {% if "Product_Type_Add"|has_global_permission %}
                                                     <li>
                                                         <a id="pop-out-add-product-type" href="{% url 'add_product_type' %}">
-                                                            {% trans "Add Organization" %}
+                                                            {{ labels.organization.create.label }}
                                                         </a>
                                                     </li>
                                                 {% endif %}
@@ -285,7 +285,7 @@
                                                 </li>
                                                 <li>
                                                     <a href="{% url 'engagements_all' %}">
-                                                        {% trans "Engagements by Product" %}
+                                                        {{ labels.asset.engagements_by }}
                                                     </a>
                                                 </li>
                                                 <li>
@@ -787,7 +787,7 @@
                                                 <li>
                                                     <a href="{% url 'product_closed_findings' product_tab.product.id %}">
                                                         <i class="fa-solid fa-fire-extinguisher"></i>
-                                                        &nbsp;&nbsp;{% trans "View Closed Findings" %}
+                                                        {% trans "View Closed Findings" %}
                                                     </a>
                                                 </li>
                                                 {% if product_tab.product|has_object_permission:"Finding_Add" %}
@@ -939,13 +939,13 @@
                                                             <li role="presentation">
                                                                 <a class="" href="{% url 'new_object' product_tab.product.id %}">
                                                                     <i class="fa-solid fa-plus"></i>
-                                                                    {% trans "Add Product Tracking Files" %}
+                                                                    {{ labels.asset.add_tracking_files }}
                                                                 </a>
                                                             </li>
                                                             <li role="presentation">
                                                                 <a href="{% url 'view_objects' product_tab.product.id %}">
                                                                     <i class="fa-solid fa-rectangle-list"></i>
-                                                                    {% trans "View Product Tracking Files" %}
+                                                                    {{ labels.asset.view_tracking_files }}
                                                                 </a>
                                                             </li>
                                                         {% endif %}

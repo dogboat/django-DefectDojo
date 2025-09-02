@@ -36,6 +36,7 @@ from dojo.endpoint.utils import endpoint_filter, endpoint_get_or_create, validat
 from dojo.engagement.queries import get_authorized_engagements
 from dojo.finding.queries import get_authorized_findings
 from dojo.group.queries import get_authorized_groups, get_group_member_roles
+from dojo.labels import get_labels
 from dojo.models import (
     EFFORT_FOR_FIXING_CHOICES,
     SEVERITY_CHOICES,
@@ -238,10 +239,16 @@ class MonthYearWidget(Widget):
             return f"{y}-{m}-{1}"
         return data.get(name, None)
 
+labels = get_labels()
 
 class Product_TypeForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={}),
                                   required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["critical_product"].label = labels.organization.fields.critical_product
+        self.fields["key_product"].label = labels.organization.fields.key_product
 
     class Meta:
         model = Product_Type
@@ -279,6 +286,7 @@ class Add_Product_Type_MemberForm(forms.ModelForm):
         self.fields["users"].queryset = Dojo_User.objects.exclude(
             Q(is_superuser=True)
             | Q(id__in=current_members)).exclude(is_active=False).order_by("first_name", "last_name")
+        self.fields["product_type"].label = labels.organization.label
         self.fields["product_type"].disabled = True
 
     class Meta:
@@ -305,6 +313,7 @@ class Delete_Product_Type_MemberForm(Edit_Product_Type_MemberForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["role"].disabled = True
+        self.fields["product_type"].label = labels.organization.label
 
 
 class Test_TypeForm(forms.ModelForm):
@@ -330,7 +339,7 @@ class ProductForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={}),
                                   required=True)
 
-    prod_type = forms.ModelChoiceField(label="Product Type",
+    prod_type = forms.ModelChoiceField(label=labels.organization.label,
                                        queryset=Product_Type.objects.none(),
                                        required=True)
 
@@ -339,13 +348,15 @@ class ProductForm(forms.ModelForm):
                                         required=True,
                                         initial="Default")
 
-    product_manager = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False)
+    product_manager = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False, label=labels.asset.manager)
     technical_contact = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False)
     team_manager = forms.ModelChoiceField(queryset=Dojo_User.objects.exclude(is_active=False).order_by("first_name", "last_name"), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["prod_type"].queryset = get_authorized_product_types(Permissions.Product_Type_Add_Product)
+        self.fields["enable_product_tag_inheritance"].label = labels.asset.enable_tag_inheritance
+        self.fields["enable_product_tag_inheritance"].help_text = labels.asset.enable_tag_inheritance_help
         if prod_type_id := kwargs.get("instance", Product()).prod_type_id:  # we are editing existing instance
             self.fields["prod_type"].queryset |= Product_Type.objects.filter(pk=prod_type_id)  # even if user does not have permission for any other ProdType we need to add at least assign ProdType to make form submittable (otherwise empty list was here which generated invalid form)
 
@@ -565,10 +576,11 @@ class ImportScanForm(forms.Form):
                                             label="Close old findings",
                                             required=False,
                                             initial=False)
-    close_old_findings_product_scope = forms.BooleanField(help_text="Old findings no longer present in the new report get closed as mitigated when importing. "
-                                                        "If service has been set, only the findings for this service will be closed. "
-                                                        "This affects findings within the same product.",
-                                            label="Close old findings within this product",
+    close_old_findings_product_scope = forms.BooleanField(help_text=(
+                                                "Old findings no longer present in the new report get closed as mitigated when importing. "
+                                                + "If service has been set, only the findings for this service will be closed. "
+                                                + labels.asset.close_findings_help),
+                                            label=labels.asset.close_findings,
                                             required=False,
                                             initial=False)
     apply_tags_to_findings = forms.BooleanField(
@@ -2275,6 +2287,7 @@ class Edit_Product_Type_Group_Form(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["product_type"].disabled = True
         self.fields["group"].disabled = True
+        self.fields["product_type"].label = labels.organization.label
 
     class Meta:
         model = Product_Type_Group

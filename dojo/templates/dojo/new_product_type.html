@@ -16,7 +16,7 @@
 {% endblock %}
 {% block content %}
     {{ block.super }}
-    <h3>{% blocktrans with label=labels.Organization.cap %}Register a new {{ label }}{% endblocktrans %}</h3>
+    <h3>{{ labels.organization.create.label }}</h3>
     <form class="form-horizontal" action="{%  url 'add_product_type' %}" method="post">{% csrf_token %}
         {% include "dojo/form_fields.html" with form=form %}
         <div class="form-group">

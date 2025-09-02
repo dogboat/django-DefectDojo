@@ -70,6 +70,7 @@ from dojo.forms import (
     ProductNotificationsForm,
     SLA_Configuration,
 )
+from dojo.labels import get_labels
 from dojo.models import (
     App_Analysis,
     Benchmark_Product_Summary,
@@ -133,6 +134,7 @@ from dojo.utils import (
 
 logger = logging.getLogger(__name__)
 
+labels = get_labels()
 
 def product(request):
     prods = get_authorized_products(Permissions.Product_View)
@@ -159,7 +161,7 @@ def product(request):
     # Get benchmark types for the template
     benchmark_types = Benchmark_Type.objects.filter(enabled=True).order_by("name")
 
-    add_breadcrumb(title=_("Product List"), top_level=not len(request.GET), request=request)
+    add_breadcrumb(title=str(labels.asset.list.label), top_level=not len(request.GET), request=request)
 
     return render(request, "dojo/product.html", {
         "prod_list": prod_list,
@@ -305,7 +307,7 @@ def view_product(request, pid):
 
     total = critical + high + medium + low + info
 
-    product_tab = Product_Tab(prod, title=_("Product"), tab="overview")
+    product_tab = Product_Tab(prod, title=str(labels.asset.label), tab="overview")
     return render(request, "dojo/view_product_details.html", {
         "prod": prod,
         "product_tab": product_tab,
@@ -338,7 +340,7 @@ def view_product(request, pid):
 @user_is_authorized(Product, Permissions.Component_View, "pid")
 def view_product_components(request, pid):
     prod = get_object_or_404(Product, id=pid)
-    product_tab = Product_Tab(prod, title=_("Product"), tab="components")
+    product_tab = Product_Tab(prod, title=str(labels.asset.label), tab="components")
     separator = ", "
 
     # Get components ordered by component_name and concat component versions to the same row
@@ -718,7 +720,7 @@ def view_product_metrics(request, pid):
     open_vulnerabilities = [["CWE-" + str(f.get("cwe")), f.get("count")] for f in open_vulnerabilities]
     all_vulnerabilities = [["CWE-" + str(f.get("cwe")), f.get("count")] for f in all_vulnerabilities]
 
-    product_tab = Product_Tab(prod, title=_("Product"), tab="metrics")
+    product_tab = Product_Tab(prod, title=str(labels.asset.label), tab="metrics")
 
     return render(request, "dojo/product_metrics.html", {
         "prod": prod,
@@ -926,7 +928,7 @@ def new_product(request, ptid=None):
             product = form.save()
             messages.add_message(request,
                                  messages.SUCCESS,
-                                 _("Product added successfully."),
+                                 labels.asset.create.success,
                                  extra_tags="alert-success")
             success, jira_project_form = jira_helper.process_jira_project_form(request, product=product)
             error = not success
@@ -1046,7 +1048,7 @@ def edit_product(request, pid):
         else:
             gform = None
 
-    product_tab = Product_Tab(product, title=_("Edit Product"), tab="settings")
+    product_tab = Product_Tab(product, title=str(labels.asset.update.label), tab="settings")
     return render(request,
                   "dojo/edit_product.html",
                   {"form": form,
@@ -1070,9 +1072,9 @@ def delete_product(request, pid):
                 if get_setting("ASYNC_OBJECT_DELETE"):
                     async_del = async_delete()
                     async_del.delete(product)
-                    message = _("Product and relationships will be removed in the background.")
+                    message = labels.asset.delete.success_async
                 else:
-                    message = _("Product and relationships removed.")
+                    message = labels.asset.delete.success
                     product.delete()
                 messages.add_message(request,
                                      messages.SUCCESS,
@@ -1092,7 +1094,7 @@ def delete_product(request, pid):
         collector.collect([product])
         rels = collector.nested()
 
-    product_tab = Product_Tab(product, title=_("Product"), tab="settings")
+    product_tab = Product_Tab(product, title=str(labels.asset.label), tab="settings")
 
     logger.debug("delete_product: GET RENDER")
 
