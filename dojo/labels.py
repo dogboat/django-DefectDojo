@@ -264,7 +264,7 @@ V2_LABELS = {
     _K.ASSET_TRACKED_FILES_ADD_LABEL: _("Add Tracked Files to a Product"),
     _K.ASSET_TRACKED_FILES_ADD_SUCCESS_MESSAGE: _("Added Tracked File to a Product"),
     _K.ASSET_TRACKED_FILES_ID_MISMATCH_ERROR_MESSAGE: _(
-        f"Product %(asset_id)s does not match Product of Object %(object_asset_id)s"),
+        "Product %(asset_id)s does not match Product of Object %(object_asset_id)s"),
     _K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Product"),
     _K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
     _K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Product Tag Inheritance"),
@@ -423,7 +423,7 @@ V3_LABELS = {
     _K.ASSET_TRACKED_FILES_ADD_LABEL: _("Add Tracked Files to an Asset"),
     _K.ASSET_TRACKED_FILES_ADD_SUCCESS_MESSAGE: _("Added Tracked File to an Asset"),
     _K.ASSET_TRACKED_FILES_ID_MISMATCH_ERROR_MESSAGE: _(
-        f"Asset %(asset_id)s does not match Asset of Object %(object_asset_id)s"),
+        "Asset %(asset_id)s does not match Asset of Object %(object_asset_id)s"),
     _K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Asset"),
     _K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
     _K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Asset Tag Inheritance"),

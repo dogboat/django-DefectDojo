@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 labels = get_labels()
 
+
 @user_is_authorized(Product, Permissions.Product_Tracking_Files_Add, "pid")
 def new_object(request, pid):
     page_name = labels.ASSET_TRACKED_FILES_ADD_LABEL
