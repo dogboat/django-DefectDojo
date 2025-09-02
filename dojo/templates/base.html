@@ -939,13 +939,13 @@
                                                             <li role="presentation">
                                                                 <a class="" href="{% url 'new_object' product_tab.product.id %}">
                                                                     <i class="fa-solid fa-plus"></i>
-                                                                    {{ labels.ASSET_TRACKING_FILES_ADD_LABEL }}
+                                                                    {% trans "Add Tracked File" %}
                                                                 </a>
                                                             </li>
                                                             <li role="presentation">
                                                                 <a href="{% url 'view_objects' product_tab.product.id %}">
                                                                     <i class="fa-solid fa-rectangle-list"></i>
-                                                                    {{ labels.ASSET_TRACKING_FILES_VIEW_LABEL }}
+                                                                    {% trans "View Tracked Files" %}
                                                                 </a>
                                                             </li>
                                                         {% endif %}

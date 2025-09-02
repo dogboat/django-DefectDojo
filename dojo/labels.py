@@ -110,8 +110,9 @@ class _K:
     ASSET_REPORT_LABEL = "asset.report_label"
     ASSET_REPORT_TITLE = "asset.report_title"
     ASSET_REPORT_WITH_NAME_TITLE = "asset.report_with_name_title"
-    ASSET_TRACKING_FILES_ADD_LABEL = "asset.tracking_files_add_label"
-    ASSET_TRACKING_FILES_VIEW_LABEL = "asset.tracking_files_view_label"
+    ASSET_TRACKED_FILES_ADD_LABEL = "asset.tracked_files.add_label"
+    ASSET_TRACKED_FILES_ADD_SUCCESS_MESSAGE = "asset.tracked_files.add_success_message"
+    ASSET_TRACKED_FILES_ID_MISMATCH_ERROR_MESSAGE = "asset.tracked_files.id_mismatch_error_message"
     ASSET_FINDINGS_CLOSE_LABEL = "asset.findings_close_label"
     ASSET_FINDINGS_CLOSE_HELP = "asset.findings_close_help"
     ASSET_TAG_INHERITANCE_ENABLE_LABEL = "asset.tag_inheritance_enable_label"
@@ -260,8 +261,10 @@ V2_LABELS = {
     _K.ASSET_REPORT_LABEL: _("Product Report"),
     _K.ASSET_REPORT_TITLE: _("Product Report"),
     _K.ASSET_REPORT_WITH_NAME_TITLE: _("Product Report: %(name)s"),
-    _K.ASSET_TRACKING_FILES_ADD_LABEL: _("Add Product Tracking Files"),
-    _K.ASSET_TRACKING_FILES_VIEW_LABEL: _("View Product Tracking Files"),
+    _K.ASSET_TRACKED_FILES_ADD_LABEL: _("Add Tracked Files to a Product"),
+    _K.ASSET_TRACKED_FILES_ADD_SUCCESS_MESSAGE: _("Added Tracked File to a Product"),
+    _K.ASSET_TRACKED_FILES_ID_MISMATCH_ERROR_MESSAGE: _(
+        f"Product %(asset_id)s does not match Product of Object %(object_asset_id)s"),
     _K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Product"),
     _K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
     _K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Product Tag Inheritance"),
@@ -417,8 +420,10 @@ V3_LABELS = {
     _K.ASSET_REPORT_LABEL: _("Asset Report"),
     _K.ASSET_REPORT_TITLE: _("Asset Report"),
     _K.ASSET_REPORT_WITH_NAME_TITLE: _("Asset Report: %(name)s"),
-    _K.ASSET_TRACKING_FILES_ADD_LABEL: _("Add Asset Tracking Files"),
-    _K.ASSET_TRACKING_FILES_VIEW_LABEL: _("View Asset Tracking Files"),
+    _K.ASSET_TRACKED_FILES_ADD_LABEL: _("Add Tracked Files to an Asset"),
+    _K.ASSET_TRACKED_FILES_ADD_SUCCESS_MESSAGE: _("Added Tracked File to an Asset"),
+    _K.ASSET_TRACKED_FILES_ID_MISMATCH_ERROR_MESSAGE: _(
+        f"Asset %(asset_id)s does not match Asset of Object %(object_asset_id)s"),
     _K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Asset"),
     _K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
     _K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Asset Tag Inheritance"),
