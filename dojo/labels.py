@@ -248,8 +248,8 @@ V2_LABELS = {
         "Deleting this Product Type will remove any related objects associated with it. These relationships are listed below:"),
     _K.ORG_DELETE_SUCCESS_MESSAGE: _("Product Type and relationships removed."),
     _K.ORG_DELETE_SUCCESS_ASYNC_MESSAGE: _("Product Type and relationships will be removed in the background."),
-    _K.ORG_DELETE_WITH_NAME_SUCCESS_MESSAGE: _('The Product Type "%(name)s" was deleted'),
-    _K.ORG_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _('The Product Type "%(name)s" was deleted by %(user)s'),
+    _K.ORG_DELETE_WITH_NAME_SUCCESS_MESSAGE: _('The product type "%(name)s" was deleted'),
+    _K.ORG_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _('The product type "%(name)s" was deleted by %(user)s'),
     _K.ASSET_LABEL: _("Product"),
     _K.ASSET_PLURAL_LABEL: _("Products"),
     _K.ASSET_ALL_LABEL: _("All Products"),
@@ -296,8 +296,8 @@ V2_LABELS = {
         "Deleting this Product will remove any related objects associated with it. These relationships are listed below: "),
     _K.ASSET_DELETE_SUCCESS_MESSAGE: _("Product and relationships removed."),
     _K.ASSET_DELETE_SUCCESS_ASYNC_MESSAGE: _("Product and relationships will be removed in the background."),
-    _K.ASSET_DELETE_WITH_NAME_SUCCESS_MESSAGE: _('The Product "%(name)s" was deleted'),
-    _K.ASSET_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _('The Product "%(name)s" was deleted by %(user)s'),
+    _K.ASSET_DELETE_WITH_NAME_SUCCESS_MESSAGE: _('The product "%(name)s" was deleted'),
+    _K.ASSET_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE: _('The product "%(name)s" was deleted by %(user)s'),
     _K.ASSET_FILTERS_LABEL: _("Product"),
     _K.ASSET_FILTERS_NAME_LABEL: _("Product Name"),
     _K.ASSET_FILTERS_NAME_HELP: _("Search for Product names that are an exact match"),
@@ -545,10 +545,19 @@ class LabelsProxy(_K):
                 raise ValueError(error_message)
 
 
-def get_labels() -> LabelsProxy:
+v2_labels_proxy = LabelsProxy(V2_LABELS)
+v3_labels_proxy = LabelsProxy(V3_LABELS)
+
+
+class LabelsLabelsProxy(_K):
+    def __getattribute__(self, name):
+        if v3_migration_enabled():
+            logger.info("Using V3 labels")
+            return getattr(v3_labels_proxy, name)
+        logger.info("Using V2 labels")
+        return getattr(v2_labels_proxy, name)
+
+
+def get_labels() -> LabelsLabelsProxy:
     """Method for getting a LabelsProxy initialized with the correct set of labels."""
-    if v3_migration_enabled():
-        logger.info("Using V3 labels")
-        return LabelsProxy(V3_LABELS)
-    logger.info("Using V2 labels")
-    return LabelsProxy(V2_LABELS)
+    return LabelsLabelsProxy()
