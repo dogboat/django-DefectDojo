@@ -41,7 +41,14 @@ jobs:
           "tests/notifications_test.py",
           "tests/tool_config.py",
           "openapi-validatator",
-
+          # V3 migration
+          "tests/v3/product_group_test.py",
+          "tests/v3/product_member_test.py",
+          "tests/v3/product_test.py",
+          "tests/v3/product_type_group_test.py",
+          "tests/v3/product_type_member_test.py",
+          "tests/v3/product_type_test.py",
+          "tests/v3/report_builder_test.py",
         ]
         os: [alpine, debian]
       fail-fast: false
