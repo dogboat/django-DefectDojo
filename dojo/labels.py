@@ -545,19 +545,18 @@ class LabelsProxy(_K):
                 raise ValueError(error_message)
 
 
-v2_labels_proxy = LabelsProxy(V2_LABELS)
-v3_labels_proxy = LabelsProxy(V3_LABELS)
+class DynamicLabelsProxy(_K):
+    v2_labels_proxy = LabelsProxy(V2_LABELS)
+    v3_labels_proxy = LabelsProxy(V3_LABELS)
 
-
-class LabelsLabelsProxy(_K):
     def __getattribute__(self, name):
         if v3_migration_enabled():
             logger.info("Using V3 labels")
-            return getattr(v3_labels_proxy, name)
+            return getattr(DynamicLabelsProxy.v3_labels_proxy, name)
         logger.info("Using V2 labels")
-        return getattr(v2_labels_proxy, name)
+        return getattr(DynamicLabelsProxy.v2_labels_proxy, name)
 
 
-def get_labels() -> LabelsLabelsProxy:
+def get_labels() -> DynamicLabelsProxy:
     """Method for getting a LabelsProxy initialized with the correct set of labels."""
-    return LabelsLabelsProxy()
+    return DynamicLabelsProxy()
