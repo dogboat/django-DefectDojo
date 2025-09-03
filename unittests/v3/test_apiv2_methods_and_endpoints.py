@@ -27,9 +27,8 @@ from dojo.models import (
     UserAnnouncement,
 )
 from dojo.urls import v2_api
-
-from unittests.v3.dojo_test_case import DojoTestCase
 from unittests.test_rest_framework import BASE_API_URL, get_open_api3_json_schema
+from unittests.v3.dojo_test_case import DojoTestCase
 
 
 class ApiEndpointMethods(DojoTestCase):

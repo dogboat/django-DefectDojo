@@ -9,7 +9,6 @@ from jira.exceptions import JIRAError
 
 import dojo.jira_link.helper as jira_helper
 from dojo.models import JIRA_Instance, Product
-
 from unittests.v3.dojo_test_case import DojoTestCase
 
 logger = logging.getLogger(__name__)
