@@ -2,12 +2,13 @@ import logging
 import sys
 import unittest
 
-from base_test_class import BaseTestCase
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select, WebDriverWait
-from user_test import UserTest
+
+from tests.base_test_class import BaseTestCase
+from tests.user_test import UserTest
 
 logger = logging.getLogger(__name__)
 
