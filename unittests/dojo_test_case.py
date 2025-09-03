@@ -9,7 +9,7 @@ from pprint import pformat
 
 from django.conf import settings
 from django.test import TestCase
-from django.urls import reverse, clear_url_caches
+from django.urls import clear_url_caches, reverse
 from django.utils import timezone
 from django.utils.http import urlencode
 from rest_framework.authtoken.models import Token

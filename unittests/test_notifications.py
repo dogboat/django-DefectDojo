@@ -664,12 +664,12 @@ class TestNotificationWebhooks(DojoTestCase):
             manager = WebhookNotificationManger()
             manager.send_webhooks_notification(event="dummy", title="Dummy event")
 
-        #updated_wh = Notification_Webhooks.objects.filter(owner=None).first()
-        #self.assertEqual(updated_wh.status, Notification_Webhooks.Status.STATUS_INACTIVE_TMP)
-        #self.assertIsNotNone(updated_wh.first_error)
-        #self.assertEqual(updated_wh.first_error, updated_wh.last_error)
-        #self.assertIn("HTTPConnectionPool(host='webhook.endpoint', port=8080): Read timed out.", updated_wh.note)
-        #self.assertIn("Timeout when sending message to Webhook 'My webhook endpoint'", cm.output[-1])
+        updated_wh = Notification_Webhooks.objects.filter(owner=None).first()
+        self.assertEqual(updated_wh.status, Notification_Webhooks.Status.STATUS_INACTIVE_TMP)
+        self.assertIsNotNone(updated_wh.first_error)
+        self.assertEqual(updated_wh.first_error, updated_wh.last_error)
+        self.assertIn("HTTPConnectionPool(host='webhook.endpoint', port=8080): Read timed out.", updated_wh.note)
+        self.assertIn("Timeout when sending message to Webhook 'My webhook endpoint'", cm.output[-1])
 
     def test_system_webhook_wrong_fqdn(self):
 
