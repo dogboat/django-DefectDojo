@@ -43,7 +43,7 @@ class ApiEndpointMethods(DojoTestCase):
         self.registry = v2_api.registry
 
     def test_is_defined(self):
-        exempt_list = [
+        exempt_list = {
             "import-scan", "reimport-scan", "notes", "system_settings", "roles",
             "import-languages", "endpoint_meta_import", "test_types",
             "configuration_permissions", "questionnaire_questions",
@@ -52,7 +52,7 @@ class ApiEndpointMethods(DojoTestCase):
             "dojo_group_members", "product_members", "product_groups", "product_type_groups",
             "product_type_members", "asset_members", "asset_groups", "organization_groups",
             "organization_members",
-        ]
+        }
         for reg, _, _ in sorted(self.registry):
             if reg in exempt_list:
                 continue
