@@ -1,8 +1,8 @@
 import sys
 import unittest
 
-from base_test_class import BaseTestCase
 from asset_test import AssetTest
+from base_test_class import BaseTestCase
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions

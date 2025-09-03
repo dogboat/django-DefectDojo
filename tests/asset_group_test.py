@@ -1,9 +1,9 @@
 import sys
 import unittest
 
+from asset_test import AssetTest
 from base_test_class import BaseTestCase
 from group_test import GroupTest
-from asset_test import AssetTest
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
