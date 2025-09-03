@@ -6,8 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
-from tests.base_test_class import BaseTestCase, on_exception_html_source_logger, set_suite_settings
-from tests.notifications_test import NotificationTest
+from ..base_test_class import BaseTestCase, on_exception_html_source_logger, set_suite_settings
+from ..notifications_test import NotificationTest
 
 
 class WaitForPageLoad:

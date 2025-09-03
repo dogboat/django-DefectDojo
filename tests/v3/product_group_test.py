@@ -6,9 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from tests.base_test_class import BaseTestCase
-from tests.group_test import GroupTest
-from tests.v3.product_test import ProductTest
+from ..base_test_class import BaseTestCase
+from ..group_test import GroupTest
+from .product_test import ProductTest
 
 
 class ProductGroupTest(BaseTestCase):

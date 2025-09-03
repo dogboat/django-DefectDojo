@@ -8,8 +8,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from user_test import UserTest
 
-from tests.base_test_class import BaseTestCase
-from tests.v3.product_test import ProductTest
+from ..base_test_class import BaseTestCase
+from .product_test import ProductTest
 
 logger = logging.getLogger(__name__)
 

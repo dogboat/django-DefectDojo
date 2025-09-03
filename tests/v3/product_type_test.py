@@ -4,7 +4,7 @@ import unittest
 
 from selenium.webdriver.common.by import By
 
-from tests.base_test_class import BaseTestCase, on_exception_html_source_logger
+from ..base_test_class import BaseTestCase, on_exception_html_source_logger
 
 logger = logging.getLogger(__name__)
 
