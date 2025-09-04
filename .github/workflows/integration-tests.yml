@@ -48,7 +48,8 @@ jobs:
           "tests/organization_group_test.py",
           "tests/organization_member_test.py",
           "tests/organization_test.py",
-          "tests/report_builder_test_v2.py", # v2; can be removed after v3 migration complete
+          # v2; can be removed after v3 migration complete
+          "tests/report_builder_test_v2.py",
         ]
         os: [alpine, debian]
       fail-fast: false
