@@ -37,6 +37,7 @@ from dojo.notifications.helper import (
     create_notification,
     webhook_status_cleanup,
 )
+
 from .dojo_test_case import DojoTestCase
 
 logger = logging.getLogger(__name__)

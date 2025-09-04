@@ -37,7 +37,6 @@ from dojo.notifications.helper import (
     create_notification,
     webhook_status_cleanup,
 )
-
 from unittests.v2.dojo_test_case import DojoTestCase, disable_v3_migration
 
 logger = logging.getLogger(__name__)
