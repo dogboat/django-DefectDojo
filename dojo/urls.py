@@ -107,9 +107,7 @@ from dojo.tool_product.urls import urlpatterns as tool_product_urls
 from dojo.tool_type.urls import urlpatterns as tool_type_urls
 from dojo.user.urls import urlpatterns as user_urls
 from dojo.utils import get_system_setting
-
 # V3 Migration
-from dojo.v3_migration import v3_migration_enabled
 from dojo.v3_migration.api_v2.views import (
     AssetAPIScanConfigurationViewSet,
     AssetGroupViewSet,
@@ -192,16 +190,15 @@ v2_api.register(r"questionnaire_answered_questionnaires", QuestionnaireAnsweredS
 v2_api.register(r"questionnaire_engagement_questionnaires", QuestionnaireEngagementSurveyViewSet, basename="engagement_survey")
 v2_api.register(r"questionnaire_general_questionnaires", QuestionnaireGeneralSurveyViewSet, basename="general_survey")
 v2_api.register(r"questionnaire_questions", QuestionnaireQuestionViewSet, basename="question")
-
-if v3_migration_enabled():
-    v2_api.register(r"assets", AssetViewSet, basename="asset")
-    v2_api.register(r"asset_api_scan_configurations", AssetAPIScanConfigurationViewSet,
-                    basename="asset_api_scan_configuration")
-    v2_api.register(r"asset_groups", AssetGroupViewSet, basename="asset_group")
-    v2_api.register(r"asset_members", AssetMemberViewSet, basename="asset_member")
-    v2_api.register(r"organizations", OrganizationViewSet, basename="organization")
-    v2_api.register(r"organization_members", OrganizationMemberViewSet, basename="organization_member")
-    v2_api.register(r"organization_groups", OrganizationGroupViewSet, basename="organization_group")
+# V3 Migration
+v2_api.register(r"assets", AssetViewSet, basename="asset")
+v2_api.register(r"asset_api_scan_configurations", AssetAPIScanConfigurationViewSet,
+                basename="asset_api_scan_configuration")
+v2_api.register(r"asset_groups", AssetGroupViewSet, basename="asset_group")
+v2_api.register(r"asset_members", AssetMemberViewSet, basename="asset_member")
+v2_api.register(r"organizations", OrganizationViewSet, basename="organization")
+v2_api.register(r"organization_members", OrganizationMemberViewSet, basename="organization_member")
+v2_api.register(r"organization_groups", OrganizationGroupViewSet, basename="organization_group")
 
 ur = []
 ur += dev_env_urls

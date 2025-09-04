@@ -9,7 +9,8 @@ from jira.exceptions import JIRAError
 
 import dojo.jira_link.helper as jira_helper
 from dojo.models import JIRA_Instance, Product
-from unittests.v3.dojo_test_case import DojoTestCase
+
+from unittests.v2.dojo_test_case import DojoTestCase, disable_v3_migration
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,7 @@ class JIRAConfigProductTest(DojoTestCase):
         DojoTestCase.__init__(self, *args, **kwargs)
 
     def setUp(self):
+        disable_v3_migration()
         self.system_settings(enable_jira=True)
         self.client.force_login(self.get_test_admin())
 
@@ -168,7 +170,7 @@ class JIRAConfigProductTest(DojoTestCase):
     @patch("dojo.jira_link.views.jira_helper.is_jira_project_valid")
     def test_add_product_with_jira_project_invalid_jira_project(self, jira_mock):
         jira_mock.return_value = False  # cannot set return_value in decorated AND have the mock into the method
-        product = self.add_product_with_jira_project(expected_delta_jira_project_db=0, expect_redirect_to="/asset/%i/edit")
+        product = self.add_product_with_jira_project(expected_delta_jira_project_db=0, expect_redirect_to="/product/%i/edit")
         # product is still saved, even with invalid jira project key
         self.assertIsNotNone(product)
         self.assertEqual(jira_mock.call_count, 1)

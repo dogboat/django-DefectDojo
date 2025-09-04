@@ -1,5 +1,4 @@
 import copy
-import importlib
 import json
 import logging
 from functools import wraps
@@ -7,9 +6,8 @@ from itertools import chain
 from pathlib import Path
 from pprint import pformat
 
-from django.conf import settings
 from django.test import TestCase
-from django.urls import clear_url_caches, reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import urlencode
 from rest_framework.authtoken.models import Token
@@ -93,25 +91,6 @@ def with_system_setting(field, value):
         return wrapper
 
     return decorator
-
-
-def disable_v3_migration():
-
-    ss = System_Settings.objects.get()
-    ss.enable_v3_migration = False
-    ss.save()
-
-    import dojo.product.urls
-    import dojo.product_type.urls
-    import dojo.urls
-
-    clear_url_caches()
-
-    importlib.reload(dojo.product.urls)
-    importlib.reload(dojo.product_type.urls)
-    importlib.reload(dojo.urls)
-    urlconf_module = importlib.import_module(settings.ROOT_URLCONF)
-    importlib.reload(urlconf_module)
 
 
 class DojoTestUtilsMixin:
@@ -316,7 +295,7 @@ class DojoTestUtilsMixin:
         }
 
     def get_expected_redirect_product(self, product):
-        return f"/product/{product.id}"
+        return f"/asset/{product.id}"
 
     def add_product_jira(self, data, expect_redirect_to=None, *, expect_200=False):
         response = self.client.get(reverse("new_product"))
@@ -325,7 +304,7 @@ class DojoTestUtilsMixin:
         # self.log_model_instance(JIRA_Project.objects.last())
 
         if not expect_redirect_to and not expect_200:
-            expect_redirect_to = "/product/%i"
+            expect_redirect_to = "/asset/%i"
 
         response = self.client.post(reverse("new_product"), urlencode(data), content_type="application/x-www-form-urlencoded")
 

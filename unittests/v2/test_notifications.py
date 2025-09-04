@@ -37,7 +37,8 @@ from dojo.notifications.helper import (
     create_notification,
     webhook_status_cleanup,
 )
-from unittests.v3.dojo_test_case import DojoTestCase
+
+from unittests.v2.dojo_test_case import DojoTestCase, disable_v3_migration
 
 logger = logging.getLogger(__name__)
 
@@ -204,6 +205,7 @@ class TestNotificationTriggers(DojoTestCase):
     fixtures = ["dojo_testdata.json"]
 
     def setUp(self):
+        disable_v3_migration()
         self.notification_tester = Dojo_User.objects.get(username="admin")
 
     @patch("dojo.notifications.helper.NotificationManager._process_notifications")
@@ -215,7 +217,7 @@ class TestNotificationTriggers(DojoTestCase):
                 prod_type = Product_Type.objects.create(name="notif prod type")
             self.assertEqual(mock.call_count, last_count + 4)
             self.assertEqual(mock.call_args_list[-1].args[0], "product_type_added")
-            self.assertEqual(mock.call_args_list[-1].kwargs["url"], f"/organization/{prod_type.id}")
+            self.assertEqual(mock.call_args_list[-1].kwargs["url"], f"/product/type/{prod_type.id}")
 
         last_count = mock.call_count
         with self.subTest("product_type_deleted"):
@@ -223,8 +225,8 @@ class TestNotificationTriggers(DojoTestCase):
                 prod_type.delete()
             self.assertEqual(mock.call_count, last_count + 1)
             self.assertEqual(mock.call_args_list[-1].args[0], "product_type_deleted")
-            self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The Organization "notif prod type" was deleted by admin')
-            self.assertEqual(mock.call_args_list[-1].kwargs["url"], "/organization")
+            self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The product type "notif prod type" was deleted by admin')
+            self.assertEqual(mock.call_args_list[-1].kwargs["url"], "/product/type")
 
     @patch("dojo.notifications.helper.NotificationManager._process_notifications")
     def test_products(self, mock):
@@ -236,7 +238,7 @@ class TestNotificationTriggers(DojoTestCase):
                 prod, _ = Product.objects.get_or_create(prod_type=prod_type, name="prod name")
             self.assertEqual(mock.call_count, last_count + 5)
             self.assertEqual(mock.call_args_list[-1].args[0], "product_added")
-            self.assertEqual(mock.call_args_list[-1].kwargs["url"], f"/asset/{prod.id}")
+            self.assertEqual(mock.call_args_list[-1].kwargs["url"], f"/product/{prod.id}")
 
         last_count = mock.call_count
         with self.subTest("product_deleted"):
@@ -244,8 +246,8 @@ class TestNotificationTriggers(DojoTestCase):
                 prod.delete()
             self.assertEqual(mock.call_count, last_count + 2)
             self.assertEqual(mock.call_args_list[-1].args[0], "product_deleted")
-            self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The Asset "prod name" was deleted by admin')
-            self.assertEqual(mock.call_args_list[-1].kwargs["url"], "/asset")
+            self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The product "prod name" was deleted by admin')
+            self.assertEqual(mock.call_args_list[-1].kwargs["url"], "/product")
 
     @patch("dojo.notifications.helper.NotificationManager._process_notifications")
     def test_engagements(self, mock):
@@ -305,7 +307,7 @@ class TestNotificationTriggers(DojoTestCase):
             self.assertEqual(mock.call_count, last_count + 1)
             self.assertEqual(mock.call_args_list[-1].args[0], "engagement_deleted")
             self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The engagement "Testing engagement" was deleted by admin')
-            self.assertEqual(mock.call_args_list[-1].kwargs["url"], f"/asset/{prod2.id}")
+            self.assertEqual(mock.call_args_list[-1].kwargs["url"], f"/product/{prod2.id}")
 
     @patch("dojo.notifications.helper.NotificationManager._process_notifications")
     def test_endpoints(self, mock):
@@ -385,7 +387,7 @@ class TestNotificationTriggers(DojoTestCase):
         prod_type = Product_Type.objects.create(name="notif prod type")
         with set_actor(self.notification_tester):
             prod_type.delete()
-        self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The Organization "notif prod type" was deleted by admin')
+        self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The product type "notif prod type" was deleted by admin')
 
     @patch("dojo.notifications.helper.NotificationManager._process_notifications")
     @override_settings(ENABLE_AUDITLOG=False)
@@ -393,13 +395,14 @@ class TestNotificationTriggers(DojoTestCase):
         prod_type = Product_Type.objects.create(name="notif prod type")
         with set_actor(self.notification_tester):
             prod_type.delete()
-        self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The Organization "notif prod type" was deleted')
+        self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The product type "notif prod type" was deleted')
 
 
 class TestNotificationTriggersApi(APITestCase):
     fixtures = ["dojo_testdata.json"]
 
     def setUp(self):
+        disable_v3_migration()
         token = Token.objects.get(user__username="admin")
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
@@ -409,7 +412,7 @@ class TestNotificationTriggersApi(APITestCase):
     def test_auditlog_on(self, mock):
         prod_type = Product_Type.objects.create(name="notif prod type API")
         self.client.delete(reverse("product_type-detail", args=(prod_type.pk,)), format="json")
-        self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The Organization "notif prod type API" was deleted by admin')
+        self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The product type "notif prod type API" was deleted by admin')
 
 
 class TestNotificationWebhooks(DojoTestCase):
@@ -427,6 +430,7 @@ class TestNotificationWebhooks(DojoTestCase):
             super().run(result)
 
     def setUp(self):
+        disable_v3_migration()
         self.sys_wh = Notification_Webhooks.objects.filter(owner=None).first()
         self.url_base = "http://webhook.endpoint:8080"
 
@@ -712,16 +716,16 @@ class TestNotificationWebhooks(DojoTestCase):
             self.assertEqual(mock.call_args.kwargs["headers"]["X-DefectDojo-Event"], "product_type_added")
             self.maxDiff = None
             self.assertEqual(mock.call_args.kwargs["json"], {
-                "description": "Organization notif prod type has been created successfully.",
+                "description": "Product Type notif prod type has been created successfully.",
                 "title": "notif prod type",
                 "user": None,
                 "url_api": f"http://localhost:8080/api/v2/product_types/{prod_type.pk}/",
-                "url_ui": f"http://localhost:8080/organization/{prod_type.pk}",
+                "url_ui": f"http://localhost:8080/product/type/{prod_type.pk}",
                 "product_type": {
                     "id": prod_type.pk,
                     "name": "notif prod type",
                     "url_api": f"http://localhost:8080/api/v2/product_types/{prod_type.pk}/",
-                    "url_ui": f"http://localhost:8080/organization/{prod_type.pk}",
+                    "url_ui": f"http://localhost:8080/product/type/{prod_type.pk}",
                 },
             })
 
@@ -730,22 +734,22 @@ class TestNotificationWebhooks(DojoTestCase):
             self.assertEqual(mock.call_args.kwargs["headers"]["X-DefectDojo-Event"], "product_added")
             self.maxDiff = None
             self.assertEqual(mock.call_args.kwargs["json"], {
-                "description": "Asset notif prod has been created successfully.",
+                "description": "Product notif prod has been created successfully.",
                 "title": "notif prod",
                 "user": None,
                 "url_api": f"http://localhost:8080/api/v2/products/{prod.pk}/",
-                "url_ui": f"http://localhost:8080/asset/{prod.pk}",
+                "url_ui": f"http://localhost:8080/product/{prod.pk}",
                 "product_type": {
                     "id": prod_type.pk,
                     "name": "notif prod type",
                     "url_api": f"http://localhost:8080/api/v2/product_types/{prod_type.pk}/",
-                    "url_ui": f"http://localhost:8080/organization/{prod_type.pk}",
+                    "url_ui": f"http://localhost:8080/product/type/{prod_type.pk}",
                 },
                 "product": {
                     "id": prod.pk,
                     "name": "notif prod",
                     "url_api": f"http://localhost:8080/api/v2/products/{prod.pk}/",
-                    "url_ui": f"http://localhost:8080/asset/{prod.pk}",
+                    "url_ui": f"http://localhost:8080/product/{prod.pk}",
                 },
             })
 
@@ -763,13 +767,13 @@ class TestNotificationWebhooks(DojoTestCase):
                     "id": prod_type.pk,
                     "name": "notif prod type",
                     "url_api": f"http://localhost:8080/api/v2/product_types/{prod_type.pk}/",
-                    "url_ui": f"http://localhost:8080/organization/{prod_type.pk}",
+                    "url_ui": f"http://localhost:8080/product/type/{prod_type.pk}",
                 },
                 "product": {
                     "id": prod.pk,
                     "name": "notif prod",
                     "url_api": f"http://localhost:8080/api/v2/products/{prod.pk}/",
-                    "url_ui": f"http://localhost:8080/asset/{prod.pk}",
+                    "url_ui": f"http://localhost:8080/product/{prod.pk}",
                 },
                 "engagement": {
                     "id": eng.pk,
@@ -802,13 +806,13 @@ class TestNotificationWebhooks(DojoTestCase):
                     "id": prod_type.pk,
                     "name": "notif prod type",
                     "url_api": f"http://localhost:8080/api/v2/product_types/{prod_type.pk}/",
-                    "url_ui": f"http://localhost:8080/organization/{prod_type.pk}",
+                    "url_ui": f"http://localhost:8080/product/type/{prod_type.pk}",
                 },
                 "product": {
                     "id": prod.pk,
                     "name": "notif prod",
                     "url_api": f"http://localhost:8080/api/v2/products/{prod.pk}/",
-                    "url_ui": f"http://localhost:8080/asset/{prod.pk}",
+                    "url_ui": f"http://localhost:8080/product/{prod.pk}",
                 },
                 "engagement": {
                     "id": eng.pk,
@@ -841,13 +845,13 @@ class TestNotificationWebhooks(DojoTestCase):
                     "id": prod_type.pk,
                     "name": "notif prod type",
                     "url_api": f"http://localhost:8080/api/v2/product_types/{prod_type.pk}/",
-                    "url_ui": f"http://localhost:8080/organization/{prod_type.pk}",
+                    "url_ui": f"http://localhost:8080/product/type/{prod_type.pk}",
                 },
                 "product": {
                     "id": prod.pk,
                     "name": "notif prod",
                     "url_api": f"http://localhost:8080/api/v2/products/{prod.pk}/",
-                    "url_ui": f"http://localhost:8080/asset/{prod.pk}",
+                    "url_ui": f"http://localhost:8080/product/{prod.pk}",
                 },
                 "engagement": {
                     "id": eng.pk,
