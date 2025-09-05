@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from functools import wraps
 
 from django.shortcuts import redirect
-from django.urls import reverse, get_urlconf, set_urlconf, clear_url_caches
+from django.urls import clear_url_caches, get_urlconf, reverse, set_urlconf
 
 from dojo.models import System_Settings
 
