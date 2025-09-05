@@ -4,7 +4,6 @@ from dojo.product import views as product_views
 from dojo.product_type import views
 from dojo.v3_migration import redirect_view
 
-
 common_urlpatterns = []
 
 

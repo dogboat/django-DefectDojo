@@ -50,4 +50,4 @@ v3_forward_urlpatterns = [
     re_path(r"^asset/report$", redirect_view("product_findings_report")),
 ]
 
-urlpatterns =  common_urlpatterns + v2_urlpatterns + v3_forward_urlpatterns
+urlpatterns = common_urlpatterns + v2_urlpatterns + v3_forward_urlpatterns

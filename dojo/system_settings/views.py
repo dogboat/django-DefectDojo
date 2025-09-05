@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views import View
 
 from dojo.forms import SystemSettingsForm

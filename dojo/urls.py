@@ -201,8 +201,10 @@ v2_api.register(r"organizations", OrganizationViewSet, basename="organization")
 v2_api.register(r"organization_members", OrganizationMemberViewSet, basename="organization_member")
 v2_api.register(r"organization_groups", OrganizationGroupViewSet, basename="organization_group")
 
+
 class Thing:
     pass
+
 
 URL_PLACEHOLDER = Thing()
 
@@ -215,9 +217,9 @@ ur += finding_group_urls
 ur += home_urls
 ur += metrics_urls
 # The following disabled due to v3 migration; added in at the bottom. Can be reactivated after v3 migration is complete.
-#ur += prod_urls
-#ur += pt_urls
-#ur += reports_urls
+# ur += prod_urls
+# ur += pt_urls
+# ur += reports_urls
 ur += search_urls
 ur += test_type_urls
 ur += test_urls
@@ -308,6 +310,7 @@ def drf_spectacular_preprocessing_filter_spec(endpoints):
         if path.startswith("/api/v2/"):
             filtered.append((path, path_regex, method, callback))
     return filtered
+
 
 # V2-specific url patterns
 v2_ui_urls = prod_urls + pt_urls + reports_urls

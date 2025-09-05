@@ -5,7 +5,6 @@ from dojo.product_type import views
 from dojo.product_type.urls import common_urlpatterns
 from dojo.v3_migration import redirect_view
 
-
 # Organization
 v3_urlpatterns = [
     re_path(r"^organization$", views.product_type, name="product_type"),

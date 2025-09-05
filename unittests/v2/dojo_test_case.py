@@ -1,5 +1,4 @@
 import copy
-import importlib
 import json
 import logging
 from functools import wraps
@@ -7,9 +6,8 @@ from itertools import chain
 from pathlib import Path
 from pprint import pformat
 
-from django.conf import settings
 from django.test import TestCase
-from django.urls import clear_url_caches, reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import urlencode
 from rest_framework.authtoken.models import Token

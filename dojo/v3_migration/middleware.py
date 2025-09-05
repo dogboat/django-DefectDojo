@@ -8,8 +8,7 @@ class V3MigrationMiddleware:
     def get_urlconf(self):
         if v3_migration_enabled():
             return "dojo.urls"
-        else:
-            return "dojo.v3_migration.urls"
+        return "dojo.v3_migration.urls"
 
     def __call__(self, request):
         request.urlconf = self.get_urlconf()

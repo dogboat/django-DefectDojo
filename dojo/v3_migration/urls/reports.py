@@ -24,4 +24,4 @@ v2_backward_urlpatterns = [
     re_path(r"^product/report$", redirect_view("product_findings_report")),
 ]
 
-urlpatterns =  common_urlpatterns + v3_urlpatterns + v2_backward_urlpatterns
+urlpatterns = common_urlpatterns + v3_urlpatterns + v2_backward_urlpatterns

@@ -2,9 +2,7 @@ from django.urls import re_path
 
 from dojo.engagement import views as dojo_engagement_views
 from dojo.product import views
-
-from dojo.v3_migration import redirect_view, v3_migration_enabled
-
+from dojo.v3_migration import redirect_view
 
 common_urlpatterns = [
     re_path(r"^technology/(?P<tid>\d+)/edit$", views.edit_technology,

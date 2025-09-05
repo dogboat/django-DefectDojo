@@ -3,8 +3,7 @@ from django.urls import re_path
 from dojo.engagement import views as dojo_engagement_views
 from dojo.product import views
 from dojo.product.urls import common_urlpatterns
-from dojo.v3_migration import redirect_view, v3_migration_enabled
-
+from dojo.v3_migration import redirect_view
 
 v3_urlpatterns = [
     re_path(r"^asset$", views.product, name="product"),
