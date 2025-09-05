@@ -11,6 +11,7 @@ from django.utils.translation import gettext as _
 from dojo.labels import get_labels
 from dojo.models import Product
 from dojo.notifications.helper import create_notification
+from dojo.v3_migration.utils import set_migration_urlconf
 
 labels = get_labels()
 
@@ -18,12 +19,13 @@ labels = get_labels()
 @receiver(post_save, sender=Product)
 def product_post_save(sender, instance, created, **kwargs):
     if created:
-        create_notification(event="product_added",
-                            title=instance.name,
-                            product=instance,
-                            url=reverse("view_product", args=(instance.id,)),
-                            url_api=reverse("product-detail", args=(instance.id,)),
-                        )
+        with set_migration_urlconf():
+            create_notification(event="product_added",
+                                title=instance.name,
+                                product=instance,
+                                url=reverse("view_product", args=(instance.id,)),
+                                url_api=reverse("product-detail", args=(instance.id,)),
+                            )
 
 
 @receiver(post_delete, sender=Product)
