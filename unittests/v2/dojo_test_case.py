@@ -101,6 +101,7 @@ def disable_v3_migration():
     ss.enable_v3_migration = False
     ss.save()
 
+    """
     import dojo.product.urls
     import dojo.product_type.urls
     import dojo.urls
@@ -112,6 +113,7 @@ def disable_v3_migration():
     importlib.reload(dojo.urls)
     urlconf_module = importlib.import_module(settings.ROOT_URLCONF)
     importlib.reload(urlconf_module)
+    """
 
 
 class DojoTestUtilsMixin:

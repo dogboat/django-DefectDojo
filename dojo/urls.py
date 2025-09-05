@@ -201,6 +201,11 @@ v2_api.register(r"organizations", OrganizationViewSet, basename="organization")
 v2_api.register(r"organization_members", OrganizationMemberViewSet, basename="organization_member")
 v2_api.register(r"organization_groups", OrganizationGroupViewSet, basename="organization_group")
 
+class Thing:
+    pass
+
+URL_PLACEHOLDER = Thing()
+
 ur = []
 ur += dev_env_urls
 ur += endpoint_urls
@@ -209,9 +214,10 @@ ur += finding_urls
 ur += finding_group_urls
 ur += home_urls
 ur += metrics_urls
-ur += prod_urls
-ur += pt_urls
-ur += reports_urls
+# The following disabled due to v3 migration; added in at the bottom. Can be reactivated after v3 migration is complete.
+#ur += prod_urls
+#ur += pt_urls
+#ur += reports_urls
 ur += search_urls
 ur += test_type_urls
 ur += test_urls
@@ -251,13 +257,13 @@ if hasattr(settings, "API_TOKENS_ENABLED") and hasattr(settings, "API_TOKEN_AUTH
             ),
         ]
 
-urlpatterns = []
+common_urlpatterns = []
 
 # sometimes urlpatterns needed be added from local_settings.py before other URLs of core dojo
 if hasattr(settings, "PRELOAD_URL_PATTERNS"):
-    urlpatterns += settings.PRELOAD_URL_PATTERNS
+    common_urlpatterns += settings.PRELOAD_URL_PATTERNS
 
-urlpatterns += [
+common_urlpatterns += [
     # action history
     re_path(r"^{}history/(?P<cid>\d+)/(?P<oid>\d+)$".format(get_system_setting("url_prefix")), views.action_history, name="action_history"),
     re_path(r"^{}".format(get_system_setting("url_prefix")), include(ur)),
@@ -272,26 +278,26 @@ urlpatterns += [
     re_path(r"^{}/(?P<path>.*)$".format(settings.MEDIA_URL.strip("/")), views.protected_serve, {"document_root": settings.MEDIA_ROOT}),
 ]
 
-urlpatterns += api_v2_urls
-urlpatterns += survey_urls
+common_urlpatterns += api_v2_urls
+common_urlpatterns += survey_urls
 
 if hasattr(settings, "DJANGO_METRICS_ENABLED"):
     if settings.DJANGO_METRICS_ENABLED:
-        urlpatterns += [re_path(r"^{}django_metrics/".format(get_system_setting("url_prefix")), include("django_prometheus.urls"))]
+        common_urlpatterns += [re_path(r"^{}django_metrics/".format(get_system_setting("url_prefix")), include("django_prometheus.urls"))]
 
 if hasattr(settings, "SAML2_ENABLED"):
     if settings.SAML2_ENABLED:
         # django saml2
-        urlpatterns += [re_path(r"^saml2/", include("djangosaml2.urls"))]
+        common_urlpatterns += [re_path(r"^saml2/", include("djangosaml2.urls"))]
 
 if hasattr(settings, "DJANGO_ADMIN_ENABLED"):
     if settings.DJANGO_ADMIN_ENABLED:
         #  django admin
-        urlpatterns += [re_path(r"^{}admin/".format(get_system_setting("url_prefix")), admin.site.urls)]
+        common_urlpatterns += [re_path(r"^{}admin/".format(get_system_setting("url_prefix")), admin.site.urls)]
 
 # sometimes urlpatterns needed be added from local_settings.py to avoid having to modify core defect dojo files
 if hasattr(settings, "EXTRA_URL_PATTERNS"):
-    urlpatterns += settings.EXTRA_URL_PATTERNS
+    common_urlpatterns += settings.EXTRA_URL_PATTERNS
 
 
 # Remove any other endpoints that drf-spectacular is guessing should be in the swagger
@@ -302,3 +308,8 @@ def drf_spectacular_preprocessing_filter_spec(endpoints):
         if path.startswith("/api/v2/"):
             filtered.append((path, path_regex, method, callback))
     return filtered
+
+# V2-specific url patterns
+v2_ui_urls = prod_urls + pt_urls + reports_urls
+
+urlpatterns = common_urlpatterns + [re_path(r"^{}".format(get_system_setting("url_prefix")), include(v2_ui_urls))]

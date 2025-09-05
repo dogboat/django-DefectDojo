@@ -904,6 +904,7 @@ INSTALLED_APPS = (
 DJANGO_MIDDLEWARE_CLASSES = [
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "dojo.v3_migration.middleware.V3MigrationMiddleware",
     "dojo.middleware.APITrailingSlashMiddleware",
     "dojo.middleware.DojoSytemSettingsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
