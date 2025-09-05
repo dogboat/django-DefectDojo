@@ -315,4 +315,4 @@ def drf_spectacular_preprocessing_filter_spec(endpoints):
 # V2-specific url patterns
 v2_ui_urls = prod_urls + pt_urls + reports_urls
 
-urlpatterns = common_urlpatterns + [re_path(r"^{}".format(get_system_setting("url_prefix")), include(v2_ui_urls))]
+urlpatterns = [*common_urlpatterns, re_path(r"^{}".format(get_system_setting("url_prefix")), include(v2_ui_urls))]

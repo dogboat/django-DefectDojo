@@ -8,4 +8,4 @@ from dojo.v3_migration.urls.reports import urlpatterns as reports_urlpatterns
 
 v3_urls = organizations_urlpatterns + assets_urlpatterns + reports_urlpatterns
 
-urlpatterns = common_urlpatterns + [re_path(r"^{}".format(get_system_setting("url_prefix")), include(v3_urls))]
+urlpatterns = [*common_urlpatterns, re_path(r"^{}".format(get_system_setting("url_prefix")), include(v3_urls))]
