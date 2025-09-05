@@ -1,7 +1,8 @@
+from contextlib import contextmanager
 from functools import wraps
 
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, get_urlconf, set_urlconf, clear_url_caches
 
 from dojo.models import System_Settings
 
@@ -29,3 +30,21 @@ def v3_migration(**redirect_map):  # redirect_view_name):
             return redirect(reverse(redirect_view_name, args=args, kwargs=kwargs))
         return _wrapped
     return _decorator
+
+
+def get_migration_urlconf_module():
+    if v3_migration_enabled():
+        return "dojo.v3_migration.urls"
+    return "dojo.urls"
+
+
+@contextmanager
+def set_migration_urlconf():
+    original_urlconf = get_urlconf()
+    try:
+        set_urlconf(get_migration_urlconf_module())
+        clear_url_caches()
+        yield
+    finally:
+        set_urlconf(original_urlconf)
+        clear_url_caches()

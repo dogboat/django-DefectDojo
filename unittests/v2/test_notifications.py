@@ -414,6 +414,7 @@ class TestNotificationTriggersApi(APITestCase):
         self.assertEqual(mock.call_args_list[-1].kwargs["description"], 'The product type "notif prod type API" was deleted by admin')
 
 
+@override_settings(ROOT_URLCONF="dojo.urls")
 class TestNotificationWebhooks(DojoTestCase):
     fixtures = ["dojo_testdata.json"]
 

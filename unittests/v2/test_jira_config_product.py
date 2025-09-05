@@ -3,6 +3,7 @@ import logging
 from unittest.mock import call, patch
 
 import requests
+from django.test import override_settings
 from django.urls import reverse
 from django.utils.http import urlencode
 from jira.exceptions import JIRAError
@@ -14,6 +15,7 @@ from unittests.v2.dojo_test_case import DojoTestCase, disable_v3_migration
 logger = logging.getLogger(__name__)
 
 
+@override_settings(ROOT_URLCONF="dojo.urls")
 class JIRAConfigProductTest(DojoTestCase):
     fixtures = ["dojo_testdata.json"]
 

@@ -484,7 +484,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = env("DD_DATA_UPLOAD_MAX_MEMORY_SIZE")
 # 'axes.backends.AxesModelBackend',
 # ]
 
-ROOT_URLCONF = "dojo.urls"
+ROOT_URLCONF = "dojo.v3_migration.urls"
 
 # Python dotted path to the WSGI application used by Django's runserver.
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
