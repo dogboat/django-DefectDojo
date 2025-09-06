@@ -200,6 +200,7 @@ class TestNotifications(DojoTestCase):
             self.assertEqual(mock_manager.send_alert_notification.call_count, last_count + 1)
 
 
+@override_settings(ROOT_URLCONF="dojo.urls")
 class TestNotificationTriggers(DojoTestCase):
     fixtures = ["dojo_testdata.json"]
 
