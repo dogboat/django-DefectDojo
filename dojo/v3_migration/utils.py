@@ -40,7 +40,13 @@ def get_migration_urlconf_module():
 
 @contextmanager
 def set_migration_urlconf():
-    if (url_conf := get_migration_urlconf_module()) != get_urlconf():
-        set_urlconf(url_conf)
-        clear_url_caches()
-    yield
+    changed = (url_conf := get_migration_urlconf_module()) != (prev_urlconf := get_urlconf())
+    try:
+        if changed:
+            set_urlconf(url_conf)
+            clear_url_caches()
+        yield
+    finally:
+        if changed:
+            set_urlconf(prev_urlconf)
+            clear_url_caches()
