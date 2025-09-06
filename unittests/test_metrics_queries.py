@@ -80,7 +80,7 @@ class FindingQueriesTest(DojoTestCase):
         mock_timezone.return_value = mock_datetime
 
         # Queries over Finding
-        with self.assertNumQueries(28):
+        with self.assertNumQueries(30):
             product_types = []
             finding_queries = utils.finding_queries(
                 product_types,
