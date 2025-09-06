@@ -38,7 +38,6 @@ from dojo.user.queries import (
     get_authorized_users_for_product_and_product_type,
     get_authorized_users_for_product_type,
 )
-from dojo.v3_migration.utils import set_migration_urlconf
 
 logger = logging.getLogger(__name__)
 
@@ -79,23 +78,22 @@ def create_notification(
             module_name, _separator, class_name = notification_manager.rpartition(".")
             module = importlib.import_module(module_name)
             notification_manager_class = getattr(module, class_name)
-    with set_migration_urlconf():
-        notification_manager_class().create_notification(
-            event=event,
-            title=title,
-            finding=finding,
-            test=test,
-            engagement=engagement,
-            product=product,
-            requested_by=requested_by,
-            reviewers=reviewers,
-            recipients=recipients,
-            no_users=no_users,
-            url=url,
-            url_api=url_api,
-            alert_only=alert_only,
-            **kwargs,
-        )
+    notification_manager_class().create_notification(
+        event=event,
+        title=title,
+        finding=finding,
+        test=test,
+        engagement=engagement,
+        product=product,
+        requested_by=requested_by,
+        reviewers=reviewers,
+        recipients=recipients,
+        no_users=no_users,
+        url=url,
+        url_api=url_api,
+        alert_only=alert_only,
+        **kwargs,
+    )
 
 
 class NotificationManagerHelpers:
