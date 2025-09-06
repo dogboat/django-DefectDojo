@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from functools import wraps
 
 from django.shortcuts import redirect
-from django.urls import clear_url_caches, get_urlconf, reverse, set_urlconf
+from django.urls import reverse
 
 from dojo.models import System_Settings
 
@@ -40,11 +40,4 @@ def get_migration_urlconf_module():
 
 @contextmanager
 def set_migration_urlconf():
-    original_urlconf = get_urlconf()
-    try:
-        set_urlconf(get_migration_urlconf_module())
-        clear_url_caches()
-        yield
-    finally:
-        set_urlconf(original_urlconf)
-        clear_url_caches()
+    yield
