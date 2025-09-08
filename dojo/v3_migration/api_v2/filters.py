@@ -24,17 +24,6 @@ from dojo.models import (
 
 labels = get_labels()
 
-"""
-filterset_fields = [
-    "id",
-    "product",
-    "tool_configuration",
-    "service_key_1",
-    "service_key_2",
-    "service_key_3",
-]
-"""
-
 
 class AssetAPIScanConfigurationFilterSet(FilterSet):
     asset = NumberFilter(field_name="product")
@@ -119,25 +108,12 @@ class ApiAssetFilter(DojoFilter):
     )
 
 
-# filterset_fields = ["id", "product_id", "user_id"]
 class AssetMemberFilterSet(FilterSet):
     asset_id = NumberFilter(field_name="product_id")
 
     class Meta:
         model = Product_Member
         fields = ("id", "user_id")
-
-
-"""
-filterset_fields = [
-    "id",
-    "name",
-    "critical_product",
-    "key_product",
-    "created",
-    "updated",
-]
-"""
 
 
 class OrganizationFilterSet(FilterSet):
@@ -149,7 +125,6 @@ class OrganizationFilterSet(FilterSet):
         fields = ("id", "name", "created", "updated")
 
 
-# filterset_fields = ["id", "product_id", "group_id"]
 class AssetGroupFilterSet(FilterSet):
     asset_id = NumberFilter(field_name="product_id")
 
@@ -158,7 +133,6 @@ class AssetGroupFilterSet(FilterSet):
         fields = ("id", "group_id")
 
 
-# filterset_fields = ["id", "product_type_id", "user_id"]
 class OrganizationMemberFilterSet(FilterSet):
     organization_id = NumberFilter(field_name="product_type_id")
 
@@ -167,7 +141,6 @@ class OrganizationMemberFilterSet(FilterSet):
         fields = ("id", "user_id")
 
 
-# filterset_fields = ["id", "product_type_id", "group_id"]
 class OrganizationGroupFilterSet(FilterSet):
     asset_type_id = NumberFilter(field_name="product_type_id")
 

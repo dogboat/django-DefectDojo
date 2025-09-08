@@ -1,4 +1,4 @@
-from dojo.v3_migration.utils import get_migration_urlconf_module
+from dojo.v3_migration.utils import get_migration_urlconf
 
 
 class V3MigrationMiddleware:
@@ -6,7 +6,7 @@ class V3MigrationMiddleware:
         self.get_response = get_response
 
     def get_urlconf(self):
-        return get_migration_urlconf_module()
+        return get_migration_urlconf()
 
     def __call__(self, request):
         request.urlconf = self.get_urlconf()

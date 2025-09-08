@@ -11,6 +11,7 @@ common_urlpatterns = [
             name="delete_technology"),
 ]
 
+
 v2_urlpatterns = [
     re_path(r"^product$", views.product, name="product"),
     re_path(r"^product/(?P<pid>\d+)$", views.view_product,
@@ -78,6 +79,7 @@ v2_urlpatterns = [
     re_path(r"^product/group/(?P<groupid>\d+)/delete$", views.delete_product_group,
             name="delete_product_group"),
 ]
+
 
 v3_forward_urlpatterns = [
     # Forward support
