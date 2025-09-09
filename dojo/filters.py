@@ -2021,6 +2021,16 @@ class FindingFilterWithoutObjectLookups(FindingFilterHelper, FindingTagStringFil
         if "pid" in kwargs:
             self.pid = kwargs.pop("pid")
         super().__init__(*args, **kwargs)
+
+        self.form.fields["test__engagement__product__prod_type__name"].label = labels.ORG_FILTERS_NAME_LABEL
+        self.form.fields["test__engagement__product__prod_type__name"].help_text = labels.ORG_FILTERS_NAME_HELP
+        self.form.fields["test__engagement__product__prod_type__name_contains"].label = labels.ORG_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["test__engagement__product__prod_type__name_contains"].help_text = labels.ORG_FILTERS_NAME_CONTAINS_HELP
+        self.form.fields["test__engagement__product__name"].label = labels.ASSET_FILTERS_NAME_LABEL
+        self.form.fields["test__engagement__product__name"].help_text = labels.ASSET_FILTERS_NAME_HELP
+        self.form.fields["test__engagement__product__name_contains"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["test__engagement__product__name_contains"].help_text = labels.ASSET_FILTERS_NAME_CONTAINS_HELP
+
         # Set some date fields
         self.set_date_fields(*args, **kwargs)
         # Don't show the product filter on the product finding view
@@ -2032,15 +2042,6 @@ class FindingFilterWithoutObjectLookups(FindingFilterHelper, FindingTagStringFil
         else:
             del self.form.fields["test__name"]
             del self.form.fields["test__name_contains"]
-
-        self.form.fields["test__engagement__product__prod_type__name"].label = labels.ORG_FILTERS_NAME_LABEL
-        self.form.fields["test__engagement__product__prod_type__name"].help_text = labels.ORG_FILTERS_NAME_HELP
-        self.form.fields["test__engagement__product__prod_type__name_contains"].label = labels.ORG_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["test__engagement__product__prod_type__name_contains"].help_text = labels.ORG_FILTERS_NAME_CONTAINS_HELP
-        self.form.fields["test__engagement__product__name"].label = labels.ASSET_FILTERS_NAME_LABEL
-        self.form.fields["test__engagement__product__name"].help_text = labels.ASSET_FILTERS_NAME_HELP
-        self.form.fields["test__engagement__product__name_contains"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["test__engagement__product__name_contains"].help_text = labels.ASSET_FILTERS_NAME_CONTAINS_HELP
 
 
 class FindingFilter(FindingFilterHelper, FindingTagFilter):
