@@ -2966,6 +2966,20 @@ class SystemSettingsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["default_group_role"].queryset = get_group_member_roles()
 
+        self.fields["enable_product_tracking_files"].label = labels.SETTINGS_TRACKED_FILES_ENABLE_LABEL
+        self.fields["enable_product_tracking_files"].help_text = labels.SETTINGS_TRACKED_FILES_ENABLE_HELP
+
+        self.fields[
+            "enforce_verified_status_product_grading"].label = labels.SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_LABEL
+        self.fields[
+            "enforce_verified_status_product_grading"].help_text = labels.SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_HELP
+
+        self.fields["enable_product_grade"].label = labels.SETTINGS_ASSET_GRADING_ENABLE_LABEL
+        self.fields["enable_product_grade"].help_text = labels.SETTINGS_ASSET_GRADING_ENABLE_HELP
+
+        self.fields["enable_product_tag_inheritance"].label = labels.SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_LABEL
+        self.fields["enable_product_tag_inheritance"].help_text = labels.SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_HELP
+
     def clean(self):
         cleaned_data = super().clean()
         enable_jira_value = cleaned_data.get("enable_jira")

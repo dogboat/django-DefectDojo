@@ -17,9 +17,9 @@ New copy can be added by doing the following:
 Some conventions used:
     Each copy attribute name starts with a noun representing the overarching model/object type the label is for.
     Attribute suffixes are as follows:
-        _label -> short label, used for UI/API fields
-        _message -> a longer message displayed as a toast or displayed on the page
-        _help -> helptext (for help_text kwargs/popover content)
+        _LABEL -> short label, used for UI/API fields
+        _MESSAGE -> a longer message displayed as a toast or displayed on the page
+        _HELP -> helptext (for help_text kwargs/popover content)
 """
 import logging
 
@@ -93,6 +93,7 @@ class _K:
     ORG_DELETE_SUCCESS_ASYNC_MESSAGE = "org.delete.success_async_message"
     ORG_DELETE_WITH_NAME_SUCCESS_MESSAGE = "org.delete.with_name_success_message"
     ORG_DELETE_WITH_NAME_WITH_USER_SUCCESS_MESSAGE = "org.delete.with_name_with_user_success_message"
+
     ASSET_LABEL = "asset.label"
     ASSET_PLURAL_LABEL = "asset.plural_label"
     ASSET_ALL_LABEL = "asset.all_label"
@@ -186,6 +187,15 @@ class _K:
     ASSET_GROUPS_DELETE_SUCCESS_MESSAGE = "asset.groups.delete_success_message"
     ASSET_GROUPS_ADD_ASSETS_LABEL = "asset.groups.add_assets_label"
     ASSET_GROUPS_NUM_ASSETS_LABEL = "asset.groups.num_assets_label"
+
+    SETTINGS_TRACKED_FILES_ENABLE_LABEL = "settings.tracked_files.enable_label"
+    SETTINGS_TRACKED_FILES_ENABLE_HELP = "settings.tracked_files.enable_help"
+    SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_LABEL = "settings.asset_grading.enforce_verified_label"
+    SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_HELP = "settings.asset_grading.enforce_verified_help"
+    SETTINGS_ASSET_GRADING_ENABLE_LABEL = "settings.asset_grading.enable_label"
+    SETTINGS_ASSET_GRADING_ENABLE_HELP = "settings.asset_grading.enable_help"
+    SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_LABEL = "settings.asset_tag_inheritance.enable_label"
+    SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_HELP = "settings.asset_tag_inheritance.enable_help"
 
 
 # V2 labels: uses "Product" and "Product Type."
@@ -351,6 +361,14 @@ V2_LABELS = {
     _K.ASSET_GROUPS_DELETE_SUCCESS_MESSAGE: _("Product Group deleted successfully."),
     _K.ASSET_GROUPS_ADD_ASSETS_LABEL: _("Add Products"),
     _K.ASSET_GROUPS_NUM_ASSETS_LABEL: _("Number of Products"),
+    _K.SETTINGS_TRACKED_FILES_ENABLE_LABEL : _("Enable Product Tracking Files"),
+    _K.SETTINGS_TRACKED_FILES_ENABLE_HELP : _("With this setting turned off, the product tracking files will be disabled in the user interface."),
+    _K.SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_LABEL : _("Enforce Verified Status - Product Grading"),
+    _K.SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_HELP : _("When enabled, findings must have a verified status to be considered as part of a product's grading."),
+    _K.SETTINGS_ASSET_GRADING_ENABLE_LABEL : _("Enable Product Grading"),
+    _K.SETTINGS_ASSET_GRADING_ENABLE_HELP : _("Displays a grade letter next to a product to show the overall health."),
+    _K.SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Product Tag Inheritance"),
+    _K.SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_HELP: _("Enables product tag inheritance globally for all products. Any tags added on a product will automatically be added to all Engagements, Tests, and Findings"),
 }
 
 
@@ -510,6 +528,14 @@ V3_LABELS = {
     _K.ASSET_GROUPS_DELETE_SUCCESS_MESSAGE: _("Asset group deleted successfully."),
     _K.ASSET_GROUPS_ADD_ASSETS_LABEL: _("Add Assets"),
     _K.ASSET_GROUPS_NUM_ASSETS_LABEL: _("Number of Assets"),
+    _K.SETTINGS_TRACKED_FILES_ENABLE_LABEL : _("Enable Tracked Asset Files"),
+    _K.SETTINGS_TRACKED_FILES_ENABLE_HELP : _("With this setting turned off, tracked Asset files will be disabled in the user interface."),
+    _K.SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_LABEL : _("Enforce Verified Status - Asset Grading"),
+    _K.SETTINGS_ASSET_GRADING_ENFORCE_VERIFIED_HELP : _("When enabled, findings must have a verified status to be considered as part of an Asset's grading."),
+    _K.SETTINGS_ASSET_GRADING_ENABLE_LABEL : _("Enable Asset Grading"),
+    _K.SETTINGS_ASSET_GRADING_ENABLE_HELP : _("Displays a grade letter next to an Asset to show the overall health."),
+    _K.SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Asset Tag Inheritance"),
+    _K.SETTINGS_ASSET_TAG_INHERITANCE_ENABLE_HELP: _("Enables Asset tag inheritance globally for all Assets. Any tags added on an Asset will automatically be added to all Engagements, Tests, and Findings."),
 }
 
 
