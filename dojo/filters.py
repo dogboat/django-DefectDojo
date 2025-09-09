@@ -1023,9 +1023,9 @@ class EngagementDirectFilterHelper(FilterSet):
         super().__init__(*args, **kwargs)
         self.form.fields["product__name"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
         self.form.fields["test__engagement__product__lifecycle"].label = labels.ASSET_LIFECYCLE_LABEL
-        # TODO
-        #self.filters["o"].field_labels["product__name"] = labels.ASSET_FILTERS_NAME_LABEL
-        #self.filters["o"].field_labels["product__prod_type__name"] = labels.ORG_FILTERS_LABEL
+        # TODO: ordering filter labels
+        # self.filters["o"].field_labels["product__name"] = labels.ASSET_FILTERS_NAME_LABEL
+        # self.filters["o"].field_labels["product__prod_type__name"] = labels.ORG_FILTERS_LABEL
 
 
 class EngagementDirectFilter(EngagementDirectFilterHelper, DojoFilter):
@@ -1120,7 +1120,7 @@ class EngagementFilterHelper(FilterSet):
         super().__init__(*args, **kwargs)
         self.form.fields["name"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
         self.form.fields["engagement__product__lifecycle"].label = labels.ASSET_LIFECYCLE_LABEL
-        # TODO ordering filter updates
+        # TODO: ordering filter updates
 
 
 class EngagementFilter(EngagementFilterHelper, DojoFilter):
@@ -1379,7 +1379,7 @@ class ProductFilterHelper(FilterSet):
         super().__init__(*args, **kwargs)
         self.form.fields["name"].label = labels.ASSET_FILTERS_NAME_LABEL
         self.form.fields["name_exact"].label = labels.ASSET_FILTERS_NAME_EXACT_LABEL
-        #TODO ordering field labels
+        # TODO: ordering filter labels
 
 
 class ProductFilter(ProductFilterHelper, DojoFilter):
@@ -1896,7 +1896,7 @@ class FindingFilterHelper(FilterSet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.form.fields["test__engagement__product__lifecycle"].label = labels.ASSET_LIFECYCLE_LABEL
-        # TODO ordering filter labels
+        # TODO: ordering filter labels
 
     def set_date_fields(self, *args: list, **kwargs: dict):
         date_input_widget = forms.DateInput(attrs={"class": "datepicker", "placeholder": "YYYY-MM-DD"}, format="%Y-%m-%d")
@@ -2035,14 +2035,14 @@ class FindingFilterWithoutObjectLookups(FindingFilterHelper, FindingTagStringFil
             del self.form.fields["test__name"]
             del self.form.fields["test__name_contains"]
 
-        self.form.fields["test__engagement__product__prod_type__name"].label =labels.ORG_FILTERS_NAME_LABEL
-        self.form.fields["test__engagement__product__prod_type__name"].help_text =labels.ORG_FILTERS_NAME_HELP
-        self.form.fields["test__engagement__product__prod_type__name_contains"].label =labels.ORG_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["test__engagement__product__prod_type__name_contains"].help_text =labels.ORG_FILTERS_NAME_CONTAINS_HELP
-        self.form.fields["test__engagement__product__name"].label =labels.ASSET_FILTERS_NAME_LABEL
-        self.form.fields["test__engagement__product__name"].help_text =labels.ASSET_FILTERS_NAME_HELP
-        self.form.fields["test__engagement__product__name_contains"].label =labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["test__engagement__product__name_contains"].help_text =labels.ASSET_FILTERS_NAME_CONTAINS_HELP
+        self.form.fields["test__engagement__product__prod_type__name"].label = labels.ORG_FILTERS_NAME_LABEL
+        self.form.fields["test__engagement__product__prod_type__name"].help_text = labels.ORG_FILTERS_NAME_HELP
+        self.form.fields["test__engagement__product__prod_type__name_contains"].label = labels.ORG_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["test__engagement__product__prod_type__name_contains"].help_text = labels.ORG_FILTERS_NAME_CONTAINS_HELP
+        self.form.fields["test__engagement__product__name"].label = labels.ASSET_FILTERS_NAME_LABEL
+        self.form.fields["test__engagement__product__name"].help_text = labels.ASSET_FILTERS_NAME_HELP
+        self.form.fields["test__engagement__product__name_contains"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["test__engagement__product__name_contains"].help_text = labels.ASSET_FILTERS_NAME_CONTAINS_HELP
 
 
 class FindingFilter(FindingFilterHelper, FindingTagFilter):
@@ -2092,8 +2092,8 @@ class FindingFilter(FindingFilterHelper, FindingTagFilter):
         # Don't show the product filter on the product finding view
         self.set_related_object_fields(*args, **kwargs)
 
-        self.form.fields["test__engagement__product__prod_type"].label =labels.ORG_FILTERS_LABEL
-        self.form.fields["test__engagement__product"].label =labels.ASSET_FILTERS_LABEL
+        self.form.fields["test__engagement__product__prod_type"].label = labels.ORG_FILTERS_LABEL
+        self.form.fields["test__engagement__product"].label = labels.ASSET_FILTERS_LABEL
 
     def set_related_object_fields(self, *args: list, **kwargs: dict):
         finding_group_query = Finding_Group.objects.all()
@@ -2678,18 +2678,18 @@ class MetricsEndpointFilterWithoutObjectLookups(MetricsEndpointFilterHelper, Fin
         if self.pid:
             del self.form.fields["finding__test__engagement__product__prod_type"]
         else:
-            self.form.fields["finding__test__engagement__product__prod_type"].label =labels.ORG_FILTERS_NAME_LABEL
-            self.form.fields["finding__test__engagement__product__prod_type"].help_text =labels.ORG_FILTERS_NAME_HELP
-        self.form.fields["finding__test__engagement__product__prod_type_contains"].label =labels.ORG_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["finding__test__engagement__product__prod_type_contains"].help_text =labels.ORG_FILTERS_NAME_CONTAINS_HELP
-        self.form.fields["finding__test__engagement__product__tags_contains"].label =labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_LABEL
-        self.form.fields["finding__test__engagement__product__tags_contains"].help_text =labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_HELP
-        self.form.fields["finding__test__engagement__product__tags"].label =labels.ASSET_FILTERS_TAG_ASSET_LABEL
-        self.form.fields["finding__test__engagement__product__tags"].help_text =labels.ASSET_FILTERS_TAG_ASSET_HELP
-        self.form.fields["not_finding__test__engagement__product__tags_contains"].label =labels.ASSET_FILTERS_TAG_NOT_CONTAIN_LABEL
-        self.form.fields["not_finding__test__engagement__product__tags_contains"].help_text =labels.ASSET_FILTERS_TAG_NOT_CONTAIN_HELP
-        self.form.fields["not_finding__test__engagement__product__tags"].label =labels.ASSET_FILTERS_TAG_NOT_LABEL
-        self.form.fields["not_finding__test__engagement__product__tags"].help_text =labels.ASSET_FILTERS_TAG_NOT_HELP
+            self.form.fields["finding__test__engagement__product__prod_type"].label = labels.ORG_FILTERS_NAME_LABEL
+            self.form.fields["finding__test__engagement__product__prod_type"].help_text = labels.ORG_FILTERS_NAME_HELP
+        self.form.fields["finding__test__engagement__product__prod_type_contains"].label = labels.ORG_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["finding__test__engagement__product__prod_type_contains"].help_text = labels.ORG_FILTERS_NAME_CONTAINS_HELP
+        self.form.fields["finding__test__engagement__product__tags_contains"].label = labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_LABEL
+        self.form.fields["finding__test__engagement__product__tags_contains"].help_text = labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_HELP
+        self.form.fields["finding__test__engagement__product__tags"].label = labels.ASSET_FILTERS_TAG_ASSET_LABEL
+        self.form.fields["finding__test__engagement__product__tags"].help_text = labels.ASSET_FILTERS_TAG_ASSET_HELP
+        self.form.fields["not_finding__test__engagement__product__tags_contains"].label = labels.ASSET_FILTERS_TAG_NOT_CONTAIN_LABEL
+        self.form.fields["not_finding__test__engagement__product__tags_contains"].help_text = labels.ASSET_FILTERS_TAG_NOT_CONTAIN_HELP
+        self.form.fields["not_finding__test__engagement__product__tags"].label = labels.ASSET_FILTERS_TAG_NOT_LABEL
+        self.form.fields["not_finding__test__engagement__product__tags"].help_text = labels.ASSET_FILTERS_TAG_NOT_HELP
 
     class Meta:
         model = Endpoint_Status
@@ -2783,9 +2783,9 @@ class EndpointFilter(EndpointFilterHelper, DojoFilter):
             self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
         self.form.fields["product"].queryset = get_authorized_products(Permissions.Product_View)
-        self.form.fields["product"].label =labels.ASSET_FILTERS_LABEL
-        self.form.fields["findings__test__engagement__product__tags"].label =labels.ASSET_FILTERS_TAGS_ASSET_LABEL
-        self.form.fields["not_findings__test__engagement__product__tags"].label =labels.ASSET_FILTERS_NOT_TAGS_ASSET_LABEL
+        self.form.fields["product"].label = labels.ASSET_FILTERS_LABEL
+        self.form.fields["findings__test__engagement__product__tags"].label = labels.ASSET_FILTERS_TAGS_ASSET_LABEL
+        self.form.fields["not_findings__test__engagement__product__tags"].label = labels.ASSET_FILTERS_NOT_TAGS_ASSET_LABEL
 
     @property
     def qs(self):
@@ -2928,18 +2928,18 @@ class EndpointFilterWithoutObjectLookups(EndpointFilterHelper):
             self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
-        self.form.fields["product__name"].label =labels.ASSET_FILTERS_NAME_LABEL
-        self.form.fields["product__name"].help_text =labels.ASSET_FILTERS_NAME_HELP
-        self.form.fields["product__name_contains"].label =labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["product__name_contains"].help_text =labels.ASSET_FILTERS_NAME_CONTAINS_HELP
-        self.form.fields["findings__test__engagement__product__tags_contains"].label =labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_LABEL
-        self.form.fields["findings__test__engagement__product__tags_contains"].help_text =labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_HELP
-        self.form.fields["findings__test__engagement__product__tags"].label =labels.ASSET_FILTERS_TAG_ASSET_LABEL
-        self.form.fields["findings__test__engagement__product__tags"].help_text =labels.ASSET_FILTERS_TAG_ASSET_HELP
-        self.form.fields["not_findings__test__engagement__product__tags_contains"].label =labels.ASSET_FILTERS_TAG_NOT_CONTAIN_LABEL
-        self.form.fields["not_findings__test__engagement__product__tags_contains"].help_text =labels.ASSET_FILTERS_TAG_NOT_CONTAIN_HELP
-        self.form.fields["not_findings__test__engagement__product__tags"].label =labels.ASSET_FILTERS_TAG_NOT_LABEL
-        self.form.fields["not_findings__test__engagement__product__tags"].help_text =labels.ASSET_FILTERS_TAG_NOT_HELP
+        self.form.fields["product__name"].label = labels.ASSET_FILTERS_NAME_LABEL
+        self.form.fields["product__name"].help_text = labels.ASSET_FILTERS_NAME_HELP
+        self.form.fields["product__name_contains"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["product__name_contains"].help_text = labels.ASSET_FILTERS_NAME_CONTAINS_HELP
+        self.form.fields["findings__test__engagement__product__tags_contains"].label = labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_LABEL
+        self.form.fields["findings__test__engagement__product__tags_contains"].help_text = labels.ASSET_FILTERS_TAG_ASSET_CONTAINS_HELP
+        self.form.fields["findings__test__engagement__product__tags"].label = labels.ASSET_FILTERS_TAG_ASSET_LABEL
+        self.form.fields["findings__test__engagement__product__tags"].help_text = labels.ASSET_FILTERS_TAG_ASSET_HELP
+        self.form.fields["not_findings__test__engagement__product__tags_contains"].label = labels.ASSET_FILTERS_TAG_NOT_CONTAIN_LABEL
+        self.form.fields["not_findings__test__engagement__product__tags_contains"].help_text = labels.ASSET_FILTERS_TAG_NOT_CONTAIN_HELP
+        self.form.fields["not_findings__test__engagement__product__tags"].label = labels.ASSET_FILTERS_TAG_NOT_LABEL
+        self.form.fields["not_findings__test__engagement__product__tags"].help_text = labels.ASSET_FILTERS_TAG_NOT_HELP
 
     @property
     def qs(self):
@@ -3172,9 +3172,9 @@ class ApiTestFilter(DojoFilter):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.form.fields["engagement__product__tags"].help_text =labels.ASSET_FILTERS_CSV_TAGS_OR_HELP
-        self.form.fields["engagement__product__tags__and"].help_text =labels.ASSET_FILTERS_CSV_TAGS_AND_HELP
-        self.form.fields["not_engagement__product__tags"].help_text =labels.ASSET_FILTERS_CSV_TAGS_NOT_HELP
+        self.form.fields["engagement__product__tags"].help_text = labels.ASSET_FILTERS_CSV_TAGS_OR_HELP
+        self.form.fields["engagement__product__tags__and"].help_text = labels.ASSET_FILTERS_CSV_TAGS_AND_HELP
+        self.form.fields["not_engagement__product__tags"].help_text = labels.ASSET_FILTERS_CSV_TAGS_NOT_HELP
 
     class Meta:
         model = Test
@@ -3464,14 +3464,14 @@ class ReportFindingFilterWithoutObjectLookups(ReportFindingFilterHelper, Finding
         self.manage_kwargs(kwargs)
         super().__init__(*args, **kwargs)
 
-        self.form.fields["test__engagement__product__prod_type__name"].label =labels.ORG_FILTERS_NAME_LABEL
-        self.form.fields["test__engagement__product__prod_type__name"].help_text =labels.ORG_FILTERS_NAME_HELP
-        self.form.fields["test__engagement__product__prod_type__name_contains"].label =labels.ORG_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["test__engagement__product__prod_type__name_contains"].help_text =labels.ORG_FILTERS_NAME_CONTAINS_HELP
-        self.form.fields["test__engagement__product__name"].label =labels.ASSET_FILTERS_NAME_LABEL
-        self.form.fields["test__engagement__product__name"].help_text =labels.ASSET_FILTERS_NAME_HELP
-        self.form.fields["test__engagement__product__name_contains"].label =labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
-        self.form.fields["test__engagement__product__name_contains"].help_text =labels.ASSET_FILTERS_NAME_CONTAINS_HELP
+        self.form.fields["test__engagement__product__prod_type__name"].label = labels.ORG_FILTERS_NAME_LABEL
+        self.form.fields["test__engagement__product__prod_type__name"].help_text = labels.ORG_FILTERS_NAME_HELP
+        self.form.fields["test__engagement__product__prod_type__name_contains"].label = labels.ORG_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["test__engagement__product__prod_type__name_contains"].help_text = labels.ORG_FILTERS_NAME_CONTAINS_HELP
+        self.form.fields["test__engagement__product__name"].label = labels.ASSET_FILTERS_NAME_LABEL
+        self.form.fields["test__engagement__product__name"].help_text = labels.ASSET_FILTERS_NAME_HELP
+        self.form.fields["test__engagement__product__name_contains"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
+        self.form.fields["test__engagement__product__name_contains"].help_text = labels.ASSET_FILTERS_NAME_CONTAINS_HELP
 
         product_type_refs = [
             "test__engagement__product__prod_type__name",
