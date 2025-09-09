@@ -288,7 +288,7 @@ V2_LABELS = {
     _K.ASSET_TRACKED_FILES_ID_MISMATCH_ERROR_MESSAGE: _(
         "Product %(asset_id)s does not match Product of Object %(object_asset_id)s"),
     _K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Product"),
-    _K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
+    _K.ASSET_FINDINGS_CLOSE_HELP: _("Old findings no longer present in the new report get closed as mitigated when importing. If service has been set, only the findings for this service will be closed. This affects findings within the same product."),
     _K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Product Tag Inheritance"),
     _K.ASSET_TAG_INHERITANCE_ENABLE_HELP: _(
         "Enables Product tag inheritance. Any tags added on an Product will automatically be added to all Engagements, Tests, and Findings."),
@@ -461,7 +461,7 @@ V3_LABELS = {
     _K.ASSET_TRACKED_FILES_ID_MISMATCH_ERROR_MESSAGE: _(
         "Asset %(asset_id)s does not match Asset of Object %(object_asset_id)s"),
     _K.ASSET_FINDINGS_CLOSE_LABEL: _("Close old findings within this Asset"),
-    _K.ASSET_FINDINGS_CLOSE_HELP: _("This affects findings within the same product."),
+    _K.ASSET_FINDINGS_CLOSE_HELP: _("Old findings no longer present in the new report get closed as mitigated when importing. If service has been set, only the findings for this service will be closed. This affects findings within the same Asset."),
     _K.ASSET_TAG_INHERITANCE_ENABLE_LABEL: _("Enable Asset Tag Inheritance"),
     _K.ASSET_TAG_INHERITANCE_ENABLE_HELP: _("Enables Asset tag inheritance. Any tags added on an Asset will automatically be added to all Engagements, Tests, and Findings."),
     _K.ASSET_ENDPOINT_HELP: _("The Asset this Endpoint should be associated with."),
