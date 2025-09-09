@@ -3,7 +3,6 @@ from django.urls import re_path
 from dojo.metrics import views
 from dojo.v3_migration import redirect_view
 
-
 common_urlpatterns = [
     re_path(r"^metrics$", views.metrics, {"mtype": "All"},
             name="metrics"),

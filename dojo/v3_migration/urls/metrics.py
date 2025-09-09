@@ -1,9 +1,8 @@
 from django.urls import re_path
 
 from dojo.metrics import views
-from dojo.v3_migration import redirect_view
 from dojo.metrics.urls import common_urlpatterns
-
+from dojo.v3_migration import redirect_view
 
 v3_urlpatterns = [
     re_path(r"^critical_asset_metrics$", views.critical_product_metrics, {"mtype": "All"},
