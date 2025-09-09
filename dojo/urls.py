@@ -215,8 +215,8 @@ ur += eng_urls
 ur += finding_urls
 ur += finding_group_urls
 ur += home_urls
-ur += metrics_urls
 # The following disabled due to v3 migration; added in at the bottom. Can be reactivated after v3 migration is complete.
+# ur += metrics_urls
 # ur += prod_urls
 # ur += pt_urls
 # ur += reports_urls
@@ -313,6 +313,6 @@ def drf_spectacular_preprocessing_filter_spec(endpoints):
 
 
 # V2-specific url patterns
-v2_ui_urls = prod_urls + pt_urls + reports_urls
+v2_ui_urls = prod_urls + pt_urls + reports_urls + metrics_urls
 
 urlpatterns = [*common_urlpatterns, re_path(r"^{}".format(get_system_setting("url_prefix")), include(v2_ui_urls))]
