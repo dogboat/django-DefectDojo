@@ -2086,13 +2086,14 @@ class FindingFilter(FindingFilterHelper, FindingTagFilter):
         if "pid" in kwargs:
             self.pid = kwargs.pop("pid")
         super().__init__(*args, **kwargs)
+
+        self.form.fields["test__engagement__product__prod_type"].label = labels.ORG_FILTERS_LABEL
+        self.form.fields["test__engagement__product"].label = labels.ASSET_FILTERS_LABEL
+
         # Set some date fields
         self.set_date_fields(*args, **kwargs)
         # Don't show the product filter on the product finding view
         self.set_related_object_fields(*args, **kwargs)
-
-        self.form.fields["test__engagement__product__prod_type"].label = labels.ORG_FILTERS_LABEL
-        self.form.fields["test__engagement__product"].label = labels.ASSET_FILTERS_LABEL
 
     def set_related_object_fields(self, *args: list, **kwargs: dict):
         finding_group_query = Finding_Group.objects.all()
