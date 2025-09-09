@@ -1024,8 +1024,6 @@ class EngagementDirectFilterHelper(FilterSet):
         self.form.fields["product__name"].label = labels.ASSET_FILTERS_NAME_CONTAINS_LABEL
         self.form.fields["test__engagement__product__lifecycle"].label = labels.ASSET_LIFECYCLE_LABEL
         # TODO: ordering filter labels
-        # self.filters["o"].field_labels["product__name"] = labels.ASSET_FILTERS_NAME_LABEL
-        # self.filters["o"].field_labels["product__prod_type__name"] = labels.ORG_FILTERS_LABEL
 
 
 class EngagementDirectFilter(EngagementDirectFilterHelper, DojoFilter):
