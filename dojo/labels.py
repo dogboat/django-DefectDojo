@@ -142,7 +142,7 @@ class _K:
     ASSET_FILTERS_LABEL = "asset.filters.label"
     ASSET_FILTERS_NAME_LABEL = "asset.filters.name_label"
     ASSET_FILTERS_NAME_HELP = "asset.filters.name_help"
-    ASSET_FILTERS_NAME_EXACT = "asset.filters.name_exact"
+    ASSET_FILTERS_NAME_EXACT_LABEL = "asset.filters.name_exact_label"
     ASSET_FILTERS_NAME_CONTAINS_LABEL = "asset.filters.name_contains_label"
     ASSET_FILTERS_NAME_CONTAINS_HELP = "asset.filters.name_contains_help"
     ASSET_FILTERS_TAGS_LABEL = "asset.filters.tags_label"
@@ -154,7 +154,7 @@ class _K:
     ASSET_FILTERS_CSV_TAGS_OR_HELP = "asset.filters.csv_tags_or_help"
     ASSET_FILTERS_CSV_TAGS_AND_HELP = "asset.filters.csv_tags_and_help"
     ASSET_FILTERS_CSV_TAGS_NOT_HELP = "asset.filters.csv_tags_not_help"
-    ASSET_FILTERS_CSV_LIFECYCLES_HELP = "asset.filters.csv_lifecycles_help"
+    ASSET_FILTERS_CSV_LIFECYCLES_LABEL = "asset.filters.csv_lifecycles_label"
     ASSET_FILTERS_TAGS_ASSET_LABEL = "asset.filters.tags_asset_label"
     ASSET_FILTERS_TAG_ASSET_LABEL = "asset.filters.tag_asset_label"
     ASSET_FILTERS_TAG_ASSET_HELP = "asset.filters.tag_asset_help"
@@ -312,7 +312,7 @@ V2_LABELS = {
     _K.ASSET_FILTERS_LABEL: _("Product"),
     _K.ASSET_FILTERS_NAME_LABEL: _("Product Name"),
     _K.ASSET_FILTERS_NAME_HELP: _("Search for Product names that are an exact match"),
-    _K.ASSET_FILTERS_NAME_EXACT: _("Exact Product Name"),
+    _K.ASSET_FILTERS_NAME_EXACT_LABEL: _("Exact Product Name"),
     _K.ASSET_FILTERS_NAME_CONTAINS_LABEL: _("Product Name Contains"),
     _K.ASSET_FILTERS_NAME_CONTAINS_HELP: _("Search for Product names that contain a given pattern"),
     _K.ASSET_FILTERS_TAGS_LABEL: _("Tags (Product)"),
@@ -327,7 +327,7 @@ V2_LABELS = {
     _K.ASSET_FILTERS_CSV_TAGS_AND_HELP: _(
         "Comma separated list of exact tags to match with an AND expression present on Product"),
     _K.ASSET_FILTERS_CSV_TAGS_NOT_HELP: _("Comma separated list of exact tags not present on Product"),
-    _K.ASSET_FILTERS_CSV_LIFECYCLES_HELP: _("Comma separated list of exact Product lifecycles"),
+    _K.ASSET_FILTERS_CSV_LIFECYCLES_LABEL: _("Comma separated list of exact Product lifecycles"),
     _K.ASSET_FILTERS_TAGS_ASSET_LABEL: _("Product Tags"),
     _K.ASSET_FILTERS_TAG_ASSET_LABEL: _("Product Tag"),
     _K.ASSET_FILTERS_TAG_ASSET_HELP: _("Search for tags on an Product that are an exact match"),
@@ -483,7 +483,7 @@ V3_LABELS = {
     _K.ASSET_FILTERS_LABEL: _("Asset"),
     _K.ASSET_FILTERS_NAME_LABEL: _("Asset Name"),
     _K.ASSET_FILTERS_NAME_HELP: _("Search for Asset names that are an exact match"),
-    _K.ASSET_FILTERS_NAME_EXACT: _("Exact Asset Name"),
+    _K.ASSET_FILTERS_NAME_EXACT_LABEL: _("Exact Asset Name"),
     _K.ASSET_FILTERS_NAME_CONTAINS_LABEL: _("Asset Name Contains"),
     _K.ASSET_FILTERS_NAME_CONTAINS_HELP: _("Search for Asset names that contain a given pattern"),
     _K.ASSET_FILTERS_TAGS_LABEL: _("Tags (Asset)"),
@@ -495,7 +495,7 @@ V3_LABELS = {
     _K.ASSET_FILTERS_CSV_TAGS_OR_HELP: _("Comma separated list of exact tags present on Asset (uses OR for multiple values)"),
     _K.ASSET_FILTERS_CSV_TAGS_AND_HELP: _("Comma separated list of exact tags to match with an AND expression present on Asset"),
     _K.ASSET_FILTERS_CSV_TAGS_NOT_HELP: _("Comma separated list of exact tags not present on Asset"),
-    _K.ASSET_FILTERS_CSV_LIFECYCLES_HELP: _("Comma separated list of exact Asset lifecycles"),
+    _K.ASSET_FILTERS_CSV_LIFECYCLES_LABEL: _("Comma separated list of exact Asset lifecycles"),
     _K.ASSET_FILTERS_TAGS_ASSET_LABEL: _("Asset Tags"),
     _K.ASSET_FILTERS_TAG_ASSET_LABEL: _("Asset Tag"),
     _K.ASSET_FILTERS_TAG_ASSET_HELP: _("Search for tags on an Asset that are an exact match"),
