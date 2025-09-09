@@ -8,7 +8,7 @@ from dojo.models import System_Settings
 
 def v3_migration_enabled():
     """Returns whether v3 migration is enabled."""
-    return System_Settings.objects.only("enable_v3_migration").get().enable_v3_migration
+    return System_Settings.objects.get().enable_v3_migration
 
 
 def redirect_view(to: str):
