@@ -23,6 +23,7 @@ Some conventions used:
 """
 import logging
 
+from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 
 from dojo.v3_migration import v3_migration_enabled
@@ -575,14 +576,28 @@ class DynamicLabelsProxy(_K):
     v2_labels_proxy = LabelsProxy(V2_LABELS)
     v3_labels_proxy = LabelsProxy(V3_LABELS)
 
-    def __getattribute__(self, name):
+    @classmethod
+    def lookup(cls, name):
         if v3_migration_enabled():
             logger.info("Using V3 labels")
-            return getattr(DynamicLabelsProxy.v3_labels_proxy, name)
+            return getattr(cls.v3_labels_proxy, name)
         logger.info("Using V2 labels")
-        return getattr(DynamicLabelsProxy.v2_labels_proxy, name)
+        return getattr(cls.v2_labels_proxy, name)
+
+    def __getattribute__(self, name):
+        return DynamicLabelsProxy.lookup(name)
+
+
+class LazyDynamicLabelsProxy(DynamicLabelsProxy):
+    def __getattribute__(self, name):
+        return lazy(lambda: DynamicLabelsProxy.__getattribute__(self, name), str)
 
 
 def get_labels() -> DynamicLabelsProxy:
-    """Method for getting a LabelsProxy initialized with the correct set of labels."""
+    """Method for getting a DynamicLabelsProxy initialized with the correct set of labels."""
     return DynamicLabelsProxy()
+
+
+def get_lazy_labels():
+    """Returns a LazyDynamicLabelsProxy initialized with the correct set of labels."""
+    return LazyDynamicLabelsProxy()

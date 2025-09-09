@@ -54,7 +54,7 @@ from dojo.finding.helper import (
 )
 from dojo.finding.queries import get_authorized_findings
 from dojo.finding_group.queries import get_authorized_finding_groups
-from dojo.labels import get_labels
+from dojo.labels import get_lazy_labels
 from dojo.models import (
     EFFORT_FOR_FIXING_CHOICES,
     ENGAGEMENT_STATUS_CHOICES,
@@ -97,7 +97,7 @@ from dojo.utils import get_system_setting, is_finding_groups_enabled
 
 logger = logging.getLogger(__name__)
 
-labels = get_labels()
+labels = get_lazy_labels()
 
 BOOLEAN_CHOICES = (("false", "No"), ("true", "Yes"))
 EARLIEST_FINDING = None
@@ -371,9 +371,9 @@ def get_tags_model_from_field_name(field):
 def get_tags_label_from_model(model):
     if model:
         if model is Product_Type:
-            return labels.ORG_FILTERS_TAGS_LABEL
+            return labels.ORG_FILTERS_TAGS_LABEL()
         if model is Product:
-            return labels.ASSET_FILTERS_TAGS_LABEL
+            return labels.ASSET_FILTERS_TAGS_LABEL()
         return f"Tags ({model.__name__.title()})"
     return "Tags (Unknown)"
 
@@ -1098,8 +1098,8 @@ class EngagementFilter(EngagementFilterHelper, DojoFilter):
         self.form.fields["prod_type"].queryset = get_authorized_product_types(Permissions.Product_Type_View)
         self.form.fields["engagement__lead"].queryset = get_authorized_users(Permissions.Product_Type_View) \
             .filter(engagement__lead__isnull=False).distinct()
-        self.form.fields["tags"].help_text = labels.ASSET_FILTERS_TAGS_HELP
-        self.form.fields["not_tags"].help_text = labels.ASSET_FILTERS_NOT_TAGS_HELP
+        self.form.fields["tags"].help_text = labels.ASSET_FILTERS_TAGS_HELP()
+        self.form.fields["not_tags"].help_text = labels.ASSET_FILTERS_NOT_TAGS_HELP()
 
     class Meta:
         model = Product
@@ -1334,8 +1334,8 @@ class ProductFilter(ProductFilterHelper, DojoFilter):
             self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
         self.form.fields["prod_type"].queryset = get_authorized_product_types(Permissions.Product_Type_View)
-        self.form.fields["tags"].help_text = labels.ASSET_FILTERS_TAGS_HELP
-        self.form.fields["not_tags"].help_text = labels.ASSET_FILTERS_NOT_TAGS_HELP
+        self.form.fields["tags"].help_text = labels.ASSET_FILTERS_TAGS_HELP()
+        self.form.fields["not_tags"].help_text = labels.ASSET_FILTERS_NOT_TAGS_HELP()
 
     class Meta:
         model = Product
